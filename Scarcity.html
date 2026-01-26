@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scarcity, Choice & Trade-offs - Canadian Economics</title>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin:0 auto;
+      padding:20px;
+      background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+      color:#333;
+      min-height:100vh;
+    }
+    .container{
+      background:#fff;
+      padding:30px;
+      border-radius:15px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.1);
+      margin:20px 0;
+    }
+    h1{
+      color:#2c3e50;
+      text-align:center;
+      margin-bottom:20px;
+      font-size:2.4em;
+    }
+    .canada-header{
+      background: linear-gradient(135deg, #ff0000, #ff6b6b);
+      color:#fff;
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .activity-nav{
+      background:#343a40;
+      padding:15px;
+      border-radius:10px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .nav-btn{
+      background-color:#17a2b8;
+      color:#fff;
+      border:none;
+      padding:12px 24px;
+      margin:8px;
+      border-radius:25px;
+      cursor:pointer;
+      font-size:1em;
+      font-weight:bold;
+      transition:all .3s ease;
+    }
+    .nav-btn:hover{ background-color:#138496; transform: translateY(-2px); }
+    .nav-btn.active{ background-color:#28a745; }
+
+    .activity-section{
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      padding:25px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #2196f3;
+      display:none;
+    }
+    .activity-section.active{ display:block; }
+
+    .concept-box{
+      background: linear-gradient(135deg, #fff8e1, #ffcc02);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #ff6f00;
+    }
+    .scenario-box{
+      background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #4caf50;
+    }
+    .question-card{
+      background:#fff;
+      padding:20px;
+      border-radius:10px;
+      margin:15px 0;
+      border:3px solid #2196f3;
+      font-size:1.05em;
+    }
+    .choice-btn{
+      background-color:#6f42c1;
+      color:#fff;
+      border:none;
+      padding:10px 18px;
+      margin:8px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:.95em;
+      font-weight:bold;
+      transition:all .3s ease;
+      min-width:170px;
+    }
+    .choice-btn:hover{ background-color:#5a32a3; transform: translateY(-1px); }
+    .choice-btn.selected{ background-color:#28a745; }
+
+    .feedback{
+      margin:15px 0;
+      padding:15px;
+      border-radius:8px;
+      font-weight:bold;
+      display:none;
+    }
+    .feedback.correct{
+      background-color:#d4edda;
+      color:#155724;
+      border:2px solid #c3e6cb;
+    }
+    .feedback.incorrect{
+      background-color:#f8d7da;
+      color:#721c24;
+      border:2px solid #f5c6cb;
+    }
+
+    .progress-section{
+      background:#f8f9fa;
+      padding:15px;
+      border-radius:8px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .progress-bar{
+      width:100%;
+      height:20px;
+      background-color:#e0e0e0;
+      border-radius:10px;
+      margin:15px 0;
+    }
+    .progress-fill{
+      height:100%;
+      background-color:#28a745;
+      border-radius:10px;
+      transition:width .3s ease;
+    }
+
+    .result-display{
+      background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #9c27b0;
+    }
+    .score-display{
+      background:#fff;
+      padding:15px;
+      border-radius:8px;
+      margin:10px 0;
+      text-align:center;
+      font-size:1.2em;
+      font-weight:bold;
+    }
+
+    .input-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin:10px 0;
+    }
+    .input-group{
+      background:#fff;
+      border:2px solid #dee2e6;
+      border-radius:10px;
+      padding:12px;
+    }
+    .input-group label{
+      display:block;
+      font-weight:bold;
+      margin-bottom:8px;
+      color:#2c3e50;
+    }
+    .input-group input[type="range"]{ width:100%; }
+    .small-note{ font-size:.95em; opacity:.9; margin-top:8px; }
+
+    .calculate-btn{
+      background-color:#28a745;
+      color:#fff;
+      border:none;
+      padding:10px 20px;
+      margin:10px 5px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:1em;
+      font-weight:bold;
+      transition:all .3s ease;
+    }
+    .calculate-btn:hover{ background-color:#218838; transform: translateY(-1px); }
+    .calculate-btn.reset-btn{ background-color:#17a2b8; }
+    .calculate-btn.reset-btn:hover{ background-color:#138496; }
+
+    .mini-table{
+      background:#fff;
+      border-radius:8px;
+      overflow:hidden;
+      margin:15px 0;
+    }
+    .mini-table table{ width:100%; border-collapse:collapse; }
+    .mini-table th{
+      background:#17a2b8;
+      color:#fff;
+      padding:12px;
+      text-align:left;
+    }
+    .mini-table td{
+      padding:10px;
+      border-bottom:1px solid #dee2e6;
+    }
+    .warning{
+      padding:12px;
+      border-radius:8px;
+      font-weight:bold;
+      background:#fff3cd;
+      border:2px solid #ffeeba;
+      color:#856404;
+      margin-top:12px;
+      display:none;
+    }
+
+    footer{
+      margin-top:30px;
+      padding-top:20px;
+      border-top:2px dashed #cfd8dc;
+      text-align:center;
+    }
+
+    @media (max-width: 768px){
+      .container{ padding:15px; }
+      h1{ font-size:2em; }
+      .nav-btn{ padding:10px 18px; margin:5px; font-size:.9em; }
+      .choice-btn{ min-width:150px; margin:5px; padding:8px 14px; }
+      .input-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🇨🇦 Scarcity, Choice & Trade-offs</h1>
+
+    <div class="canada-header">
+      <h2>🍁 The Big Idea: Resources are limited 🍁</h2>
+      <p><strong>Because of scarcity, every choice has a trade-off and an opportunity cost.</strong></p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="activity-nav">
+      <button class="nav-btn active" onclick="showActivity('overview', this)">🔄 Overview</button>
+      <button class="nav-btn" onclick="showActivity('scarcity-spotter', this)">🔍 Scarcity Spotter</button>
+      <button class="nav-btn" onclick="showActivity('opportunity-cost', this)">⚖️ Opportunity Cost</button>
+      <button class="nav-btn" onclick="showActivity('tradeoff-sim', this)">🎛️ Trade-off Simulator</button>
+      <button class="nav-btn" onclick="showActivity('quiz', this)">🎯 Master Quiz</button>
+    </div>
+
+    <!-- Overview -->
+    <div id="overview" class="activity-section active">
+      <h3>🔄 Core Concepts</h3>
+
+      <div class="concept-box">
+        <h4>📚 Definitions</h4>
+        <p><strong>Scarcity:</strong> Limited resources + unlimited wants. You can’t have everything.</p>
+        <p><strong>Choice:</strong> Picking one option because you can’t pick all options.</p>
+        <p><strong>Trade-off:</strong> What you give up when you choose something else.</p>
+        <p><strong>Opportunity cost:</strong> The <em>next best alternative</em> you give up.</p>
+        <p class="small-note"><strong>Shortcut:</strong> Scarcity → Choice → Trade-off → Opportunity Cost</p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🍁 Canadian Example: City Budget</h4>
+        <p>A city can spend extra money on <strong>transit</strong> or <strong>parks</strong>, but not both at the same level.</p>
+        <div class="mini-table">
+          <table>
+            <tr>
+              <th>Decision</th>
+              <th>Trade-off</th>
+              <th>Opportunity Cost (Next Best)</th>
+            </tr>
+            <tr>
+              <td>More transit funding</td>
+              <td>Less funding for something else</td>
+              <td>Parks upgrades (if that was next best)</td>
+            </tr>
+            <tr>
+              <td>More parks funding</td>
+              <td>Less funding for something else</td>
+              <td>Transit improvements (if that was next best)</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 1: Scarcity Spotter -->
+    <div id="scarcity-spotter" class="activity-section">
+      <h3>🔍 Scarcity Spotter</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>Decide if each situation shows <strong>scarcity</strong>. If yes, name the scarce resource.</p>
+      </div>
+
+      <div class="question-card">
+        <p><strong>1) A concert in Toronto sells out because there are only 18,000 seats.</strong></p>
+        <button class="choice-btn" onclick="checkTF('ss1', true, true, '✅ Yes! Seats are limited, so the venue capacity is scarce.', this)">✅ Scarcity</button>
+        <button class="choice-btn" onclick="checkTF('ss1', false, true, '❌ This is scarcity. The limited resource is seats (capacity).', this)">❌ Not Scarcity</button>
+        <div id="ss1-feedback" class="feedback"></div>
+      </div>
+
+      <div class="question-card">
+        <p><strong>2) A student wants 10 new apps, but their phone storage is almost full.</strong></p>
+        <button class="choice-btn" onclick="checkTF('ss2', true, true, '✅ Yes! Storage is limited—so they must choose what to keep.', this)">✅ Scarcity</button>
+        <button class="choice-btn" onclick="checkTF('ss2', false, true, '❌ This is scarcity. The scarce resource is storage space.', this)">❌ Not Scarcity</button>
+        <div id="ss2-feedback" class="feedback"></div>
+      </div>
+
+      <div class="question-card">
+        <p><strong>3) A store has unlimited digital copies of a free online poster for download.</strong></p>
+        <button class="choice-btn" onclick="checkTF('ss3', true, false, '❌ In this simplified example, unlimited copies means no scarcity of the poster itself.', this)">✅ Scarcity</button>
+        <button class="choice-btn" onclick="checkTF('ss3', false, false, '✅ Correct. If it’s truly unlimited, the poster itself isn’t scarce.', this)">❌ Not Scarcity</button>
+        <div id="ss3-feedback" class="feedback"></div>
+        <p class="small-note"><em>Note:</em> In real life, there can still be scarcity of internet access, time, devices, etc.</p>
+      </div>
+
+      <div class="question-card">
+        <p><strong>4) A hockey team has only 6 spots for defense players on the roster.</strong></p>
+        <button class="choice-btn" onclick="checkTF('ss4', true, true, '✅ Yes! Roster spots are limited.', this)">✅ Scarcity</button>
+        <button class="choice-btn" onclick="checkTF('ss4', false, true, '❌ This is scarcity. The scarce resource is roster positions.', this)">❌ Not Scarcity</button>
+        <div id="ss4-feedback" class="feedback"></div>
+      </div>
+
+      <div class="question-card">
+        <p><strong>5) A restaurant has 4 cooks scheduled, and the dinner rush has a long line.</strong></p>
+        <button class="choice-btn" onclick="checkTF('ss5', true, true, '✅ Yes! Labour time (cooks per hour) is limited, causing waiting.', this)">✅ Scarcity</button>
+        <button class="choice-btn" onclick="checkTF('ss5', false, true, '❌ This shows scarcity: limited labour time/worker capacity.', this)">❌ Not Scarcity</button>
+        <div id="ss5-feedback" class="feedback"></div>
+      </div>
+    </div>
+
+    <!-- Activity 2: Opportunity Cost -->
+    <div id="opportunity-cost" class="activity-section">
+      <h3>⚖️ Opportunity Cost Builder</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>Pick the <strong>opportunity cost</strong> (the next best alternative) for each choice.</p>
+      </div>
+
+      <div class="question-card">
+        <p><strong>1) You have one evening. You choose to work a shift instead of going to a Raptors game.</strong><br>
+        <em>What is the opportunity cost?</em></p>
+        <button class="choice-btn" onclick="checkMC('oc1', 0, 1, '❌ Not quite. Wages are what you gain, not what you give up.', this)">The wages you earn</button>
+        <button class="choice-btn" onclick="checkMC('oc1', 1, 1, '✅ Correct! The next best alternative you give up is the Raptors game.', this)">Going to the Raptors game</button>
+        <button class="choice-btn" onclick="checkMC('oc1', 2, 1, '❌ That’s a result, but not the next best alternative.', this)">Feeling tired after work</button>
+        <div id="oc1-feedback" class="feedback"></div>
+      </div>
+
+      <div class="question-card">
+        <p><strong>2) A school can buy new laptops OR upgrade the gym floor. It chooses laptops.</strong><br>
+        <em>What is the opportunity cost?</em></p>
+        <button class="choice-btn" onclick="checkMC('oc2', 0, 2, '❌ Laptops are what was chosen, not the opportunity cost.', this)">New laptops</button>
+        <button class="choice-btn" onclick="checkMC('oc2', 1, 2, '❌ Taxes/funding are part of scarcity, but not the next best alternative.', this)">The school budget</button>
+        <button class="choice-btn" onclick="checkMC('oc2', 2, 2, '✅ Correct! The next best alternative is the gym floor upgrade.', this)">Upgrading the gym floor</button>
+        <div id="oc2-feedback" class="feedback"></div>
+      </div>
+
+      <div class="question-card">
+        <p><strong>3) You spend $60 on a new game. Your next best plan was saving the $60 for a hoodie.</strong><br>
+        <em>What is the opportunity cost?</em></p>
+        <button class="choice-btn" onclick="checkMC('oc3', 0, 1, '❌ The game is the chosen option, not the opportunity cost.', this)">The game</button>
+        <button class="choice-btn" onclick="checkMC('oc3', 1, 1, '✅ Correct! The hoodie is the next best alternative you gave up.', this)">The hoodie</button>
+        <button class="choice-btn" onclick="checkMC('oc3', 2, 1, '❌ Not exactly. The cost is not “all money” — it’s the next best alternative.', this)">All the money you have</button>
+        <div id="oc3-feedback" class="feedback"></div>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🧠 Fast Rule</h4>
+        <p><strong>Opportunity cost</strong> is usually <em>not</em> “everything you give up.” It’s the <strong>one best alternative</strong> you would have chosen next.</p>
+      </div>
+    </div>
+
+    <!-- Activity 3: Trade-off Simulator -->
+    <div id="tradeoff-sim" class="activity-section">
+      <h3>🎛️ Trade-off Simulator</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>You have a limited monthly budget of <strong>$100</strong>. Move the sliders. Notice how raising one category forces trade-offs in others.</p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>💸 Student Budget (Total = $100)</h4>
+
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Snacks: $<span id="snacksVal">25</span></label>
+            <input id="snacks" type="range" min="0" max="100" value="25" oninput="updateBudget()" />
+          </div>
+
+          <div class="input-group">
+            <label>Entertainment: $<span id="entVal">25</span></label>
+            <input id="ent" type="range" min="0" max="100" value="25" oninput="updateBudget()" />
+          </div>
+
+          <div class="input-group">
+            <label>Savings: $<span id="savVal">25</span></label>
+            <input id="sav" type="range" min="0" max="100" value="25" oninput="updateBudget()" />
+          </div>
+
+          <div class="input-group">
+            <label>Charity/Gifts: $<span id="charVal">25</span></label>
+            <input id="char" type="range" min="0" max="100" value="25" oninput="updateBudget()" />
+          </div>
+        </div>
+
+        <div class="mini-table">
+          <table>
+            <tr>
+              <th>Category</th>
+              <th>Amount</th>
+            </tr>
+            <tr><td>Snacks</td><td id="snacksRow">$25</td></tr>
+            <tr><td>Entertainment</td><td id="entRow">$25</td></tr>
+            <tr><td>Savings</td><td id="savRow">$25</td></tr>
+            <tr><td>Charity/Gifts</td><td id="charRow">$25</td></tr>
+            <tr>
+              <td><strong>Total</strong></td>
+              <td id="totalRow"><strong>$100</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Remaining</strong></td>
+              <td id="remainRow"><strong>$0</strong></td>
+            </tr>
+          </table>
+        </div>
+
+        <div id="overBudget" class="warning">⚠️ Over budget! Reduce one or more categories until remaining is $0 or higher.</div>
+
+        <div class="result-display" id="tradeoffMessage" style="display:none;">
+          <h4>Trade-off Insight</h4>
+          <p id="tradeoffText"></p>
+          <p class="small-note"><em>Try this:</em> Increase Savings. What do you have to reduce? That’s the trade-off.</p>
+        </div>
+
+        <button class="calculate-btn" onclick="explainTradeoff()">Explain My Trade-off</button>
+        <button class="calculate-btn reset-btn" onclick="resetBudget()">Reset Sliders</button>
+      </div>
+    </div>
+
+    <!-- Activity 4: Master Quiz -->
+    <div id="quiz" class="activity-section">
+      <h3>🎯 Scarcity, Choice & Trade-offs Master Quiz</h3>
+
+      <div class="progress-section">
+        <h4>📊 Progress Tracker</h4>
+        <div id="quiz-progress">Questions Completed: <span id="completed-count">0</span>/<span id="total-count">12</span></div>
+        <div class="progress-bar">
+          <div id="quiz-progress-fill" class="progress-fill" style="width:0%;"></div>
+        </div>
+        <button class="calculate-btn reset-btn" onclick="resetMasterQuiz()">🔄 Reset Quiz</button>
+      </div>
+
+      <div class="scenario-box">
+        <h4>📝 Quiz Rules</h4>
+        <p>You’ll get 12 random questions. Each one checks understanding of scarcity, choice, trade-offs, and opportunity cost.</p>
+      </div>
+
+      <div id="master-quiz"></div>
+
+      <div class="result-display" id="final-results" style="display:none;">
+        <h4>🎯 Quiz Results</h4>
+        <div id="score-summary" class="score-display"></div>
+        <div id="detailed-feedback"></div>
+      </div>
+    </div>
+
+    <!-- Footer: Always include clickable website -->
+    <footer>
+      <p style="font-weight:bold;">
+        ✅ View this interactive module online:
+        <!-- Replace these links AFTER you upload this file to your repo -->
+        <a href="https://htmlpreview.github.io/?https://github.com/waberra/Introduction-to-Economics-/blob/main/scarcity_choice_tradeoffs.html"
+           target="_blank" rel="noopener noreferrer">
+          Click here
+        </a>
+      </p>
+      <p class="small-note">
+        After you upload the file to your repo as <strong>scarcity_choice_tradeoffs.html</strong>, this preview link will work.
+        If you use GitHub Pages, your link will look like:
+        <strong>https://waberra.github.io/Introduction-to-Economics-/scarcity_choice_tradeoffs.html</strong>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Navigation ----------
+    function showActivity(activityId, btn) {
+      document.querySelectorAll(".activity-section").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(activityId).classList.add("active");
+      btn.classList.add("active");
+
+      if (activityId === "quiz") initializeMasterQuiz();
+    }
+
+    // ---------- Shared UI helpers ----------
+    function markSelected(btn) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+    }
+
+    function showFeedback(id, isCorrect, text) {
+      const div = document.getElementById(id + "-feedback");
+      div.style.display = "block";
+      div.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      div.textContent = text;
+    }
+
+    // True/False checker
+    function checkTF(id, selectedBool, correctBool, msg, btn) {
+      markSelected(btn);
+      showFeedback(id, selectedBool === correctBool, msg);
+    }
+
+    // Multiple choice checker using index
+    function checkMC(id, selectedIndex, correctIndex, msg, btn) {
+      markSelected(btn);
+      showFeedback(id, selectedIndex === correctIndex, msg);
+    }
+
+    // ---------- Trade-off Simulator ----------
+    const BUDGET_TOTAL = 100;
+
+    function val(id){ return parseInt(document.getElementById(id).value, 10) || 0; }
+    function setText(id, t){ document.getElementById(id).textContent = t; }
+
+    function updateBudget() {
+      const snacks = val("snacks");
+      const ent = val("ent");
+      const sav = val("sav");
+      const ch = val("char");
+
+      setText("snacksVal", snacks);
+      setText("entVal", ent);
+      setText("savVal", sav);
+      setText("charVal", ch);
+
+      document.getElementById("snacksRow").textContent = "$" + snacks;
+      document.getElementById("entRow").textContent = "$" + ent;
+      document.getElementById("savRow").textContent = "$" + sav;
+      document.getElementById("charRow").textContent = "$" + ch;
+
+      const total = snacks + ent + sav + ch;
+      const remaining = BUDGET_TOTAL - total;
+
+      document.getElementById("totalRow").innerHTML = "<strong>$" + total + "</strong>";
+      document.getElementById("remainRow").innerHTML = "<strong>$" + remaining + "</strong>";
+
+      const warn = document.getElementById("overBudget");
+      warn.style.display = remaining < 0 ? "block" : "none";
+    }
+
+    function explainTradeoff() {
+      updateBudget();
+      const snacks = val("snacks");
+      const ent = val("ent");
+      const sav = val("sav");
+      const ch = val("char");
+
+      const total = snacks + ent + sav + ch;
+      const remaining = BUDGET_TOTAL - total;
+
+      const msgBox = document.getElementById("tradeoffMessage");
+      const msg = document.getElementById("tradeoffText");
+      msgBox.style.display = "block";
+
+      if (remaining < 0) {
+        msg.textContent =
+          "You are over budget. This shows scarcity: your $100 is limited. To fix it, you must reduce at least one category. The trade-off is which category gets less.";
+        return;
+      }
+
+      // Find top two categories (to talk about trade-offs)
+      const arr = [
+        { name: "Snacks", v: snacks },
+        { name: "Entertainment", v: ent },
+        { name: "Savings", v: sav },
+        { name: "Charity/Gifts", v: ch }
+      ].sort((a,b) => b.v - a.v);
+
+      const biggest = arr[0];
+      const second = arr[1];
+
+      msg.textContent =
+        `Your biggest choice is ${biggest.name} ($${biggest.v}). Because your total budget is fixed at $${BUDGET_TOTAL}, spending more on ${biggest.name} usually means spending less on something else (a trade-off). A likely next-best alternative is ${second.name} ($${second.v}). The opportunity cost of increasing ${biggest.name} is giving up some of that next-best option.`;
+    }
+
+    function resetBudget() {
+      document.getElementById("snacks").value = 25;
+      document.getElementById("ent").value = 25;
+      document.getElementById("sav").value = 25;
+      document.getElementById("char").value = 25;
+      document.getElementById("tradeoffMessage").style.display = "none";
+      updateBudget();
+    }
+
+    updateBudget();
+
+    // ---------- Master Quiz ----------
+    let currentQ = 0;
+    let answers = [];
+    let score = 0;
+    let quizQuestions = [];
+
+    const questionBank = [
+      {
+        id: "q1",
+        q: "Scarcity means:",
+        options: ["Resources are unlimited", "Wants are limited", "Resources are limited compared to wants", "Prices are always high"],
+        correct: 2,
+        exp: "Scarcity is the condition where limited resources meet unlimited wants."
+      },
+      {
+        id: "q2",
+        q: "Because of scarcity, people must:",
+        options: ["Avoid all choices", "Make choices", "Get everything they want", "Stop producing goods"],
+        correct: 1,
+        exp: "Scarcity forces choices—there isn’t enough for everything."
+      },
+      {
+        id: "q3",
+        q: "A trade-off is:",
+        options: ["A free bonus", "What you give up when you choose something", "Always money spent", "Only for businesses"],
+        correct: 1,
+        exp: "A trade-off is what you give up due to a choice."
+      },
+      {
+        id: "q4",
+        q: "Opportunity cost is best defined as:",
+        options: ["Total cost in dollars", "The next best alternative you give up", "All alternatives you give up", "Something you gain"],
+        correct: 1,
+        exp: "Opportunity cost is the next best alternative sacrificed."
+      },
+      {
+        id: "q5",
+        q: "You choose to study instead of playing video games. If the next best alternative was video games, the opportunity cost is:",
+        options: ["Studying", "The video games", "Your grades", "Your phone"],
+        correct: 1,
+        exp: "The opportunity cost is the next best alternative you gave up: video games."
+      },
+      {
+        id: "q6",
+        q: "A hockey arena has 18,000 seats. A sold-out game is an example of scarcity of:",
+        options: ["Hockey", "Seats (capacity)", "Fans", "Weather"],
+        correct: 1,
+        exp: "Seats are limited—capacity is scarce."
+      },
+      {
+        id: "q7",
+        q: "A business chooses to spend more on advertising and less on new equipment. This is an example of:",
+        options: ["No scarcity", "A trade-off", "Unlimited resources", "A free good"],
+        correct: 1,
+        exp: "Choosing one use of resources means giving up another: a trade-off."
+      },
+      {
+        id: "q8",
+        q: "If you increase savings in a fixed $100 budget, what must happen?",
+        options: ["Nothing changes", "Other categories must decrease or you go over budget", "Your income doubles", "Scarcity disappears"],
+        correct: 1,
+        exp: "With a fixed budget, more in one category means less elsewhere (or over budget)."
+      },
+      {
+        id: "q9",
+        q: "A government can fund more hospitals or more highways with the same tax revenue. This situation highlights:",
+        options: ["Scarcity and trade-offs", "Only profits", "No need for choices", "Unlimited resources"],
+        correct: 0,
+        exp: "Limited funds force choices and trade-offs."
+      },
+      {
+        id: "q10",
+        q: "Which statement is most accurate?",
+        options: ["Opportunity cost is always money", "Opportunity cost is always time", "Opportunity cost depends on your next best alternative", "Opportunity cost is the chosen option"],
+        correct: 2,
+        exp: "Opportunity cost depends on what your next best alternative was."
+      },
+      {
+        id: "q11",
+        q: "If a student works a shift instead of going to a movie, the opportunity cost is most likely:",
+        options: ["The wages earned", "The movie experience", "The job itself", "The bus ride"],
+        correct: 1,
+        exp: "Wages are what you gain; the movie is what you give up (next best)."
+      },
+      {
+        id: "q12",
+        q: "If a resource is truly unlimited and free (like a simple digital file that can be copied endlessly), then in this simplified model it is:",
+        options: ["Scarce", "Not scarce", "Always expensive", "Only scarce for businesses"],
+        correct: 1,
+        exp: "If it is truly unlimited, the item itself isn’t scarce (though real-world access can still be scarce)."
+      },
+      // extra for randomization
+      {
+        id: "q13",
+        q: "Choosing to buy new shoes means you might not buy a hoodie. This is an example of:",
+        options: ["Scarcity only", "A trade-off", "No choice", "A surplus"],
+        correct: 1,
+        exp: "Buying shoes means giving up another option: a trade-off."
+      },
+      {
+        id: "q14",
+        q: "Scarcity exists because:",
+        options: ["People don’t want much", "Resources are limited and wants are unlimited", "All goods are free", "Everyone earns the same income"],
+        correct: 1,
+        exp: "Limited resources + unlimited wants creates scarcity."
+      },
+      {
+        id: "q15",
+        q: "When you choose option A, the opportunity cost is:",
+        options: ["Option A", "All options", "The next best alternative (Option B)", "The price tag only"],
+        correct: 2,
+        exp: "Opportunity cost is the next best alternative you give up."
+      },
+      {
+        id: "q16",
+        q: "A trade-off is closest in meaning to:",
+        options: ["A compromise due to limits", "A reward", "A shortcut", "A refund"],
+        correct: 0,
+        exp: "Trade-offs are compromises caused by scarcity."
+      }
+    ];
+
+    function pickQuestions(n){
+      const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, n);
+    }
+
+    function resetMasterQuiz() {
+      const ok = confirm("Reset the quiz and start over? Your current progress will be lost.");
+      if (ok) initializeMasterQuiz();
+    }
+
+    function initializeMasterQuiz(){
+      currentQ = 0;
+      answers = [];
+      score = 0;
+      quizQuestions = pickQuestions(12);
+
+      document.getElementById("final-results").style.display = "none";
+      document.getElementById("completed-count").textContent = "0";
+      document.getElementById("quiz-progress-fill").style.width = "0%";
+      document.getElementById("quiz-progress").innerHTML =
+        `Questions Completed: <span id="completed-count">0</span>/${quizQuestions.length}`;
+
+      displayQuestion();
+    }
+
+    function displayQuestion(){
+      if (currentQ >= quizQuestions.length) {
+        showResults();
+        return;
+      }
+
+      const q = quizQuestions[currentQ];
+      const container = document.getElementById("master-quiz");
+
+      container.innerHTML = `
+        <div class="question-card">
+          <h5>Question ${currentQ + 1} of ${quizQuestions.length}</h5>
+          <p><strong>${q.q}</strong></p>
+          <div id="q-options">
+            ${q.options.map((opt, idx) =>
+              `<button class="choice-btn" onclick="answerQuiz(${idx}, this)">${opt}</button>`
+            ).join("")}
+          </div>
+          <div id="q-feedback" class="feedback"></div>
+        </div>
+      `;
+    }
+
+    function answerQuiz(selectedIndex, btn){
+      const q = quizQuestions[currentQ];
+      const correct = q.correct;
+      const isCorrect = selectedIndex === correct;
+
+      answers[currentQ] = {
+        question: q.q,
+        options: q.options,
+        selected: selectedIndex,
+        correct: correct,
+        isCorrect: isCorrect,
+        explanation: q.exp
+      };
+
+      if (isCorrect) score++;
+
+      // style selection
+      btn.parentElement.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+
+      const feedback = document.getElementById("q-feedback");
+      feedback.style.display = "block";
+      feedback.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      feedback.innerHTML = `<strong>${isCorrect ? "✅ Correct!" : "❌ Incorrect."}</strong><br>${q.exp}`;
+
+      // progress
+      const completed = currentQ + 1;
+      document.getElementById("completed-count").textContent = completed;
+      document.getElementById("quiz-progress-fill").style.width = (completed / quizQuestions.length) * 100 + "%";
+
+      setTimeout(() => {
+        currentQ++;
+        displayQuestion();
+      }, 2500);
+    }
+
+    function showResults(){
+      const total = quizQuestions.length;
+      const pct = Math.round((score / total) * 100);
+
+      const resultsDiv = document.getElementById("final-results");
+      const scoreDiv = document.getElementById("score-summary");
+      const detailDiv = document.getElementById("detailed-feedback");
+
+      scoreDiv.innerHTML = `
+        <h3>Your Score: ${score}/${total} (${pct}%)</h3>
+        <p>${scoreMessage(pct)}</p>
+        <p><strong>🔄 Reset to practice with different questions.</strong></p>
+      `;
+
+      let html = "<h5>📋 Detailed Review:</h5>";
+      answers.forEach((a, i) => {
+        html += `
+          <div style="margin: 15px 0; padding: 15px; border-radius: 8px; ${a.isCorrect ? "background:#d4edda;border:2px solid #c3e6cb;" : "background:#f8d7da;border:2px solid #f5c6cb;"}">
+            <strong>Q${i+1}:</strong> ${a.question}<br>
+            <strong>Your answer:</strong> ${a.options[a.selected]}<br>
+            <strong>Correct answer:</strong> ${a.options[a.correct]}<br>
+            <em>${a.explanation}</em>
+          </div>
+        `;
+      });
+
+      detailDiv.innerHTML = html;
+      resultsDiv.style.display = "block";
+    }
+
+    function scoreMessage(pct){
+      if (pct >= 90) return "🏆 Excellent! You clearly understand scarcity, choice, and opportunity cost.";
+      if (pct >= 80) return "👏 Strong! Review opportunity cost vs trade-off for full mastery.";
+      if (pct >= 70) return "👍 Good! Focus on the definition: opportunity cost = next best alternative.";
+      if (pct >= 60) return "📚 Keep practicing! Try the simulator and the Opportunity Cost section again.";
+      return "📖 More review needed. Go back to Overview and Scarcity Spotter, then try again.";
+    }
+  </script>
+</body>
+</html>
