@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production, Distribution, and Consumption - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.4em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .activity-nav {
+            background: #343a40;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .nav-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background-color: #28a745;
+        }
+        
+        .activity-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+            display: none;
+        }
+        
+        .activity-section.active {
+            display: block;
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #fff8e1, #ffcc02);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff6f00;
+        }
+        
+        .scenario-box {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #2196f3;
+            font-size: 1.1em;
+        }
+        
+        .activity-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #6f42c1;
+        }
+        
+        .choice-btn {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 8px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+        
+        .choice-btn:hover {
+            background-color: #5a32a3;
+            transform: translateY(-1px);
+        }
+        
+        .choice-btn.selected {
+            background-color: #28a745;
+        }
+        
+        .feedback {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .progress-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .economics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .flow-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #6c757d;
+        }
+        
+        .flow-step {
+            background: #17a2b8;
+            color: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #6c757d;
+            margin: 5px 0;
+        }
+        
+        .result-display {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .score-display {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 2em; }
+            .economics-grid { grid-template-columns: 1fr; }
+            .nav-btn { padding: 10px 18px; margin: 5px; font-size: 0.9em; }
+            .choice-btn { margin: 5px; padding: 8px 15px; min-width: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🇨🇦 Production, Distribution, and Consumption</h1>
+    
+    <div class="canada-header">
+        <h2>🍁 The Three Fundamental Economic Activities 🍁</h2>
+        <p><strong>Explore how Canada's economy creates, allocates, and uses goods and services!</strong></p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="activity-nav">
+        <button class="nav-btn active" onclick="showActivity('overview')">🔄 Economic Flow</button>
+        <button class="nav-btn" onclick="showActivity('production')">🏭 Production</button>
+        <button class="nav-btn" onclick="showActivity('distribution')">🚛 Distribution</button>
+        <button class="nav-btn" onclick="showActivity('consumption')">🛒 Consumption</button>
+        <button class="nav-btn" onclick="showActivity('integration')">🔗 Integration Quiz</button>
+    </div>
+
+    <!-- Activity 1: Economic Flow Overview -->
+    <div id="overview" class="activity-section active">
+        <h3>🔄 The Economic Flow: From Resources to Satisfaction</h3>
+        
+        <div class="concept-box">
+            <h4>📚 The Three Fundamental Economic Activities</h4>
+            <div class="economics-grid">
+                <div>
+                    <h5>🏭 Production</h5>
+                    <p><strong>What:</strong> Creating goods and services</p>
+                    <p><strong>How:</strong> Using factors of production (land, labor, capital, entrepreneurship)</p>
+                    <p><strong>Examples:</strong> Manufacturing, farming, services</p>
+                </div>
+                <div>
+                    <h5>🚛 Distribution</h5>
+                    <p><strong>What:</strong> Getting goods and services to consumers</p>
+                    <p><strong>How:</strong> Through markets, transportation, retail channels</p>
+                    <p><strong>Examples:</strong> Shipping, retail stores, e-commerce</p>
+                </div>
+                <div>
+                    <h5>🛒 Consumption</h5>
+                    <p><strong>What:</strong> Using goods and services to satisfy needs/wants</p>
+                    <p><strong>How:</strong> Purchasing decisions, usage patterns</p>
+                    <p><strong>Examples:</strong> Buying food, using healthcare, entertainment</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-diagram">
+            <h4>📊 Canadian Economic Flow Example: Maple Syrup</h4>
+            <div class="flow-step">🌳 PRODUCTION: Quebec maple farms collect sap and process into syrup</div>
+            <div class="arrow">⬇️</div>
+            <div class="flow-step">🚛 DISTRIBUTION: Transported to grocery stores, restaurants across Canada</div>
+            <div class="arrow">⬇️</div>
+            <div class="flow-step">🛒 CONSUMPTION: Families buy and enjoy syrup on pancakes</div>
+        </div>
+
+        <div class="activity-card">
+            <h4>🎯 Interactive: Complete the Economic Flow</h4>
+            <p><strong>Scenario:</strong> Tim Hortons coffee from bean to cup</p>
+            
+            <div class="question-card">
+                <h5>Step 1: Production Phase</h5>
+                <p><strong>Coffee beans are grown in Colombia and processed. What economic activity is this?</strong></p>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow1', 'production', 'Correct! Growing and processing beans is production.')">Production</button>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow1', 'distribution', 'Incorrect. This is creating the product, not moving it.')">Distribution</button>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow1', 'consumption', 'Incorrect. No one is using the final product yet.')">Consumption</button>
+                <div id="flow1-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Step 2: Distribution Phase</h5>
+                <p><strong>Beans are shipped to Tim Hortons roasting facilities, then to stores across Canada. What economic activity is this?</strong></p>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow2', 'production', 'Incorrect. The coffee is made, now it needs to be moved.')">Production</button>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow2', 'distribution', 'Correct! Transportation and logistics are distribution activities.')">Distribution</button>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow2', 'consumption', 'Incorrect. Customers haven\'t bought it yet.')">Consumption</button>
+                <div id="flow2-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Step 3: Consumption Phase</h5>
+                <p><strong>Sarah buys a coffee at Tim Hortons and drinks it during her commute. What economic activity is this?</strong></p>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow3', 'production', 'Incorrect. The coffee is already made.')">Production</button>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow3', 'distribution', 'Incorrect. The coffee has reached the final location.')">Distribution</button>
+                <button class="choice-btn" onclick="checkFlowAnswer('flow3', 'consumption', 'Correct! Sarah is using the product to satisfy her need for caffeine.')">Consumption</button>
+                <div id="flow3-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity 2: Production -->
+    <div id="production" class="activity-section">
+        <h3>🏭 Production: Creating Value in the Canadian Economy</h3>
+        
+        <div class="concept-box">
+            <h4>📚 Production Concepts</h4>
+            <p><strong>Production:</strong> The process of creating goods and services by combining inputs (factors of production)</p>
+            <div class="economics-grid">
+                <div>
+                    <h5>🌍 Land</h5>
+                    <p>Natural resources: forests, minerals, agricultural land, water</p>
+                </div>
+                <div>
+                    <h5>👷 Labor</h5>
+                    <p>Human effort: physical work, skills, knowledge, creativity</p>
+                </div>
+                <div>
+                    <h5>🏗️ Capital</h5>
+                    <p>Tools, machinery, buildings, technology used in production</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <h4>🍁 Canadian Production Examples</h4>
+            
+            <div class="question-card">
+                <h5>🌲 Scenario 1: Forestry in British Columbia</h5>
+                <p><strong>A lumber company in BC cuts trees, mills them into lumber, and produces wooden furniture. Identify the factors of production:</strong></p>
+                
+                <p><strong>What is the primary "Land" factor?</strong></p>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1a', 'forests', 'Correct! Forests are the natural resource being used.')">Forest land and trees</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1a', 'workers', 'Incorrect. Workers are labor, not land.')">Skilled workers</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1a', 'equipment', 'Incorrect. Equipment is capital, not land.')">Cutting equipment</button>
+                <div id="prod1a-feedback" class="feedback"></div>
+
+                <p><strong>What represents "Labor" in this operation?</strong></p>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1b', 'workers', 'Correct! Loggers, mill operators, and carpenters provide the human effort.')">Loggers, mill operators, carpenters</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1b', 'trees', 'Incorrect. Trees are natural resources (land).')">Trees being cut</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1b', 'machinery', 'Incorrect. Machinery is capital equipment.')">Chainsaws and mills</button>
+                <div id="prod1b-feedback" class="feedback"></div>
+
+                <p><strong>What is the main "Capital" being used?</strong></p>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1c', 'equipment', 'Correct! Chainsaws, mills, and factories are capital goods.')">Chainsaws, mills, furniture-making equipment</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1c', 'trees', 'Incorrect. Trees are the raw material (land).')">The trees themselves</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod1c', 'workers', 'Incorrect. Workers provide labor, not capital.')">Worker skills</button>
+                <div id="prod1c-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>🌾 Scenario 2: Prairie Wheat Farming</h5>
+                <p><strong>A Saskatchewan farm grows wheat using modern farming techniques. What type of production is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkProductionAnswer('prod2', 'primary', 'Correct! Farming extracts resources from nature - it\'s primary production.')">Primary Production (extracting from nature)</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod2', 'secondary', 'Incorrect. Secondary production involves manufacturing.')">Secondary Production (manufacturing)</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod2', 'tertiary', 'Incorrect. Tertiary production involves services.')">Tertiary Production (services)</button>
+                <div id="prod2-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>🏦 Scenario 3: Toronto Banking Services</h5>
+                <p><strong>Royal Bank of Canada provides financial services like loans and investment advice. What type of production is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkProductionAnswer('prod3', 'primary', 'Incorrect. Banking doesn\'t extract natural resources.')">Primary Production</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod3', 'secondary', 'Incorrect. Banking doesn\'t manufacture physical goods.')">Secondary Production</button>
+                <button class="choice-btn" onclick="checkProductionAnswer('prod3', 'tertiary', 'Correct! Banking provides services - it\'s tertiary production.')">Tertiary Production (services)</button>
+                <div id="prod3-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity 3: Distribution -->
+    <div id="distribution" class="activity-section">
+        <h3>🚛 Distribution: Allocating Resources and Output in Canada</h3>
+        
+        <div class="concept-box">
+            <h4>📚 Distribution Concepts</h4>
+            <p><strong>Distribution:</strong> How goods, services, income, and resources are allocated in the economy</p>
+            <div class="economics-grid">
+                <div>
+                    <h5>🚛 Physical Distribution</h5>
+                    <p>Getting products from producers to consumers: transportation, logistics, retail</p>
+                </div>
+                <div>
+                    <h5>💰 Income Distribution</h5>
+                    <p>How total income is shared among people: wages, inequality, wealth gaps</p>
+                </div>
+                <div>
+                    <h5>📊 Output Distribution</h5>
+                    <p>How total production is allocated: consumption, investment, government, exports</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <h4>🔄 Canadian Distribution in All Forms</h4>
+            
+            <div class="question-card">
+                <h5>📦 Scenario 1: Amazon Canada Delivery</h5>
+                <p><strong>Amazon needs to deliver products from their Toronto warehouse to a customer in Whitehorse, Yukon. What are the main distribution challenges?</strong></p>
+                
+                <p><strong>What is the primary geographic challenge?</strong></p>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist1', 'distance', 'Correct! Canada\'s vast distances make distribution expensive and time-consuming.')">Extremely long distances</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist1', 'population', 'Partially correct, but distance is the main challenge.')">Small population</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist1', 'competition', 'Incorrect. This isn\'t primarily a competitive issue.')">Too much competition</button>
+                <div id="dist1-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>🥛 Scenario 2: Dairy Distribution</h5>
+                <p><strong>Saputo (Quebec dairy company) distributes milk products across Canada but faces different regulations in each province. What distribution system issue is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist2', 'regulatory', 'Correct! Different provincial regulations create distribution barriers.')">Regulatory barriers between provinces</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist2', 'transportation', 'Incorrect. This is about rules, not physical movement.')">Transportation costs</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist2', 'demand', 'Incorrect. This is about regulations, not consumer preferences.')">Different consumer preferences</button>
+                <div id="dist2-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>⛽ Scenario 3: Gasoline Distribution</h5>
+                <p><strong>Petro-Canada distributes gasoline from refineries to gas stations across the country. What makes this distribution network efficient?</strong></p>
+                
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist3', 'pipelines', 'Correct! Pipelines are the most efficient way to transport large volumes of fuel.')">Pipeline network for bulk transport</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist3', 'trucks', 'Incorrect. Trucks are used for final delivery but aren\'t the main transport.')">Truck delivery to every station</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist3', 'rail', 'Incorrect. Rail is less common for gasoline distribution.')">Rail transport</button>
+                <div id="dist3-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>💻 Scenario 4: Digital Distribution</h5>
+                <p><strong>Spotify Canada distributes music digitally to subscribers. How does digital distribution differ from physical distribution?</strong></p>
+                
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist4', 'instant', 'Correct! Digital distribution eliminates physical transport and storage needs.')">No physical transportation needed - instant delivery</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist4', 'expensive', 'Incorrect. Digital distribution typically reduces costs.')">More expensive than physical</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist4', 'limited', 'Incorrect. Digital distribution can reach anyone with internet.')">Limited to urban areas</button>
+                <div id="dist4-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>💰 Scenario 5: Income Distribution</h5>
+                <p><strong>Statistics Canada reports that the top 10% of Canadian earners receive 25% of total income, while the bottom 10% receive only 2%. What type of distribution issue is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist5', 'inequality', 'Correct! This shows income inequality - uneven distribution of income across the population.')">Income inequality - uneven distribution of earnings</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist5', 'physical', 'Incorrect. This is about income distribution, not physical goods.')">Physical distribution problem</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist5', 'efficiency', 'Incorrect. This is about fairness/equality, not efficiency.')">Distribution efficiency</button>
+                <div id="dist5-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>🏭 Scenario 6: Regional Income Distribution</h5>
+                <p><strong>Alberta's average household income is $94,000 while Prince Edward Island's is $71,000. What explains this income distribution difference?</strong></p>
+                
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist6', 'industries', 'Correct! Different industries (oil vs agriculture/tourism) create different income levels.')">Different dominant industries and resource endowments</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist6', 'population', 'Incorrect. Population size doesn\'t directly determine average income.')">Population size differences</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist6', 'geography', 'Partially correct, but industry differences are more important.')">Geographic location only</button>
+                <div id="dist6-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>📊 Scenario 7: Output Distribution (GDP Allocation)</h5>
+                <p><strong>Canada's GDP in 2023 was spent: 55% on consumption, 23% on investment, 21% on government, 1% net exports. What does this output distribution show?</strong></p>
+                
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist7', 'consumer-economy', 'Correct! The majority of Canada\'s output goes to consumer spending, showing it\'s a consumer-driven economy.')">Canada is primarily a consumer-driven economy</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist7', 'government-economy', 'Incorrect. Government spending is significant but not the majority.')">Canada is primarily a government-controlled economy</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist7', 'export-economy', 'Incorrect. Net exports are only 1% of GDP.')">Canada is primarily an export-driven economy</button>
+                <div id="dist7-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>⚖️ Scenario 8: Distribution Policy</h5>
+                <p><strong>The Canadian government uses progressive income tax (higher rates for higher incomes) and programs like Old Age Security. What is the goal of these distribution policies?</strong></p>
+                
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist8', 'redistribute', 'Correct! These policies redistribute income from higher earners to lower earners to reduce inequality.')">Redistribute income to reduce inequality</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist8', 'maximize', 'Incorrect. The goal is equity, not just maximizing total income.')">Maximize total national income</button>
+                <button class="choice-btn" onclick="checkDistributionAnswer('dist8', 'efficiency', 'Incorrect. This is about equity/fairness, not efficiency.')">Improve economic efficiency only</button>
+                <div id="dist8-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity 4: Consumption -->
+    <div id="consumption" class="activity-section">
+        <h3>🛒 Consumption: How Canadians Use Economic Goods</h3>
+        
+        <div class="concept-box">
+            <h4>📚 Consumption Concepts</h4>
+            <p><strong>Consumption:</strong> The use of goods and services to satisfy human needs and wants</p>
+            <div class="economics-grid">
+                <div>
+                    <h5>🍎 Consumer Goods</h5>
+                    <p>Products bought by individuals: food, clothing, cars</p>
+                </div>
+                <div>
+                    <h5>⚡ Services</h5>
+                    <p>Intangible products: healthcare, education, entertainment</p>
+                </div>
+                <div>
+                    <h5>🏠 Durable vs Non-Durable</h5>
+                    <p>Long-lasting goods vs. items consumed quickly</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <h4>💳 Canadian Consumption Patterns</h4>
+            
+            <div class="question-card">
+                <h5>🏠 Scenario 1: Housing Consumption</h5>
+                <p><strong>The Chen family in Vancouver spends 40% of their income on housing (rent/mortgage). What type of consumption is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons1', 'necessity', 'Correct! Housing is a basic need that takes priority in spending.')">Necessity consumption (essential need)</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons1', 'luxury', 'Incorrect. Housing is essential, not a luxury.')">Luxury consumption (optional)</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons1', 'investment', 'Partially correct if buying, but rent is consumption.')">Investment consumption</button>
+                <div id="cons1-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>❄️ Scenario 2: Seasonal Consumption</h5>
+                <p><strong>Canadian Tire sees huge increases in snow shovel and winter tire sales from October-December. What consumption pattern is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons2', 'seasonal', 'Correct! Weather creates predictable seasonal consumption patterns.')">Seasonal consumption driven by climate</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons2', 'impulse', 'Incorrect. This is planned consumption for predictable weather.')">Impulse consumption</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons2', 'status', 'Incorrect. This is practical, not status-driven consumption.')">Status consumption</button>
+                <div id="cons2-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>🍁 Scenario 3: Cultural Consumption</h5>
+                <p><strong>During the Stanley Cup playoffs, Canadians dramatically increase their consumption of beer, pizza, and big-screen TVs. What drives this consumption?</strong></p>
+                
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons3', 'social', 'Correct! Social and cultural events drive consumption patterns.')">Social and cultural factors</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons3', 'price', 'Incorrect. This isn\'t about prices being lower.')">Lower prices during playoffs</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons3', 'income', 'Incorrect. Income doesn\'t change during playoffs.')">Increased income</button>
+                <div id="cons3-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>💰 Scenario 4: Income and Consumption</h5>
+                <p><strong>When Alberta's oil prices were high (2010-2014), Alberta residents had higher consumption of luxury goods compared to other provinces. What economic principle is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons4', 'income-effect', 'Correct! Higher income leads to increased consumption, especially of luxury goods.')">Income effect - higher income increases consumption</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons4', 'substitution', 'Incorrect. This isn\'t about substituting one good for another.')">Substitution effect</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons4', 'price-effect', 'Incorrect. This is about income changes, not price changes.')">Price effect</button>
+                <div id="cons4-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>🌱 Scenario 5: Sustainable Consumption</h5>
+                <p><strong>Canadian consumers increasingly buy organic food, electric cars, and solar panels despite higher costs. What consumption trend is this?</strong></p>
+                
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons5', 'values', 'Correct! Values and environmental concerns influence consumption choices.')">Values-based consumption (environmental concerns)</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons5', 'price', 'Incorrect. These products typically cost more, not less.')">Price-driven consumption</button>
+                <button class="choice-btn" onclick="checkConsumptionAnswer('cons5', 'status', 'Partially correct but environmental values are the main driver.')">Status-driven consumption</button>
+                <div id="cons5-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity 5: Integration Quiz -->
+    <div id="integration" class="activity-section">
+        <h3>🔗 Integration Quiz: Connecting Production, Distribution, and Consumption</h3>
+        
+        <div class="progress-section">
+            <h4>📊 Progress Tracker</h4>
+            <div id="quiz-progress">Questions Completed: <span id="completed-count">0</span>/11</div>
+            <div class="progress-bar">
+                <div id="quiz-progress-fill" class="progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <h4>🇨🇦 Canadian Economic Integration Scenarios</h4>
+            
+            <div id="integration-quiz">
+                <!-- Quiz questions will be populated by JavaScript -->
+            </div>
+
+            <div class="result-display" id="final-results" style="display:none;">
+                <h4>🎯 Quiz Results</h4>
+                <div id="score-summary" class="score-display"></div>
+                <div id="detailed-feedback"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global quiz state
+let currentQuizQuestion = 0;
+let quizAnswers = [];
+let quizScore = 0;
+
+// Integration quiz questions
+const integrationQuestions = [
+    {
+        id: 'int1',
+        question: 'A Quebec maple syrup producer taps trees, processes sap into syrup, ships to grocery stores across Canada, and families buy it for breakfast. Which activities are happening?',
+        options: ['Only production', 'Production and distribution only', 'All three: production, distribution, and consumption', 'Only consumption'],
+        correct: 2,
+        explanation: 'All three activities occur: tapping/processing (production), shipping to stores (distribution), families buying and using (consumption).'
+    },
+    {
+        id: 'int2', 
+        question: 'Netflix Canada streams movies to subscribers. The servers, internet infrastructure, and content creation represent which economic activity?',
+        options: ['Pure consumption', 'Production of entertainment services', 'Only distribution', 'None of these'],
+        correct: 1,
+        explanation: 'Netflix produces entertainment services by creating and delivering content using technology infrastructure.'
+    },
+    {
+        id: 'int3',
+        question: 'When Tim Hortons runs out of donuts at a Toronto location by 2 PM, this represents a problem in which economic activity?',
+        options: ['Production planning', 'Distribution logistics', 'Consumption forecasting', 'All of the above'],
+        correct: 3,
+        explanation: 'This involves production (not making enough), distribution (not getting them to the store on time), and consumption forecasting (underestimating demand).'
+    },
+    {
+        id: 'int4',
+        question: 'Canadian Tire stocks snow shovels in July to prepare for winter demand. This is primarily which activity?',
+        options: ['Production', 'Distribution strategy', 'Consumption', 'Investment'],
+        correct: 1,
+        explanation: 'This is distribution strategy - planning inventory and logistics to meet future consumption patterns.'
+    },
+    {
+        id: 'int5',
+        question: 'During COVID-19, many Canadians switched from restaurant meals to grocery shopping and home cooking. This changed which economic activities?',
+        options: ['Only consumption patterns', 'Only production', 'Consumption patterns and production/distribution for both industries', 'Only distribution'],
+        correct: 2,
+        explanation: 'This shift affected consumption patterns and required changes in production and distribution for both restaurant and grocery industries.'
+    },
+    {
+        id: 'int6',
+        question: 'A Winnipeg family installs solar panels on their roof to generate electricity. This represents:',
+        options: ['Only consumption of solar panels', 'Consumption of panels, but production of electricity', 'Only production', 'Neither production nor consumption'],
+        correct: 1,
+        explanation: 'They consume solar panels as products, but also become producers of electricity for their own use or the grid.'
+    },
+    {
+        id: 'int7',
+        question: 'Amazon Prime offers same-day delivery in major Canadian cities. This innovation primarily improves which economic activity?',
+        options: ['Production efficiency', 'Distribution speed and convenience', 'Consumption quality', 'All equally'],
+        correct: 1,
+        explanation: 'Same-day delivery is primarily a distribution innovation that gets products to consumers faster.'
+    },
+    {
+        id: 'int8',
+        question: 'When oil prices rise, Alberta has more income to spend on goods from other provinces. This shows the connection between:',
+        options: ['Production in one region affecting consumption in the same region', 'Production in one region affecting consumption across regions', 'Only local economic effects', 'Distribution problems'],
+        correct: 1,
+        explanation: 'Alberta\'s oil production success increases income, which boosts consumption of goods produced in other regions through trade.'
+    },
+    {
+        id: 'int9',
+        question: 'Loblaw Companies operates farms (production), distribution centers, and retail stores. This business model is called:',
+        options: ['Horizontal integration', 'Vertical integration', 'Diversification', 'Specialization'],
+        correct: 1,
+        explanation: 'Vertical integration means controlling multiple stages of the economic process from production through distribution to final sale.'
+    },
+    {
+        id: 'int10',
+        question: 'The shift to electric vehicles in Canada will require changes in:',
+        options: ['Car production only', 'Distribution of gasoline only', 'Production (cars & electricity), distribution (charging stations), and consumption patterns', 'Consumption only'],
+        correct: 2,
+        explanation: 'Electric vehicles require changes in all three: producing different cars and more electricity, building charging infrastructure (distribution), and changing how people fuel their vehicles (consumption).'
+    },
+    {
+        id: 'int11',
+        question: 'When the federal government increases minimum wage, this primarily affects which type of distribution?',
+        options: ['Physical distribution of goods', 'Income distribution among workers', 'Output distribution in GDP', 'International trade distribution'],
+        correct: 1,
+        explanation: 'Minimum wage policy directly affects income distribution by changing how wages are distributed among workers, especially affecting lower-income earners.'
+    }
+];
+
+function showActivity(activityId) {
+    // Hide all activities
+    document.querySelectorAll('.activity-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Remove active class from all nav buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected activity
+    document.getElementById(activityId).classList.add('active');
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+    
+    // Initialize integration quiz if selected
+    if (activityId === 'integration') {
+        initializeIntegrationQuiz();
+    }
+}
+
+function checkFlowAnswer(questionId, selectedAnswer, correctAnswer, feedback) {
+    const feedbackDiv = document.getElementById(questionId + '-feedback');
+    const isCorrect = selectedAnswer === correctAnswer;
+    
+    // Remove previous selections
+    event.target.parentElement.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark this button as selected
+    event.target.classList.add('selected');
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.textContent = feedback;
+}
+
+function checkProductionAnswer(questionId, selectedAnswer, correctAnswer, feedback) {
+    const feedbackDiv = document.getElementById(questionId + '-feedback');
+    const isCorrect = selectedAnswer === correctAnswer;
+    
+    // Remove previous selections
+    event.target.parentElement.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark this button as selected
+    event.target.classList.add('selected');
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.textContent = feedback;
+}
+
+function checkDistributionAnswer(questionId, selectedAnswer, correctAnswer, feedback) {
+    const feedbackDiv = document.getElementById(questionId + '-feedback');
+    const isCorrect = selectedAnswer === correctAnswer;
+    
+    // Remove previous selections
+    event.target.parentElement.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark this button as selected
+    event.target.classList.add('selected');
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.textContent = feedback;
+}
+
+function checkConsumptionAnswer(questionId, selectedAnswer, correctAnswer, feedback) {
+    const feedbackDiv = document.getElementById(questionId + '-feedback');
+    const isCorrect = selectedAnswer === correctAnswer;
+    
+    // Remove previous selections
+    event.target.parentElement.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark this button as selected
+    event.target.classList.add('selected');
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.textContent = feedback;
+}
+
+function initializeIntegrationQuiz() {
+    currentQuizQuestion = 0;
+    quizAnswers = [];
+    quizScore = 0;
+    
+    document.getElementById('final-results').style.display = 'none';
+    document.getElementById('completed-count').textContent = '0';
+    document.getElementById('quiz-progress-fill').style.width = '0%';
+    
+    displayQuizQuestion();
+}
+
+function displayQuizQuestion() {
+    if (currentQuizQuestion >= integrationQuestions.length) {
+        showFinalResults();
+        return;
+    }
+    
+    const question = integrationQuestions[currentQuizQuestion];
+    const quizContainer = document.getElementById('integration-quiz');
+    
+    quizContainer.innerHTML = `
+        <div class="question-card">
+            <h5>Question ${currentQuizQuestion + 1} of ${integrationQuestions.length}</h5>
+            <p><strong>${question.question}</strong></p>
+            <div id="quiz-options">
+                ${question.options.map((option, index) => 
+                    `<button class="choice-btn" onclick="answerQuizQuestion(${index})">${option}</button>`
+                ).join('')}
+            </div>
+            <div id="quiz-feedback" class="feedback"></div>
+        </div>
+    `;
+}
+
+function answerQuizQuestion(selectedIndex) {
+    const question = integrationQuestions[currentQuizQuestion];
+    const isCorrect = selectedIndex === question.correct;
+    const feedbackDiv = document.getElementById('quiz-feedback');
+    
+    // Record answer
+    quizAnswers[currentQuizQuestion] = {
+        selected: selectedIndex,
+        correct: question.correct,
+        isCorrect: isCorrect
+    };
+    
+    if (isCorrect) quizScore++;
+    
+    // Update UI
+    document.querySelectorAll('#quiz-options .choice-btn').forEach((btn, index) => {
+        btn.classList.remove('selected');
+        if (index === selectedIndex) {
+            btn.classList.add('selected');
+        }
+    });
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.innerHTML = `
+        <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect.'}</strong><br>
+        ${question.explanation}
+    `;
+    
+    // Update progress
+    const completedCount = currentQuizQuestion + 1;
+    document.getElementById('completed-count').textContent = completedCount;
+    document.getElementById('quiz-progress-fill').style.width = (completedCount / integrationQuestions.length) * 100 + '%';
+    
+    // Move to next question after delay
+    setTimeout(() => {
+        currentQuizQuestion++;
+        displayQuizQuestion();
+    }, 3000);
+}
+
+function showFinalResults() {
+    const percentage = Math.round((quizScore / integrationQuestions.length) * 100);
+    const resultsDiv = document.getElementById('final-results');
+    const scoreDiv = document.getElementById('score-summary');
+    const feedbackDiv = document.getElementById('detailed-feedback');
+    
+    scoreDiv.innerHTML = `
+        <h3>Your Score: ${quizScore}/${integrationQuestions.length} (${percentage}%)</h3>
+        <p>${getScoreMessage(percentage)}</p>
+    `;
+    
+    let detailedHTML = '<h5>📋 Detailed Review:</h5>';
+    integrationQuestions.forEach((q, index) => {
+        const answer = quizAnswers[index];
+        const isCorrect = answer.isCorrect;
+        
+        detailedHTML += `
+            <div style="margin: 10px 0; padding: 10px; border-radius: 6px; ${isCorrect ? 'background: #d4edda;' : 'background: #f8d7da;'}">
+                <strong>Q${index + 1}:</strong> ${q.question}<br>
+                <strong>Your answer:</strong> ${q.options[answer.selected]}<br>
+                <strong>Correct answer:</strong> ${q.options[q.correct]}<br>
+                <em>${q.explanation}</em>
+            </div>
+        `;
+    });
+    
+    feedbackDiv.innerHTML = detailedHTML;
+    resultsDiv.style.display = 'block';
+}
+
+function getScoreMessage(percentage) {
+    if (percentage >= 90) return "🏆 Outstanding! You've mastered the connection between production, distribution, and consumption!";
+    else if (percentage >= 80) return "👏 Excellent! You understand how these economic activities work together.";
+    else if (percentage >= 70) return "👍 Good work! Review the connections between the three economic activities.";
+    else if (percentage >= 60) return "📚 Keep studying! Focus on how production, distribution, and consumption interact.";
+    else return "📖 More review needed. Make sure you understand each economic activity and how they connect.";
+}
+</script>
+
+</body>
+</html>
