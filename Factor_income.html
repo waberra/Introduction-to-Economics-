@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Factor Payments - Classifying Income (Canada)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      margin: 20px 0;
+    }
+
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.4em;
+    }
+
+    .canada-header {
+      background: linear-gradient(135deg, #ff0000, #ff6b6b);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .activity-nav {
+      background: #343a40;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .nav-btn {
+      background-color: #17a2b8;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 8px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+      background-color: #138496;
+      transform: translateY(-2px);
+    }
+
+    .nav-btn.active {
+      background-color: #28a745;
+    }
+
+    .activity-section {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      padding: 25px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #2196f3;
+      display: none;
+    }
+
+    .activity-section.active {
+      display: block;
+    }
+
+    .concept-box {
+      background: linear-gradient(135deg, #fff8e1, #ffcc02);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #ff6f00;
+    }
+
+    .factor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .factor-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      border: 3px solid #4caf50;
+      text-align: center;
+    }
+
+    .factor-icon {
+      font-size: 3em;
+      margin: 10px 0;
+    }
+
+    .scenario-box {
+      background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #4caf50;
+    }
+
+    .question-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border: 3px solid #2196f3;
+      font-size: 1.1em;
+    }
+
+    .business-case {
+      background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #9c27b0;
+    }
+
+    .choice-btn {
+      background-color: #6f42c1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.95em;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      min-width: 160px;
+    }
+
+    .choice-btn:hover {
+      background-color: #5a32a3;
+      transform: translateY(-1px);
+    }
+
+    .choice-btn.selected {
+      background-color: #28a745;
+    }
+
+    .calculate-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .calculate-btn:hover {
+      background-color: #218838;
+      transform: translateY(-1px);
+    }
+
+    .calculate-btn.reset-btn {
+      background-color: #17a2b8;
+    }
+
+    .calculate-btn.reset-btn:hover {
+      background-color: #138496;
+    }
+
+    .feedback {
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .feedback.correct {
+      background-color: #d4edda;
+      color: #155724;
+      border: 2px solid #c3e6cb;
+    }
+
+    .feedback.incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 2px solid #f5c6cb;
+    }
+
+    .identification-activity {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border: 3px solid #ff9800;
+    }
+
+    .progress-section {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: #28a745;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .result-display {
+      background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #9c27b0;
+    }
+
+    .score-display {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .combinations-table {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .combinations-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .combinations-table th {
+      background: #17a2b8;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .combinations-table td {
+      padding: 10px;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .combinations-table tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    .input-group {
+      background: #ffffff;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #2c3e50;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ced4da;
+      font-size: 1em;
+    }
+
+    .small-note {
+      font-size: 0.95em;
+      opacity: 0.9;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 15px; }
+      h1 { font-size: 2em; }
+      .factor-grid { grid-template-columns: 1fr 1fr; }
+      .nav-btn { padding: 10px 18px; margin: 5px; font-size: 0.9em; }
+      .choice-btn { margin: 5px; padding: 8px 15px; min-width: 140px; }
+      .input-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .factor-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🇨🇦 Factor Payments: Classifying Income</h1>
+
+    <div class="canada-header">
+      <h2>🍁 Where does income come from in the economy? 🍁</h2>
+      <p><strong>Learn to classify income as wages & salaries, rent, interest, or profit.</strong></p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="activity-nav">
+      <button class="nav-btn active" onclick="showActivity('overview', this)">🔄 Overview</button>
+      <button class="nav-btn" onclick="showActivity('identification', this)">🔍 Income ID</button>
+      <button class="nav-btn" onclick="showActivity('cases', this)">🏢 Canadian Cases</button>
+      <button class="nav-btn" onclick="showActivity('calculators', this)">🧮 Income Lab</button>
+      <button class="nav-btn" onclick="showActivity('quiz', this)">🎯 Master Quiz</button>
+    </div>
+
+    <!-- Activity 1: Overview -->
+    <div id="overview" class="activity-section active">
+      <h3>🔄 The Four Main Types of Income (Factor Payments)</h3>
+
+      <div class="concept-box">
+        <h4>📚 What are Factor Payments?</h4>
+        <p><strong>Factor payments</strong> are the incomes people earn for providing the factors of production:</p>
+        <p class="small-note"><strong>Labour → Wages & Salaries</strong> • <strong>Land → Rent</strong> • <strong>Capital → Interest</strong> • <strong>Entrepreneurship → Profit</strong></p>
+        <p class="small-note"><em>Tip:</em> Ask “What resource is being provided?” then match it to the income type.</p>
+      </div>
+
+      <div class="factor-grid">
+        <div class="factor-card" style="border-color:#2196f3;">
+          <div class="factor-icon">💼</div>
+          <h5>Wages & Salaries</h5>
+          <p><strong>Income for Labour</strong></p>
+          <p>Paycheques for time, skills, and effort</p>
+          <p><em>Example:</em> nurse, cashier, electrician</p>
+        </div>
+
+        <div class="factor-card" style="border-color:#ff9800;">
+          <div class="factor-icon">🏠</div>
+          <h5>Rent</h5>
+          <p><strong>Income for Land / Property</strong></p>
+          <p>Payments for using land or buildings</p>
+          <p><em>Example:</em> apartment rent, farmland lease</p>
+        </div>
+
+        <div class="factor-card" style="border-color:#17a2b8;">
+          <div class="factor-icon">💰</div>
+          <h5>Interest</h5>
+          <p><strong>Income for Capital (Money Lent)</strong></p>
+          <p>Payment for lending savings / money</p>
+          <p><em>Example:</em> GIC, bonds, loans</p>
+        </div>
+
+        <div class="factor-card" style="border-color:#28a745;">
+          <div class="factor-icon">📈</div>
+          <h5>Profit</h5>
+          <p><strong>Income for Entrepreneurship</strong></p>
+          <p>What’s left after costs are paid</p>
+          <p><em>Example:</em> small business owner</p>
+        </div>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🍁 Quick Canadian Example Table</h4>
+        <div class="combinations-table">
+          <table>
+            <tr>
+              <th>Situation</th>
+              <th>Income Type</th>
+              <th>Why?</th>
+            </tr>
+            <tr>
+              <td>A Toronto barista gets paid every two weeks</td>
+              <td><strong>Wages & Salaries</strong></td>
+              <td>Payment for labour (work time + skills)</td>
+            </tr>
+            <tr>
+              <td>A landlord leases a basement apartment</td>
+              <td><strong>Rent</strong></td>
+              <td>Payment for use of property/land</td>
+            </tr>
+            <tr>
+              <td>A saver earns money from a GIC at a bank</td>
+              <td><strong>Interest</strong></td>
+              <td>Payment for lending money (financial capital)</td>
+            </tr>
+            <tr>
+              <td>A food truck owner earns money after paying costs</td>
+              <td><strong>Profit</strong></td>
+              <td>Reward for risk-taking + running the business</td>
+            </tr>
+          </table>
+        </div>
+        <p class="small-note"><em>Reality check:</em> Self-employed people can earn “mixed income” (some labour + some profit), but in this activity we’ll classify by the <strong>main source</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Activity 2: Income Identification -->
+    <div id="identification" class="activity-section">
+      <h3>🔍 Income Identification Challenge</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Learning Objective</h4>
+        <p>Read each scenario and identify the type of income: <strong>wages & salaries</strong>, <strong>rent</strong>, <strong>interest</strong>, or <strong>profit</strong>.</p>
+      </div>
+
+      <div class="identification-activity">
+        <h4>🧾 Scenario Set 1: Everyday Canadian Life</h4>
+
+        <div class="question-card">
+          <p><strong>1) A part-time student works at a grocery store and gets a paycheque every Friday.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc1','wages','wages','✅ Correct! Paycheques for work are wages & salaries (labour).', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc1','rent','wages','❌ Not rent. No property is being rented out.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc1','interest','wages','❌ Not interest. No money is being lent.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc1','profit','wages','❌ Not profit. This is employee income, not business leftovers.', this)">📈 Profit</button>
+          <div id="inc1-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>2) A family leases out a parking spot downtown for $200/month.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc2','wages','rent','❌ Not wages. Nobody is being paid to work.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc2','rent','rent','✅ Correct! Payment for use of land/property is rent.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc2','interest','rent','❌ Not interest. It’s not money being lent.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc2','profit','rent','❌ Not profit in this classification. It’s mainly property income.', this)">📈 Profit</button>
+          <div id="inc2-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>3) Someone buys a Government of Canada bond and earns a return each year.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc3','wages','interest','❌ Not wages. No labour is being done.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc3','rent','interest','❌ Not rent. No property is being leased.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc3','interest','interest','✅ Correct! Bonds pay interest for lending money.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc3','profit','interest','❌ Not profit. It’s not running a business.', this)">📈 Profit</button>
+          <div id="inc3-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>4) A small bakery earns $9,000 in sales this week and has $7,000 in costs.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc4','wages','profit','❌ Not wages. This is business income after costs.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc4','rent','profit','❌ Not rent. This is not payment for leasing property.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc4','interest','profit','❌ Not interest. No loan return is described.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc4','profit','profit','✅ Correct! Profit = revenue − costs (reward for entrepreneurship).', this)">📈 Profit</button>
+          <div id="inc4-feedback" class="feedback"></div>
+        </div>
+      </div>
+
+      <div class="identification-activity">
+        <h4>🏗️ Scenario Set 2: More Tricky Ones</h4>
+
+        <div class="question-card">
+          <p><strong>5) A construction worker is paid overtime for weekend shifts.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc5','wages','wages','✅ Correct! Overtime pay is still wages & salaries.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc5','rent','wages','❌ Not rent. No property is being used by someone else.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc5','interest','wages','❌ Not interest. No money is lent.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc5','profit','wages','❌ Not profit. This is employee compensation.', this)">📈 Profit</button>
+          <div id="inc5-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>6) A farmer charges another farmer to use their land for grazing cattle.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc6','wages','rent','❌ Not wages. It’s not pay for work time.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc6','rent','rent','✅ Correct! Leasing land earns rent.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc6','interest','rent','❌ Not interest. It’s land, not lending money.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc6','profit','rent','❌ Not profit for this classification. Main source is land/property.', this)">📈 Profit</button>
+          <div id="inc6-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>7) A credit union pays you money for keeping savings in an account.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc7','wages','interest','❌ Not wages. No labour is performed.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc7','rent','interest','❌ Not rent. No property is being leased.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc7','interest','interest','✅ Correct! Savings earn interest (payment for lending funds).', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc7','profit','interest','❌ Not profit. You aren’t operating the bank.', this)">📈 Profit</button>
+          <div id="inc7-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>8) A clothing store owner pays all bills and has money left over for themselves.</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc8','wages','profit','❌ Not wages (unless they’re an employee). This describes the business leftover.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc8','rent','profit','❌ Not rent. It’s not payment for leasing property.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc8','interest','profit','❌ Not interest. No lending return is described.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('inc8','profit','profit','✅ Correct! Money left after costs is profit.', this)">📈 Profit</button>
+          <div id="inc8-feedback" class="feedback"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 3: Canadian Cases -->
+    <div id="cases" class="activity-section">
+      <h3>🏢 Canadian Business & Household Case Studies</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>Classify the <strong>main income type</strong> in each case, and explain why.</p>
+      </div>
+
+      <div class="business-case">
+        <h4>🏘️ Case Study 1: Condo Investor in Mississauga</h4>
+        <p><strong>Situation:</strong> A condo owner rents the unit for $2,400/month. They pay $1,700/month in mortgage + condo fees + repairs.</p>
+
+        <div class="question-card">
+          <p><strong>What type of income is the $2,400/month received from the tenant?</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1','wages','rent','❌ Not wages. That would be pay for work.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1','rent','rent','✅ Correct! Tenant payments for using property are rent.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1','interest','rent','❌ Not interest. That’s a return for lending money.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1','profit','rent','❌ Not profit in this classification. The main source is property use.', this)">📈 Profit</button>
+          <div id="cs1-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>What is the “money left after expenses” most similar to?</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1b','profit','profit','✅ Correct! Net income after costs is like profit (leftover).', this)">📈 Profit</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1b','interest','profit','❌ Not interest. Expenses/leftover isn’t a loan payment.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1b','rent','profit','❌ Rent is the payment from tenant; leftover after costs is different.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs1b','wages','profit','❌ Not wages. No labour pay is described.', this)">💼 Wages & Salaries</button>
+          <div id="cs1b-feedback" class="feedback"></div>
+          <p class="small-note"><em>Teacher note:</em> This is a nice discussion about <strong>gross rent vs. net rental income</strong>.</p>
+        </div>
+      </div>
+
+      <div class="business-case">
+        <h4>🏪 Case Study 2: A Corner Store (Convenience Store)</h4>
+        <p><strong>Situation:</strong> The owner hires a cashier, pays rent for the location, borrows money to renovate, and keeps what’s left after costs.</p>
+
+        <div class="question-card">
+          <p><strong>The cashier’s paycheque is:</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2','wages','wages','✅ Correct! Employee pay is wages & salaries.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2','rent','wages','❌ Not rent.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2','interest','wages','❌ Not interest.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2','profit','wages','❌ Not profit.', this)">📈 Profit</button>
+          <div id="cs2-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>The payment the owner makes to the bank for borrowing money is mainly linked to:</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2b','interest','interest','✅ Correct! Borrowing money leads to interest payments to the lender.', this)">💰 Interest</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2b','rent','interest','❌ Not rent. That’s for property use.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2b','wages','interest','❌ Not wages. That’s pay for labour.', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2b','profit','interest','❌ Not profit. This is a cost paid to lenders.', this)">📈 Profit</button>
+          <div id="cs2b-feedback" class="feedback"></div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>What the owner keeps after paying all costs is:</strong></p>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2c','profit','profit','✅ Correct! Leftover after costs is profit.', this)">📈 Profit</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2c','wages','profit','❌ Not wages (unless owner is paid as an employee).', this)">💼 Wages & Salaries</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2c','rent','profit','❌ Not rent.', this)">🏠 Rent</button>
+          <button class="choice-btn" onclick="checkIncomeAnswer('cs2c','interest','profit','❌ Not interest.', this)">💰 Interest</button>
+          <div id="cs2c-feedback" class="feedback"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 4: Income Lab (Calculators) -->
+    <div id="calculators" class="activity-section">
+      <h3>🧮 Income Lab: Calculate Each Type</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>Use simple numbers to see how each income type works. (All calculations are for learning—real life can include taxes and extra details.)</p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>💼 Wages & Salaries Calculator</h4>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="wageHourly">Hourly wage ($)</label>
+            <input id="wageHourly" type="number" value="18" min="0" step="0.01" />
+          </div>
+          <div class="input-group">
+            <label for="wageHours">Hours per week</label>
+            <input id="wageHours" type="number" value="20" min="0" step="0.1" />
+          </div>
+        </div>
+        <button class="calculate-btn" onclick="calcWages()">Calculate Monthly Wages</button>
+        <button class="calculate-btn reset-btn" onclick="resetWages()">Reset</button>
+        <div id="wageResult" class="result-display" style="display:none;"></div>
+        <p class="small-note"><em>We use 4.33 weeks/month for an average month.</em></p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🏠 Rent Calculator (Net Rental Income)</h4>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="rentMonthly">Monthly rent received ($)</label>
+            <input id="rentMonthly" type="number" value="2200" min="0" step="1" />
+          </div>
+          <div class="input-group">
+            <label for="rentExpenses">Monthly expenses ($)</label>
+            <input id="rentExpenses" type="number" value="900" min="0" step="1" />
+          </div>
+        </div>
+        <button class="calculate-btn" onclick="calcRent()">Calculate Net Rent Income</button>
+        <button class="calculate-btn reset-btn" onclick="resetRent()">Reset</button>
+        <div id="rentResult" class="result-display" style="display:none;"></div>
+        <p class="small-note"><em>Net rental income = rent received − expenses.</em></p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>💰 Interest Calculator (Simple)</h4>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="interestPrincipal">Principal / amount saved or lent ($)</label>
+            <input id="interestPrincipal" type="number" value="5000" min="0" step="1" />
+          </div>
+          <div class="input-group">
+            <label for="interestRate">Annual interest rate (%)</label>
+            <input id="interestRate" type="number" value="4" min="0" step="0.01" />
+          </div>
+        </div>
+        <button class="calculate-btn" onclick="calcInterest()">Calculate Interest (Year + Month)</button>
+        <button class="calculate-btn reset-btn" onclick="resetInterest()">Reset</button>
+        <div id="interestResult" class="result-display" style="display:none;"></div>
+        <p class="small-note"><em>Simple interest for learning: annual = principal × rate.</em></p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>📈 Profit Calculator</h4>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="profitRevenue">Monthly revenue/sales ($)</label>
+            <input id="profitRevenue" type="number" value="12000" min="0" step="1" />
+          </div>
+          <div class="input-group">
+            <label for="profitCosts">Monthly costs ($)</label>
+            <input id="profitCosts" type="number" value="9500" min="0" step="1" />
+          </div>
+        </div>
+        <button class="calculate-btn" onclick="calcProfit()">Calculate Profit</button>
+        <button class="calculate-btn reset-btn" onclick="resetProfit()">Reset</button>
+        <div id="profitResult" class="result-display" style="display:none;"></div>
+        <p class="small-note"><em>Profit = revenue − costs.</em></p>
+      </div>
+    </div>
+
+    <!-- Activity 5: Master Quiz -->
+    <div id="quiz" class="activity-section">
+      <h3>🎯 Factor Payments Master Quiz</h3>
+
+      <div class="progress-section">
+        <h4>📊 Progress Tracker</h4>
+        <div id="quiz-progress">Questions Completed: <span id="completed-count">0</span>/<span id="total-count">16</span></div>
+        <div class="progress-bar">
+          <div id="quiz-progress-fill" class="progress-fill" style="width:0%;"></div>
+        </div>
+        <button class="calculate-btn reset-btn" onclick="resetMasterQuiz()">🔄 Reset Quiz</button>
+      </div>
+
+      <div class="identification-activity">
+        <h4>🇨🇦 Mixed Scenarios (Choose the Correct Income Type)</h4>
+        <p><strong>How it works:</strong> Each session randomly selects 16 questions from a larger bank. Reset to practice again!</p>
+
+        <div id="master-quiz"></div>
+
+        <div class="result-display" id="final-results" style="display:none;">
+          <h4>🎯 Quiz Results</h4>
+          <div id="score-summary" class="score-display"></div>
+          <div id="detailed-feedback"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Navigation ----------
+    function showActivity(activityId, btn) {
+      document.querySelectorAll(".activity-section").forEach(section => section.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+
+      document.getElementById(activityId).classList.add("active");
+      btn.classList.add("active");
+
+      if (activityId === "quiz") initializeMasterQuiz();
+    }
+
+    // ---------- Shared multiple-choice checker ----------
+    function checkIncomeAnswer(questionId, selectedAnswer, correctAnswer, feedbackText, btn) {
+      const feedbackDiv = document.getElementById(questionId + "-feedback");
+      const isCorrect = selectedAnswer === correctAnswer;
+
+      // remove previous selections in this question-card
+      const parent = btn.parentElement;
+      parent.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+
+      btn.classList.add("selected");
+
+      feedbackDiv.style.display = "block";
+      feedbackDiv.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      feedbackDiv.textContent = feedbackText;
+    }
+
+    // ---------- Calculators ----------
+    function money(n) {
+      return n.toLocaleString(undefined, { style: "currency", currency: "CAD" });
+    }
+
+    function readNum(id) {
+      const v = parseFloat(document.getElementById(id).value);
+      return isNaN(v) ? 0 : v;
+    }
+
+    function calcWages() {
+      const hourly = readNum("wageHourly");
+      const hours = readNum("wageHours");
+      const weekly = hourly * hours;
+      const monthly = weekly * 4.33;
+
+      const div = document.getElementById("wageResult");
+      div.style.display = "block";
+      div.innerHTML = `
+        <h4>Result</h4>
+        <p><strong>Weekly wages:</strong> ${money(weekly)}</p>
+        <p><strong>Estimated monthly wages:</strong> ${money(monthly)}</p>
+        <p class="small-note">Classification: <strong>Wages & Salaries</strong> (income for labour)</p>
+      `;
+    }
+
+    function resetWages() {
+      document.getElementById("wageHourly").value = 18;
+      document.getElementById("wageHours").value = 20;
+      document.getElementById("wageResult").style.display = "none";
+    }
+
+    function calcRent() {
+      const rent = readNum("rentMonthly");
+      const expenses = readNum("rentExpenses");
+      const net = rent - expenses;
+
+      const div = document.getElementById("rentResult");
+      div.style.display = "block";
+      div.innerHTML = `
+        <h4>Result</h4>
+        <p><strong>Rent received:</strong> ${money(rent)}</p>
+        <p><strong>Expenses:</strong> ${money(expenses)}</p>
+        <p><strong>Net rental income:</strong> ${money(net)}</p>
+        <p class="small-note">Classification: <strong>Rent</strong> (income from property/land use)</p>
+      `;
+    }
+
+    function resetRent() {
+      document.getElementById("rentMonthly").value = 2200;
+      document.getElementById("rentExpenses").value = 900;
+      document.getElementById("rentResult").style.display = "none";
+    }
+
+    function calcInterest() {
+      const principal = readNum("interestPrincipal");
+      const ratePct = readNum("interestRate");
+      const rate = ratePct / 100;
+
+      const annual = principal * rate;
+      const monthly = annual / 12;
+
+      const div = document.getElementById("interestResult");
+      div.style.display = "block";
+      div.innerHTML = `
+        <h4>Result</h4>
+        <p><strong>Annual interest (simple):</strong> ${money(annual)}</p>
+        <p><strong>Monthly average:</strong> ${money(monthly)}</p>
+        <p class="small-note">Classification: <strong>Interest</strong> (income from lending money/capital)</p>
+      `;
+    }
+
+    function resetInterest() {
+      document.getElementById("interestPrincipal").value = 5000;
+      document.getElementById("interestRate").value = 4;
+      document.getElementById("interestResult").style.display = "none";
+    }
+
+    function calcProfit() {
+      const rev = readNum("profitRevenue");
+      const costs = readNum("profitCosts");
+      const prof = rev - costs;
+
+      const div = document.getElementById("profitResult");
+      div.style.display = "block";
+      div.innerHTML = `
+        <h4>Result</h4>
+        <p><strong>Revenue:</strong> ${money(rev)}</p>
+        <p><strong>Costs:</strong> ${money(costs)}</p>
+        <p><strong>Profit:</strong> ${money(prof)}</p>
+        <p class="small-note">Classification: <strong>Profit</strong> (reward for entrepreneurship/risk-taking)</p>
+      `;
+    }
+
+    function resetProfit() {
+      document.getElementById("profitRevenue").value = 12000;
+      document.getElementById("profitCosts").value = 9500;
+      document.getElementById("profitResult").style.display = "none";
+    }
+
+    // ---------- Master Quiz ----------
+    let currentMasterQuestion = 0;
+    let masterAnswers = [];
+    let masterScore = 0;
+    let currentQuizQuestions = [];
+
+    const quizBank = [
+      {
+        id: "q1",
+        question: "A nurse at a hospital receives a biweekly paycheque. This income is:",
+        options: ["Rent", "Interest", "Wages & Salaries", "Profit"],
+        correct: 2,
+        explanation: "Wages & salaries are paid for labour—time, skills, and effort."
+      },
+      {
+        id: "q2",
+        question: "A student earns money from a savings account at a credit union. This income is:",
+        options: ["Interest", "Rent", "Profit", "Wages & Salaries"],
+        correct: 0,
+        explanation: "Interest is earned from lending money (financial capital)."
+      },
+      {
+        id: "q3",
+        question: "A landlord charges $2,100/month for an apartment. The payment received is:",
+        options: ["Profit", "Rent", "Interest", "Wages & Salaries"],
+        correct: 1,
+        explanation: "Rent is payment for using land/property."
+      },
+      {
+        id: "q4",
+        question: "A café earns $6,000 in sales and has $4,800 in costs. The leftover is:",
+        options: ["Interest", "Wages & Salaries", "Rent", "Profit"],
+        correct: 3,
+        explanation: "Profit is what remains after costs are paid (revenue − costs)."
+      },
+      {
+        id: "q5",
+        question: "A retiree buys a Government of Canada bond and gets paid each year. The income is:",
+        options: ["Wages & Salaries", "Interest", "Rent", "Profit"],
+        correct: 1,
+        explanation: "Bonds pay interest as a return for lending funds."
+      },
+      {
+        id: "q6",
+        question: "A farmer leases farmland to a neighbour for a season. The lease payment is:",
+        options: ["Rent", "Profit", "Wages & Salaries", "Interest"],
+        correct: 0,
+        explanation: "Land (property) use is paid with rent."
+      },
+      {
+        id: "q7",
+        question: "A delivery driver gets paid per hour plus tips. The hourly pay is:",
+        options: ["Profit", "Wages & Salaries", "Interest", "Rent"],
+        correct: 1,
+        explanation: "Hourly pay is wages/salaries (labour income)."
+      },
+      {
+        id: "q8",
+        question: "A bank pays you 3% per year for a GIC. That payment is:",
+        options: ["Interest", "Rent", "Wages & Salaries", "Profit"],
+        correct: 0,
+        explanation: "GIC returns are interest."
+      },
+      {
+        id: "q9",
+        question: "An entrepreneur runs a small business and keeps what’s left after paying expenses. That income is:",
+        options: ["Rent", "Profit", "Interest", "Wages & Salaries"],
+        correct: 1,
+        explanation: "Leftover after costs is profit."
+      },
+      {
+        id: "q10",
+        question: "A person rents out a storage locker they own. The money received is:",
+        options: ["Rent", "Interest", "Profit", "Wages & Salaries"],
+        correct: 0,
+        explanation: "Payment for use of property is rent."
+      },
+      {
+        id: "q11",
+        question: "A teacher’s salary is best classified as:",
+        options: ["Wages & Salaries", "Rent", "Interest", "Profit"],
+        correct: 0,
+        explanation: "Salaries are wages (labour income)."
+      },
+      {
+        id: "q12",
+        question: "A company owner borrows money and pays the lender extra for the loan. The extra paid is:",
+        options: ["Rent", "Profit", "Interest", "Wages & Salaries"],
+        correct: 2,
+        explanation: "The cost of borrowing funds is interest."
+      },
+      {
+        id: "q13",
+        question: "A shop owner pays employees, rent, and loan interest. What remains belongs to the owner as:",
+        options: ["Wages & Salaries", "Profit", "Rent", "Interest"],
+        correct: 1,
+        explanation: "Profit is the residual after paying costs."
+      },
+      {
+        id: "q14",
+        question: "A homeowner rents out their driveway for event parking. The income is:",
+        options: ["Rent", "Profit", "Interest", "Wages & Salaries"],
+        correct: 0,
+        explanation: "Driveway/space use is property (rent)."
+      },
+      {
+        id: "q15",
+        question: "A person invests money by lending it through a bond. The return is:",
+        options: ["Wages & Salaries", "Profit", "Rent", "Interest"],
+        correct: 3,
+        explanation: "Lending funds earns interest."
+      },
+      {
+        id: "q16",
+        question: "A business sells products for $20,000 and has total costs of $21,000. The profit is:",
+        options: ["$1,000 profit", "$1,000 loss", "$20,000 profit", "$21,000 interest"],
+        correct: 1,
+        explanation: "Profit = revenue − costs = 20,000 − 21,000 = −1,000 (a loss)."
+      },
+      // extra bank (for randomization)
+      {
+        id: "q17",
+        question: "A hairstylist is an employee at a salon and earns $19/hour. This income is:",
+        options: ["Rent", "Interest", "Wages & Salaries", "Profit"],
+        correct: 2,
+        explanation: "Employee earnings for labour are wages/salaries."
+      },
+      {
+        id: "q18",
+        question: "A person owns a small duplex and receives monthly payments from tenants. The main income type is:",
+        options: ["Rent", "Interest", "Wages & Salaries", "Profit"],
+        correct: 0,
+        explanation: "Tenant payments for property use are rent."
+      },
+      {
+        id: "q19",
+        question: "A startup sells an app subscription; after paying costs, it has money left. That leftover is:",
+        options: ["Wages & Salaries", "Interest", "Profit", "Rent"],
+        correct: 2,
+        explanation: "Leftover after business costs is profit."
+      },
+      {
+        id: "q20",
+        question: "A saver earns money because the bank uses their deposited funds. That income is:",
+        options: ["Interest", "Rent", "Profit", "Wages & Salaries"],
+        correct: 0,
+        explanation: "Deposits can earn interest as a return on lending funds to the bank."
+      }
+    ];
+
+    function getQuizQuestions() {
+      const all = [...quizBank];
+      const shuffled = all.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 16);
+    }
+
+    function resetMasterQuiz() {
+      const ok = confirm("Reset the quiz and start over? Your current progress will be lost.");
+      if (ok) initializeMasterQuiz();
+    }
+
+    function initializeMasterQuiz() {
+      currentMasterQuestion = 0;
+      masterAnswers = [];
+      masterScore = 0;
+      currentQuizQuestions = getQuizQuestions();
+
+      document.getElementById("final-results").style.display = "none";
+      document.getElementById("completed-count").textContent = "0";
+      document.getElementById("quiz-progress-fill").style.width = "0%";
+      document.getElementById("quiz-progress").innerHTML =
+        `Questions Completed: <span id="completed-count">0</span>/${currentQuizQuestions.length}`;
+
+      displayMasterQuestion();
+    }
+
+    function displayMasterQuestion() {
+      if (currentMasterQuestion >= currentQuizQuestions.length) {
+        showMasterResults();
+        return;
+      }
+
+      const q = currentQuizQuestions[currentMasterQuestion];
+      const quizContainer = document.getElementById("master-quiz");
+
+      quizContainer.innerHTML = `
+        <div class="question-card">
+          <h5>Question ${currentMasterQuestion + 1} of ${currentQuizQuestions.length}</h5>
+          <p><strong>${q.question}</strong></p>
+          <div id="master-options">
+            ${q.options.map((opt, idx) => `<button class="choice-btn" onclick="answerMasterQuestion(${idx}, this)">${opt}</button>`).join("")}
+          </div>
+          <div id="master-feedback" class="feedback"></div>
+        </div>
+      `;
+    }
+
+    function answerMasterQuestion(selectedIndex, btn) {
+      const q = currentQuizQuestions[currentMasterQuestion];
+      const isCorrect = selectedIndex === q.correct;
+      const feedbackDiv = document.getElementById("master-feedback");
+
+      masterAnswers[currentMasterQuestion] = {
+        selected: selectedIndex,
+        correct: q.correct,
+        isCorrect,
+        question: q.question,
+        options: q.options,
+        explanation: q.explanation
+      };
+
+      if (isCorrect) masterScore++;
+
+      // UI selections
+      btn.parentElement.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+
+      feedbackDiv.style.display = "block";
+      feedbackDiv.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      feedbackDiv.innerHTML = `<strong>${isCorrect ? "✅ Correct!" : "❌ Incorrect."}</strong><br>${q.explanation}`;
+
+      // progress
+      const completed = currentMasterQuestion + 1;
+      document.getElementById("completed-count").textContent = completed;
+      document.getElementById("quiz-progress-fill").style.width = (completed / currentQuizQuestions.length) * 100 + "%";
+
+      setTimeout(() => {
+        currentMasterQuestion++;
+        displayMasterQuestion();
+      }, 2800);
+    }
+
+    function showMasterResults() {
+      const total = currentQuizQuestions.length;
+      const pct = Math.round((masterScore / total) * 100);
+
+      const resultsDiv = document.getElementById("final-results");
+      const scoreDiv = document.getElementById("score-summary");
+      const feedbackDiv = document.getElementById("detailed-feedback");
+
+      scoreDiv.innerHTML = `
+        <h3>Your Score: ${masterScore}/${total} (${pct}%)</h3>
+        <p>${getScoreMessage(pct)}</p>
+        <p><strong>🔄 Want more practice? Click “Reset Quiz”.</strong></p>
+      `;
+
+      let detailedHTML = "<h5>📋 Detailed Review:</h5>";
+      masterAnswers.forEach((a, i) => {
+        detailedHTML += `
+          <div style="margin: 15px 0; padding: 15px; border-radius: 8px; ${a.isCorrect ? "background:#d4edda;border:2px solid #c3e6cb;" : "background:#f8d7da;border:2px solid #f5c6cb;"}">
+            <strong>Q${i + 1}:</strong> ${a.question}<br>
+            <strong>Your answer:</strong> ${a.options[a.selected]}<br>
+            <strong>Correct answer:</strong> ${a.options[a.correct]}<br>
+            <em>${a.explanation}</em>
+          </div>
+        `;
+      });
+
+      feedbackDiv.innerHTML = detailedHTML;
+      resultsDiv.style.display = "block";
+    }
+
+    function getScoreMessage(pct) {
+      if (pct >= 90) return "🏆 Outstanding! You can classify factor payments confidently.";
+      if (pct >= 80) return "👏 Strong work! You’re very close to mastery.";
+      if (pct >= 70) return "👍 Good! Review what makes rent vs profit different.";
+      if (pct >= 60) return "📚 Keep going! Focus on: labour→wages, land→rent, capital→interest, entrepreneurship→profit.";
+      return "📖 More practice needed—try the Income ID activity and the Income Lab calculators.";
+    }
+  </script>
+</body>
+</html>
