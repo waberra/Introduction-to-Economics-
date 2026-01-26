@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factors of Production - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.4em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .activity-nav {
+            background: #343a40;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .nav-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background-color: #28a745;
+        }
+        
+        .activity-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+            display: none;
+        }
+        
+        .activity-section.active {
+            display: block;
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #fff8e1, #ffcc02);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff6f00;
+        }
+        
+        .factor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .factor-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 3px solid #4caf50;
+            text-align: center;
+        }
+        
+        .factor-icon {
+            font-size: 3em;
+            margin: 10px 0;
+        }
+        
+        .scenario-box {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #2196f3;
+            font-size: 1.1em;
+        }
+        
+        .business-case {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .choice-btn {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 8px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        
+        .choice-btn:hover {
+            background-color: #5a32a3;
+            transform: translateY(-1px);
+        }
+        
+        .choice-btn.selected {
+            background-color: #28a745;
+        }
+        
+        .calculate-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .calculate-btn:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+        
+        .calculate-btn.reset-btn {
+            background-color: #17a2b8;
+        }
+        
+        .calculate-btn.reset-btn:hover {
+            background-color: #138496;
+        }
+        
+        .feedback {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .identification-activity {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #ff9800;
+        }
+        
+        .progress-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .result-display {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .score-display {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .combinations-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .combinations-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .combinations-table th {
+            background: #17a2b8;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .combinations-table td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .combinations-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 2em; }
+            .factor-grid { grid-template-columns: 1fr 1fr; }
+            .nav-btn { padding: 10px 18px; margin: 5px; font-size: 0.9em; }
+            .choice-btn { margin: 5px; padding: 8px 15px; min-width: 120px; }
+        }
+        
+        @media (max-width: 480px) {
+            .factor-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🇨🇦 Factors of Production</h1>
+    
+    <div class="canada-header">
+        <h2>🍁 The Building Blocks of Canadian Economy 🍁</h2>
+        <p><strong>Explore the four essential ingredients needed to create goods and services!</strong></p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="activity-nav">
+        <button class="nav-btn active" onclick="showActivity('overview')">🔄 Overview</button>
+        <button class="nav-btn" onclick="showActivity('identification')">🔍 Factor ID</button>
+        <button class="nav-btn" onclick="showActivity('business-cases')">🏢 Business Cases</button>
+        <button class="nav-btn" onclick="showActivity('combinations')">⚡ Combinations</button>
+        <button class="nav-btn" onclick="showActivity('quiz')">🎯 Master Quiz</button>
+    </div>
+
+    <!-- Activity 1: Overview -->
+    <div id="overview" class="activity-section active">
+        <h3>🔄 The Four Factors of Production</h3>
+        
+        <div class="concept-box">
+            <h4>📚 What Are Factors of Production?</h4>
+            <p><strong>Factors of Production:</strong> The essential resources needed to produce goods and services in any economy. Every business combines these factors to create value.</p>
+            <p><strong>Note:</strong> We also include <em>intermediate products</em> - goods produced by one business and used as inputs by another business.</p>
+        </div>
+
+        <div class="factor-grid">
+            <div class="factor-card">
+                <div class="factor-icon">🌍</div>
+                <h5>Land</h5>
+                <p><strong>Natural Resources</strong></p>
+                <p>Forests, minerals, water, oil, agricultural land, fishing grounds</p>
+                <p><em>Canada's Advantage: Vast natural resources</em></p>
+            </div>
+            
+            <div class="factor-card">
+                <div class="factor-icon">👷</div>
+                <h5>Labour</h5>
+                <p><strong>Human Resources</strong></p>
+                <p>Physical work, skills, knowledge, creativity, experience</p>
+                <p><em>Canada's Strength: Educated workforce</em></p>
+            </div>
+            
+            <div class="factor-card">
+                <div class="factor-icon">🏗️</div>
+                <h5>Capital</h5>
+                <p><strong>Human-Made Resources</strong></p>
+                <p>Machinery, buildings, tools, technology, infrastructure</p>
+                <p><em>Canada's Investment: Modern technology</em></p>
+            </div>
+            
+            <div class="factor-card">
+                <div class="factor-icon">💡</div>
+                <h5>Entrepreneurship</h5>
+                <p><strong>Business Leadership</strong></p>
+                <p>Innovation, risk-taking, organizing, decision-making</p>
+                <p><em>Canada's Innovation: Startup ecosystem</em></p>
+            </div>
+        </div>
+
+        <div class="factor-grid" style="grid-template-columns: 1fr; max-width: 300px; margin: 20px auto;">
+            <div class="factor-card" style="border-color: #ff6f00;">
+                <div class="factor-icon">🔧</div>
+                <h5>Intermediate Products</h5>
+                <p><strong>Goods Used to Make Other Goods</strong></p>
+                <p>Steel for cars, flour for bread, microchips for electronics</p>
+                <p><em>Canada's Role: Major supplier to global supply chains</em></p>
+            </div>
+        </div>
+
+        <div class="scenario-box">
+            <h4>🍁 Canadian Example: Maple Syrup Production</h4>
+            <div class="combinations-table">
+                <table>
+                    <tr>
+                        <th>Factor</th>
+                        <th>Example in Maple Syrup Production</th>
+                        <th>Why It's Essential</th>
+                    </tr>
+                    <tr>
+                        <td><strong>🌍 Land</strong></td>
+                        <td>Sugar maple forests in Quebec and Ontario</td>
+                        <td>Natural resource that produces the sap</td>
+                    </tr>
+                    <tr>
+                        <td><strong>👷 Labour</strong></td>
+                        <td>Workers who tap trees, collect sap, operate equipment</td>
+                        <td>Human effort to extract and process</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🏗️ Capital</strong></td>
+                        <td>Tapping equipment, boiling houses, storage tanks</td>
+                        <td>Tools needed to transform sap into syrup</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💡 Entrepreneurship</strong></td>
+                        <td>Maple farm owner who organizes production, markets product</td>
+                        <td>Leadership to combine other factors effectively</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔧 Intermediate Products</strong></td>
+                        <td>Glass bottles, labels, cardboard boxes for packaging</td>
+                        <td>Goods produced by other companies, used to package final product</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="scenario-box">
+            <h4>🔗 Understanding Production Chains</h4>
+            <p><strong>How Intermediate Products Connect Industries:</strong></p>
+            
+            <div class="combinations-table">
+                <table>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Canadian Example</th>
+                        <th>Industry</th>
+                        <th>Output Type</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1. Raw Materials</strong></td>
+                        <td>Iron ore from Labrador mines</td>
+                        <td>Mining</td>
+                        <td>Natural resource (Land)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Processing</strong></td>
+                        <td>Steel production in Hamilton</td>
+                        <td>Steel manufacturing</td>
+                        <td>Intermediate product</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Manufacturing</strong></td>
+                        <td>Car assembly in Ontario</td>
+                        <td>Automotive</td>
+                        <td>Final consumer product</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Services</strong></td>
+                        <td>Car dealership in Calgary</td>
+                        <td>Retail</td>
+                        <td>Consumer service</td>
+                    </tr>
+                </table>
+            </div>
+            <p><em>Each stage uses all four factors of production plus intermediate products from previous stages!</em></p>
+        </div>
+    </div>
+
+    <!-- Activity 2: Factor Identification -->
+    <div id="identification" class="activity-section">
+        <h3>🔍 Factor Identification Challenge</h3>
+        
+        <div class="concept-box">
+            <h4>🎯 Learning Objective</h4>
+            <p>Practice identifying which factor of production each resource represents in real Canadian business scenarios.</p>
+        </div>
+
+        <div class="identification-activity">
+            <h4>🏭 Scenario 1: Bombardier Aircraft Manufacturing</h4>
+            <p><strong>Bombardier produces aircraft in Montreal. Identify the factor of production for each resource:</strong></p>
+            
+            <div class="question-card">
+                <p><strong>The aluminum and composite materials used to build aircraft fuselages</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id1', 'land', '✅ CORRECT! Raw materials are natural resources, classified as Land.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id1', 'labour', '❌ INCORRECT. Materials are not human effort.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id1', 'capital', '❌ INCORRECT. Materials are inputs, not tools.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id1', 'entrepreneur', '❌ INCORRECT. Materials are not business leadership.')">💡 Entrepreneurship</button>
+                <div id="id1-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>Aerospace engineers who design the aircraft systems</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id2', 'land', '❌ INCORRECT. Engineers are people, not natural resources.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id2', 'labour', '✅ CORRECT! Engineers provide skilled human effort and knowledge.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id2', 'capital', '❌ INCORRECT. Engineers are not equipment.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id2', 'entrepreneur', '❌ INCORRECT. Engineers are employees, not business leaders.')">💡 Entrepreneurship</button>
+                <div id="id2-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>The sophisticated assembly line robots and computer-controlled machinery</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id3', 'land', '❌ INCORRECT. Robots are made by humans, not natural.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id3', 'labour', '❌ INCORRECT. Robots are not human workers.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id3', 'capital', '✅ CORRECT! Machinery and robots are capital goods used in production.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id3', 'entrepreneur', '❌ INCORRECT. Machines are not business leadership.')">💡 Entrepreneurship</button>
+                <div id="id3-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>The CEO who decides which aircraft models to develop and which markets to target</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4', 'land', '❌ INCORRECT. The CEO is not a natural resource.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4', 'labour', '⚠️ PARTIALLY CORRECT. The CEO provides labour, but their main role is leadership.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4', 'capital', '❌ INCORRECT. The CEO is not equipment.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4', 'entrepreneur', '✅ CORRECT! The CEO provides strategic leadership, risk-taking, and organization.')">💡 Entrepreneurship</button>
+                <div id="id4-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>The aircraft engines purchased from Pratt & Whitney Canada that power Bombardier's planes</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4b', 'land', '❌ INCORRECT. Engines are manufactured products, not natural resources.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4b', 'labour', '❌ INCORRECT. Engines are products, not human effort.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4b', 'capital', '❌ INCORRECT. These engines are inputs, not Bombardier\'s own equipment.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id4b', 'intermediate', '✅ CORRECT! Engines are goods produced by one company (Pratt & Whitney) and used as inputs by another (Bombardier).')">🔧 Intermediate Products</button>
+                <div id="id4b-feedback" class="feedback"></div>
+            </div>
+        </div>
+
+        <div class="identification-activity">
+            <h4>⛽ Scenario 2: Suncor Oil Sands Operations</h4>
+            
+            <div class="question-card">
+                <p><strong>The oil sand deposits in Alberta's Athabasca region</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id5', 'land', '✅ CORRECT! Oil sands are natural resources found in the earth.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id5', 'labour', '❌ INCORRECT. Oil sands are not human effort.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id5', 'capital', '❌ INCORRECT. Oil sands are natural, not made by humans.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id5', 'entrepreneur', '❌ INCORRECT. Oil sands are not business leadership.')">💡 Entrepreneurship</button>
+                <div id="id5-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>The massive mining trucks and oil extraction equipment</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id6', 'land', '❌ INCORRECT. Mining equipment is manufactured, not natural.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id6', 'labour', '❌ INCORRECT. Equipment is not human workers.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id6', 'capital', '✅ CORRECT! Mining trucks and extraction equipment are capital goods.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id6', 'entrepreneur', '❌ INCORRECT. Equipment is not leadership.')">💡 Entrepreneurship</button>
+                <div id="id6-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>The specialized chemicals used to separate oil from sand during processing</strong></p>
+                <button class="choice-btn" onclick="checkFactorAnswer('id7', 'land', '❌ INCORRECT. These chemicals are manufactured products.')">🌍 Land</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id7', 'labour', '❌ INCORRECT. Chemicals are products, not human effort.')">👷 Labour</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id7', 'capital', '❌ INCORRECT. Chemicals are consumed inputs, not reusable equipment.')">🏗️ Capital</button>
+                <button class="choice-btn" onclick="checkFactorAnswer('id7', 'intermediate', '✅ CORRECT! Processing chemicals are intermediate products - goods produced by chemical companies and used as inputs in oil extraction.')">🔧 Intermediate Products</button>
+                <div id="id7-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity 3: Business Cases -->
+    <div id="business-cases" class="activity-section">
+        <h3>🏢 Canadian Business Case Studies</h3>
+        
+        <div class="concept-box">
+            <h4>🎯 Analyze Real Companies</h4>
+            <p>Examine how successful Canadian companies combine all four factors of production to create value.</p>
+        </div>
+
+        <div class="business-case">
+            <h4>🍕 Case Study 1: Boston Pizza Restaurant Chain</h4>
+            <p><strong>Boston Pizza operates 400+ restaurants across Canada. How do they use each factor of production?</strong></p>
+            
+            <div class="question-card">
+                <h5>Land Factor Analysis</h5>
+                <p><strong>What represents Boston Pizza's primary use of the "Land" factor?</strong></p>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp1', 'locations', '✅ CORRECT! Restaurant locations (real estate) and food ingredients (agricultural products) are land factors.')">Restaurant locations and agricultural ingredients</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp1', 'employees', '❌ INCORRECT. Employees are labour, not land.')">Restaurant employees</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp1', 'equipment', '❌ INCORRECT. Kitchen equipment is capital.')">Kitchen equipment</button>
+                <div id="bp1-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Labour Factor Analysis</h5>
+                <p><strong>How does Boston Pizza utilize the "Labour" factor across their operations?</strong></p>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp2', 'comprehensive', '✅ CORRECT! They need diverse human skills from cooking to management to marketing.')">Cooks, servers, managers, head office staff, delivery drivers</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp2', 'cooks-only', '❌ INCORRECT. Labour includes all human effort, not just cooks.')">Only the cooks who prepare food</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp2', 'automated', '❌ INCORRECT. Restaurants are service businesses requiring extensive human interaction.')">Mostly automated with minimal human involvement</button>
+                <div id="bp2-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Capital Factor Analysis</h5>
+                <p><strong>What capital investments are essential for Boston Pizza's operations?</strong></p>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp3', 'all-equipment', '✅ CORRECT! All these physical assets are needed for restaurant operations.')">Kitchen equipment, POS systems, furniture, delivery vehicles</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp3', 'money-only', '❌ INCORRECT. Financial capital is different from physical capital goods.')">Only the money invested in the business</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp3', 'recipes', '❌ INCORRECT. Recipes are intellectual property, not physical capital.')">Just the pizza recipes and food formulas</button>
+                <div id="bp3-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Entrepreneurship Factor Analysis</h5>
+                <p><strong>How does Boston Pizza demonstrate entrepreneurship as a factor of production?</strong></p>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp4', 'leadership', '✅ CORRECT! Entrepreneurship involves strategic decisions, innovation, and risk management.')">Strategic planning, menu innovation, expansion decisions, brand management</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp4', 'profits', '❌ INCORRECT. Profits are results, not the entrepreneurship factor itself.')">Simply making profits from restaurant sales</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp4', 'franchisees', '⚠️ PARTIALLY CORRECT. Individual franchise owners do show entrepreneurship, but corporate leadership is the main entrepreneurship factor.')">Only the individual franchise owners</button>
+                <div id="bp4-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Intermediate Products Analysis</h5>
+                <p><strong>Boston Pizza uses pre-made pizza dough, processed cheese, and pre-cooked chicken wings from food suppliers. What are these?</strong></p>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp5', 'land', '❌ INCORRECT. These are processed foods, not natural resources.')">Land - natural agricultural products</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp5', 'labour', '❌ INCORRECT. These are products, not human effort.')">Labour - work by restaurant staff</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp5', 'capital', '❌ INCORRECT. These are consumable inputs, not reusable equipment.')">Capital - restaurant equipment</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('bp5', 'intermediate', '✅ CORRECT! These are intermediate products - goods produced by food suppliers and used as inputs by Boston Pizza.')">Intermediate Products - goods used to make final meals</button>
+                <div id="bp5-feedback" class="feedback"></div>
+            </div>
+        </div>
+
+        <div class="business-case">
+            <h4>🏪 Case Study 2: Shoppers Drug Mart</h4>
+            <p><strong>Canada's largest pharmacy chain combines factors of production to serve healthcare needs.</strong></p>
+            
+            <div class="question-card">
+                <h5>Integrated Factor Analysis</h5>
+                <p><strong>Shoppers Drug Mart's expansion into online pharmacy services required new combinations of factors. Which factor was MOST transformed?</strong></p>
+                <button class="choice-btn" onclick="checkBusinessAnswer('sdm1', 'capital', '✅ CORRECT! Digital transformation required major investments in new technology infrastructure.')">Capital - needed new technology systems and distribution centers</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('sdm1', 'land', '❌ INCORRECT. They still use similar retail locations.')">Land - needed completely different store locations</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('sdm1', 'labour', '⚠️ PARTIALLY CORRECT. New skills were needed, but technology changes were more significant.')">Labour - needed entirely different employees</button>
+                <div id="sdm1-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Intermediate Products in Pharmacy</h5>
+                <p><strong>Shoppers Drug Mart purchases prescription medications from pharmaceutical companies like Pfizer and Merck, then dispenses them to customers. What are these medications?</strong></p>
+                <button class="choice-btn" onclick="checkBusinessAnswer('sdm2', 'land', '❌ INCORRECT. While medications contain natural compounds, they are highly processed products.')">Land - natural medicinal compounds</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('sdm2', 'capital', '❌ INCORRECT. Medications are consumed, not reusable equipment.')">Capital - pharmacy equipment</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('sdm2', 'intermediate', '✅ CORRECT! Medications are intermediate products - goods produced by pharmaceutical companies and used by pharmacies to provide healthcare services.')">Intermediate Products - goods used to provide pharmacy services</button>
+                <button class="choice-btn" onclick="checkBusinessAnswer('sdm2', 'labour', '❌ INCORRECT. Medications are products, not human effort.')">Labour - pharmacist expertise</button>
+                <div id="sdm2-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity 4: Factor Combinations -->
+    <div id="combinations" class="activity-section">
+        <h3>⚡ Factor Combinations and Productivity</h3>
+        
+        <div class="concept-box">
+            <h4>🔄 How Factors Work Together</h4>
+            <p>The magic happens when factors are combined efficiently. Different combinations can produce the same output, but with different costs and efficiency levels.</p>
+        </div>
+
+        <div class="scenario-box">
+            <h4>🌾 Agricultural Example: Prairie Wheat Farming</h4>
+            <p><strong>Two Saskatchewan farms produce wheat but use different factor combinations:</strong></p>
+            
+            <div class="combinations-table">
+                <table>
+                    <tr>
+                        <th>Farm Type</th>
+                        <th>Land</th>
+                        <th>Labour</th>
+                        <th>Capital</th>
+                        <th>Entrepreneurship</th>
+                        <th>Result</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Traditional Farm</strong></td>
+                        <td>1,000 acres</td>
+                        <td>10 seasonal workers</td>
+                        <td>Basic tractors, simple tools</td>
+                        <td>Family farm management</td>
+                        <td>40 bushels/acre</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Modern Farm</strong></td>
+                        <td>1,000 acres</td>
+                        <td>3 skilled operators</td>
+                        <td>GPS tractors, precision equipment</td>
+                        <td>Data-driven management</td>
+                        <td>65 bushels/acre</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <h5>🔄 Factor Substitution Analysis</h5>
+            <p><strong>What does this comparison show about factor combinations?</strong></p>
+            <button class="choice-btn" onclick="checkCombinationAnswer('comb1', 'substitution', '✅ CORRECT! Capital (technology) can substitute for labour, often increasing productivity.')">Capital can substitute for labour while increasing productivity</button>
+            <button class="choice-btn" onclick="checkCombinationAnswer('comb1', 'land-important', '❌ INCORRECT. Both farms use the same amount of land.')">Land is always the most important factor</button>
+            <button class="choice-btn" onclick="checkCombinationAnswer('comb1', 'more-better', '❌ INCORRECT. The modern farm uses less labour but produces more.')">More labour always produces better results</button>
+            <div id="comb1-feedback" class="feedback"></div>
+        </div>
+
+        <div class="business-case">
+            <h4>🏭 Manufacturing Example: Factor Intensity</h4>
+            <p><strong>Different industries require different factor combinations:</strong></p>
+            
+            <div class="question-card">
+                <p><strong>Which Canadian industry is most "Labour-Intensive" (relies heavily on human workers)?</strong></p>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb2', 'healthcare', '✅ CORRECT! Healthcare requires extensive human interaction and skilled professionals.')">Healthcare and personal services</button>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb2', 'oil', '❌ INCORRECT. Oil extraction is capital-intensive with heavy machinery.')">Oil and gas extraction</button>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb2', 'mining', '❌ INCORRECT. Mining uses extensive machinery and equipment.')">Mining operations</button>
+                <div id="comb2-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>Which Canadian industry is most "Capital-Intensive" (relies heavily on equipment and technology)?</strong></p>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb3', 'restaurants', '❌ INCORRECT. Restaurants are relatively labour-intensive.')">Restaurant services</button>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb3', 'telecommunications', '✅ CORRECT! Telecom requires massive infrastructure investments in towers, cables, and technology.')">Telecommunications</button>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb3', 'education', '❌ INCORRECT. Education is primarily labour-intensive.')">Education services</button>
+                <div id="comb3-feedback" class="feedback"></div>
+            </div>
+
+            <div class="question-card">
+                <h5>Intermediate Products in Manufacturing</h5>
+                <p><strong>A Canadian car manufacturer purchases steel sheets, rubber tires, and electronic components from suppliers to assemble vehicles. What are these materials?</strong></p>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb4', 'land', '❌ INCORRECT. While these originated from natural resources, they are now processed products.')">Land - raw natural resources</button>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb4', 'capital', '❌ INCORRECT. These materials are consumed in production, not reusable tools.')">Capital - manufacturing equipment</button>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb4', 'intermediate', '✅ CORRECT! Steel, tires, and electronics are intermediate products - goods made by other companies and used as inputs.')">Intermediate Products - goods used as manufacturing inputs</button>
+                <button class="choice-btn" onclick="checkCombinationAnswer('comb4', 'labour', '❌ INCORRECT. These are physical materials, not human effort.')">Labour - assembly work</button>
+                <div id="comb4-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity 5: Master Quiz -->
+    <div id="quiz" class="activity-section">
+        <h3>🎯 Factors of Production Master Quiz</h3>
+        
+        <div class="progress-section">
+            <h4>📊 Progress Tracker</h4>
+            <div id="quiz-progress">Questions Completed: <span id="completed-count">0</span>/<span id="total-count">16</span></div>
+            <div class="progress-bar">
+                <div id="quiz-progress-fill" class="progress-fill" style="width: 0%;"></div>
+            </div>
+            <button class="calculate-btn reset-btn" onclick="resetMasterQuiz()" style="margin: 10px;">🔄 Reset Quiz</button>
+        </div>
+
+        <div class="identification-activity">
+            <h4>🇨🇦 Comprehensive Canadian Scenarios</h4>
+            <p><strong>🎯 Practice Quiz:</strong> Each quiz session randomly selects 16 questions from a bank of 20 questions covering all factors of production and intermediate products. Use the "Reset Quiz" button to get a new set of questions for additional practice!</p>
+            
+            <div id="master-quiz">
+                <!-- Quiz questions will be populated by JavaScript -->
+            </div>
+
+            <div class="result-display" id="final-results" style="display:none;">
+                <h4>🎯 Quiz Results</h4>
+                <div id="score-summary" class="score-display"></div>
+                <div id="detailed-feedback"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global quiz state
+let currentMasterQuestion = 0;
+let masterAnswers = [];
+let masterScore = 0;
+
+// Master quiz questions
+const masterQuestions = [
+    {
+        id: 'master1',
+        question: 'A Tim Hortons franchise owner buys a new espresso machine for $15,000. This purchase represents which factor of production?',
+        options: ['Land - it\'s a physical resource', 'Labour - it requires workers to operate', 'Capital - it\'s equipment used in production', 'Entrepreneurship - it\'s a business investment'],
+        correct: 2,
+        explanation: 'The espresso machine is capital - a human-made tool used to produce coffee. While it requires an investment decision (entrepreneurship) and workers to operate (labour), the machine itself is classified as capital.'
+    },
+    {
+        id: 'master2',
+        question: 'The James Bay hydroelectric project in Quebec harnesses river water to generate electricity. The river water represents which factor?',
+        options: ['Capital - it\'s used to produce electricity', 'Labour - it flows and works', 'Land - it\'s a natural resource', 'Entrepreneurship - it generates profits'],
+        correct: 2,
+        explanation: 'River water is a natural resource, making it part of the Land factor. Even though it\'s used with capital (dams, turbines) to produce electricity, the water itself is a gift of nature.'
+    },
+    {
+        id: 'master3',
+        question: 'Elon Musk\'s decision to build Tesla\'s first Canadian factory represents which factor of production?',
+        options: ['Land - because factories need locations', 'Labour - because workers will build cars', 'Capital - because it requires machinery', 'Entrepreneurship - strategic risk-taking and innovation'],
+        correct: 3,
+        explanation: 'This represents entrepreneurship - the strategic decision-making, risk-taking, and innovation involved in expanding business operations. The actual land, labour, and capital will be factors used in production, but the decision itself is entrepreneurship.'
+    },
+    {
+        id: 'master4',
+        question: 'A software developer at Shopify creates new e-commerce features from their home office. The developer\'s coding skills and creativity represent:',
+        options: ['Land - intellectual resources', 'Labour - human effort and skills', 'Capital - computer equipment', 'Entrepreneurship - creating new products'],
+        correct: 1,
+        explanation: 'The developer\'s skills, knowledge, and creative effort represent Labour - human resources applied to production. While they use capital (computer) and may be innovative, their core contribution is skilled human effort.'
+    },
+    {
+        id: 'master5',
+        question: 'Canadian Pacific Railway\'s transcontinental rail network was built in the 1880s and is still used today. This infrastructure represents:',
+        options: ['Land - it uses natural corridors', 'Labour - because workers built it', 'Capital - infrastructure used for transportation services', 'Entrepreneurship - because it was a risky venture'],
+        correct: 2,
+        explanation: 'The rail network is capital - human-made infrastructure used to provide transportation services. While it required land (natural corridors), labour (construction workers), and entrepreneurship (risky investment), the finished railway itself is capital.'
+    },
+    {
+        id: 'master6',
+        question: 'During the 2008 recession, many Canadian manufacturers switched from labour-intensive to capital-intensive production (more machines, fewer workers). This demonstrates:',
+        options: ['Factor substitution - capital replacing labour', 'Entrepreneurship - better business decisions', 'Land scarcity - not enough natural resources', 'Labour shortage - not enough workers available'],
+        correct: 0,
+        explanation: 'This demonstrates factor substitution - the ability to replace one factor (labour) with another (capital) to maintain production. Companies invested in machinery to reduce labour costs during economic uncertainty.'
+    },
+    {
+        id: 'master7',
+        question: 'Lululemon\'s founder Chip Wilson identified a market gap for high-quality yoga apparel and built a global brand. His role primarily represents:',
+        options: ['Land - because he used natural materials', 'Labour - because he worked hard', 'Capital - because he invested money', 'Entrepreneurship - innovation and market leadership'],
+        correct: 3,
+        explanation: 'Wilson\'s role represents entrepreneurship - identifying opportunities, taking risks, innovating, and organizing resources to create a successful business. While he provided labour and capital, his primary contribution was entrepreneurial leadership.'
+    },
+    {
+        id: 'master8',
+        question: 'A McDonald\'s restaurant in Toronto uses Canadian beef, Alberta wheat (buns), and Ontario potatoes (fries). These ingredients represent:',
+        options: ['Labour - because farmers worked to produce them', 'Capital - because they\'re processed materials', 'Land - agricultural products from natural resources', 'Entrepreneurship - because they create value'],
+        correct: 2,
+        explanation: 'These agricultural ingredients represent Land - products that come from natural resources (soil, climate, water). While farmers provided labour and used capital to produce them, the ingredients themselves are classified as land-based resources.'
+    },
+    {
+        id: 'master9',
+        question: 'Nortel\'s collapse in 2000 eliminated 60,000 Canadian tech jobs but led to the creation of many successful startups by former employees. This shows:',
+        options: ['Labour mobility - workers moving to new opportunities', 'Entrepreneurship emerging from disruption', 'Capital destruction and recreation', 'All factors of production being affected'],
+        correct: 3,
+        explanation: 'All factors were affected: Labour moved to new companies, former employees became entrepreneurs starting new ventures, and capital resources were reallocated. This demonstrates how economic disruption affects all factors of production.'
+    },
+    {
+        id: 'master10',
+        question: 'The oil sands in Alberta require massive extraction equipment, specialized workers, and huge upfront investments. Which factor is most limiting for new companies entering this industry?',
+        options: ['Land - oil sand deposits are limited', 'Labour - specialized skills are rare', 'Capital - requires enormous upfront investment', 'Entrepreneurship - market is too competitive'],
+        correct: 2,
+        explanation: 'Capital is most limiting - oil sands require billions in upfront investment for extraction equipment, processing facilities, and infrastructure. While specialized labour is important, the massive capital requirements create the highest barrier to entry.'
+    },
+    {
+        id: 'master11',
+        question: 'Indigenous communities in Northern Canada combine traditional knowledge with modern technology for sustainable resource management. This demonstrates:',
+        options: ['Only entrepreneurship in action', 'Integration of labour (traditional knowledge) with capital (modern technology)', 'Land resources being the only important factor', 'Conflict between traditional and modern approaches'],
+        correct: 1,
+        explanation: 'This demonstrates the integration of labour (traditional knowledge and skills) with capital (modern technology) to sustainably manage land resources. It shows how different types of human knowledge can enhance technological solutions.'
+    },
+    {
+        id: 'master12',
+        question: 'Canadian banks like RBC invest heavily in AI and machine learning to improve customer service while reducing staff in some branches. This trend shows:',
+        options: ['Technology eliminating the need for human workers entirely', 'Capital (AI technology) enhancing and partially substituting for labour', 'Entrepreneurship becoming less important in banking', 'Land becoming more important than other factors'],
+        correct: 1,
+        explanation: 'This shows capital (AI technology) both enhancing human capabilities and partially substituting for certain types of labour. Banks still need skilled workers but are using technology to augment human productivity and automate routine tasks.'
+    },
+    {
+        id: 'master13',
+        question: 'McCain Foods in New Brunswick purchases potatoes from local farmers, processes them into frozen french fries, and sells them to McDonald\'s restaurants. What are the frozen fries that McDonald\'s purchases?',
+        options: ['Land - agricultural products from farms', 'Capital - food processing equipment', 'Intermediate Products - goods used to make final meals', 'Labour - food processing work'],
+        correct: 2,
+        explanation: 'The frozen fries are intermediate products - goods produced by McCain Foods that McDonald\'s uses as inputs to create their final product (prepared meals for customers).'
+    },
+    {
+        id: 'master14',
+        question: 'A Canadian furniture company buys lumber from BC sawmills, hardware from suppliers, and fabric from textile manufacturers. These materials represent:',
+        options: ['Only land factors because they come from natural resources', 'Only capital because they are used in manufacturing', 'Intermediate products - goods produced by other companies used as inputs', 'Labour because workers handle these materials'],
+        correct: 2,
+        explanation: 'These are all intermediate products - lumber (processed wood), hardware (manufactured metal goods), and fabric (processed textiles) are all goods produced by other companies and used as inputs by the furniture manufacturer.'
+    }
+];
+
+// Additional question bank for variety (randomly selected)
+const additionalQuestions = [
+    {
+        id: 'extra1',
+        question: 'Rogers Communications builds 5G cell towers across Canada, requiring land leases, construction crews, tower equipment, and strategic network planning. Which factor is most critical for coverage success?',
+        options: ['Land - optimal tower locations for signal coverage', 'Labour - skilled construction and tech workers', 'Capital - expensive 5G tower equipment', 'Entrepreneurship - network strategy decisions'],
+        correct: 0,
+        explanation: 'While all factors matter, land (optimal tower locations) is most critical because poor locations cannot be fixed by better equipment or workers - signal coverage depends fundamentally on geographic positioning.'
+    },
+    {
+        id: 'extra2', 
+        question: 'Air Canada purchases jet fuel from refineries, uses it to power flights, and provides transportation services. The jet fuel represents:',
+        options: ['Land - petroleum-based natural resource', 'Capital - flight equipment', 'Intermediate Products - refined fuel used as airline input', 'Labour - fuel handling work'],
+        correct: 2,
+        explanation: 'Jet fuel is an intermediate product - it\'s produced by refineries from crude oil and used by airlines as an input to provide transportation services.'
+    },
+    {
+        id: 'extra3',
+        question: 'Blackberry\'s rise and fall shows how innovation can create and destroy value. Their success with early smartphones, then failure to adapt to touchscreens represents:',
+        options: ['Only capital changes - better/worse technology', 'Only labour issues - wrong employees', 'Entrepreneurship - both successful and failed strategic decisions', 'Land constraints - geographic limitations'],
+        correct: 2,
+        explanation: 'This demonstrates entrepreneurship in action - successful innovation (early smartphones) followed by entrepreneurial failure (not adapting strategy to touchscreen trends).'
+    },
+    {
+        id: 'extra4',
+        question: 'Canada Goose uses down feathers from suppliers, high-end fabrics, and specialized zippers to make luxury winter coats. These materials are:',
+        options: ['Land - since feathers come from birds in nature', 'Capital - manufacturing equipment', 'Intermediate Products - processed materials from other companies', 'Labour - material handling work'],
+        correct: 2,
+        explanation: 'These are intermediate products - down, fabrics, and zippers are all processed/manufactured goods from suppliers that Canada Goose uses as inputs for their final products.'
+    },
+    {
+        id: 'extra5',
+        question: 'The University of Toronto has Nobel Prize-winning professors, world-class research facilities, prime downtown location, and innovative academic leadership. Which factor creates the biggest competitive advantage?',
+        options: ['Land - prestigious Toronto location', 'Labour - exceptional faculty expertise', 'Capital - research facilities and equipment', 'Entrepreneurship - academic innovation and leadership'],
+        correct: 1,
+        explanation: 'While all factors matter, labour (exceptional faculty) creates the biggest advantage because outstanding professors can work anywhere, use any equipment, but their knowledge and reputation are irreplaceable.'
+    },
+    {
+        id: 'extra6',
+        question: 'Magna International produces car parts for Ford, GM, and Toyota. Their stamped metal components, electronic modules, and seat assemblies are:',
+        options: ['Capital goods for the car companies', 'Final consumer products', 'Intermediate Products - parts used by car manufacturers', 'Land-based resources'],
+        correct: 2,
+        explanation: 'Magna\'s products are intermediate products - goods produced by one company (Magna) that are used as inputs by other companies (Ford, GM, Toyota) to make their final products (cars).'
+    }
+];
+
+// Combine questions and shuffle for variety
+function getQuizQuestions() {
+    const allQuestions = [...masterQuestions, ...additionalQuestions];
+    // Shuffle array and take first 16 questions for variety
+    const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 16);
+}
+
+// Current quiz questions (selected each time quiz starts)
+let currentQuizQuestions = [];
+
+function showActivity(activityId) {
+    // Hide all activities
+    document.querySelectorAll('.activity-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Remove active class from all nav buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected activity
+    document.getElementById(activityId).classList.add('active');
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+    
+    // Initialize master quiz if selected
+    if (activityId === 'quiz') {
+        initializeMasterQuiz();
+    }
+}
+
+function resetMasterQuiz() {
+    const confirmReset = confirm('Are you sure you want to reset the quiz and start over? Your current progress will be lost.');
+    if (confirmReset) {
+        initializeMasterQuiz();
+    }
+}
+
+function checkFactorAnswer(questionId, selectedAnswer, correctAnswer, feedback) {
+    const feedbackDiv = document.getElementById(questionId + '-feedback');
+    const isCorrect = selectedAnswer === correctAnswer;
+    
+    // Remove previous selections
+    event.target.parentElement.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark this button as selected
+    event.target.classList.add('selected');
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.textContent = feedback;
+}
+
+function checkBusinessAnswer(questionId, selectedAnswer, correctAnswer, feedback) {
+    const feedbackDiv = document.getElementById(questionId + '-feedback');
+    const isCorrect = selectedAnswer === correctAnswer;
+    
+    // Remove previous selections
+    event.target.parentElement.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark this button as selected
+    event.target.classList.add('selected');
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.textContent = feedback;
+}
+
+function checkCombinationAnswer(questionId, selectedAnswer, correctAnswer, feedback) {
+    const feedbackDiv = document.getElementById(questionId + '-feedback');
+    const isCorrect = selectedAnswer === correctAnswer;
+    
+    // Remove previous selections
+    event.target.parentElement.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Mark this button as selected
+    event.target.classList.add('selected');
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.textContent = feedback;
+}
+
+function initializeMasterQuiz() {
+    currentMasterQuestion = 0;
+    masterAnswers = [];
+    masterScore = 0;
+    
+    // Get a new set of questions (shuffled selection)
+    currentQuizQuestions = getQuizQuestions();
+    
+    document.getElementById('final-results').style.display = 'none';
+    document.getElementById('completed-count').textContent = '0';
+    document.getElementById('quiz-progress-fill').style.width = '0%';
+    
+    // Update progress tracker with actual question count
+    document.getElementById('quiz-progress').innerHTML = `Questions Completed: <span id="completed-count">0</span>/${currentQuizQuestions.length}`;
+    
+    displayMasterQuestion();
+}
+
+function displayMasterQuestion() {
+    if (currentMasterQuestion >= currentQuizQuestions.length) {
+        showMasterResults();
+        return;
+    }
+    
+    const question = currentQuizQuestions[currentMasterQuestion];
+    const quizContainer = document.getElementById('master-quiz');
+    
+    quizContainer.innerHTML = `
+        <div class="question-card">
+            <h5>Question ${currentMasterQuestion + 1} of ${currentQuizQuestions.length}</h5>
+            <p><strong>${question.question}</strong></p>
+            <div id="master-options">
+                ${question.options.map((option, index) => 
+                    `<button class="choice-btn" onclick="answerMasterQuestion(${index})">${option}</button>`
+                ).join('')}
+            </div>
+            <div id="master-feedback" class="feedback"></div>
+        </div>
+    `;
+}
+
+function answerMasterQuestion(selectedIndex) {
+    const question = currentQuizQuestions[currentMasterQuestion];
+    const isCorrect = selectedIndex === question.correct;
+    const feedbackDiv = document.getElementById('master-feedback');
+    
+    // Record answer
+    masterAnswers[currentMasterQuestion] = {
+        selected: selectedIndex,
+        correct: question.correct,
+        isCorrect: isCorrect,
+        question: question.question,
+        options: question.options,
+        explanation: question.explanation
+    };
+    
+    if (isCorrect) masterScore++;
+    
+    // Update UI
+    document.querySelectorAll('#master-options .choice-btn').forEach((btn, index) => {
+        btn.classList.remove('selected');
+        if (index === selectedIndex) {
+            btn.classList.add('selected');
+        }
+    });
+    
+    // Show feedback
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+    feedbackDiv.innerHTML = `
+        <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect.'}</strong><br>
+        ${question.explanation}
+    `;
+    
+    // Update progress
+    const completedCount = currentMasterQuestion + 1;
+    document.getElementById('completed-count').textContent = completedCount;
+    document.getElementById('quiz-progress-fill').style.width = (completedCount / currentQuizQuestions.length) * 100 + '%';
+    
+    // Move to next question after delay
+    setTimeout(() => {
+        currentMasterQuestion++;
+        displayMasterQuestion();
+    }, 3500);
+}
+
+function showMasterResults() {
+    const percentage = Math.round((masterScore / currentQuizQuestions.length) * 100);
+    const resultsDiv = document.getElementById('final-results');
+    const scoreDiv = document.getElementById('score-summary');
+    const feedbackDiv = document.getElementById('detailed-feedback');
+    
+    scoreDiv.innerHTML = `
+        <h3>Your Score: ${masterScore}/${currentQuizQuestions.length} (${percentage}%)</h3>
+        <p>${getMasterScoreMessage(percentage)}</p>
+        <p><strong>🔄 Want more practice? Click "Reset Quiz" to get a different set of questions!</strong></p>
+    `;
+    
+    let detailedHTML = '<h5>📋 Detailed Review:</h5>';
+    masterAnswers.forEach((answer, index) => {
+        const isCorrect = answer.isCorrect;
+        
+        detailedHTML += `
+            <div style="margin: 15px 0; padding: 15px; border-radius: 8px; ${isCorrect ? 'background: #d4edda; border: 2px solid #c3e6cb;' : 'background: #f8d7da; border: 2px solid #f5c6cb;'}">
+                <strong>Q${index + 1}:</strong> ${answer.question}<br>
+                <strong>Your answer:</strong> ${answer.options[answer.selected]}<br>
+                <strong>Correct answer:</strong> ${answer.options[answer.correct]}<br>
+                <em>${answer.explanation}</em>
+            </div>
+        `;
+    });
+    
+    feedbackDiv.innerHTML = detailedHTML;
+    resultsDiv.style.display = 'block';
+}
+
+function getMasterScoreMessage(percentage) {
+    if (percentage >= 90) return "🏆 Outstanding! You've mastered the four factors of production and their applications!";
+    else if (percentage >= 80) return "👏 Excellent! You have a strong understanding of how factors work in the Canadian economy.";
+    else if (percentage >= 70) return "👍 Good work! Review the differences between factors and how they combine in production.";
+    else if (percentage >= 60) return "📚 Keep studying! Focus on distinguishing between land, labour, capital, and entrepreneurship.";
+    else return "📖 More review needed. Make sure you understand what each factor represents and how they work together.";
+}
+</script>
+
+</body>
+</html>
