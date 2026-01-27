@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Positive vs Normative Statements - Canadian Economics</title>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin:0 auto;
+      padding:20px;
+      background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+      color:#333;
+      min-height:100vh;
+    }
+    .container{
+      background:#fff;
+      padding:30px;
+      border-radius:15px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.1);
+      margin:20px 0;
+    }
+    h1{
+      color:#2c3e50;
+      text-align:center;
+      margin-bottom:20px;
+      font-size:2.4em;
+    }
+    .canada-header{
+      background: linear-gradient(135deg, #ff0000, #ff6b6b);
+      color:#fff;
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .activity-nav{
+      background:#343a40;
+      padding:15px;
+      border-radius:10px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .nav-btn{
+      background-color:#17a2b8;
+      color:#fff;
+      border:none;
+      padding:12px 24px;
+      margin:8px;
+      border-radius:25px;
+      cursor:pointer;
+      font-size:1em;
+      font-weight:bold;
+      transition:all .3s ease;
+    }
+    .nav-btn:hover{ background-color:#138496; transform: translateY(-2px); }
+    .nav-btn.active{ background-color:#28a745; }
+
+    .activity-section{
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      padding:25px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #2196f3;
+      display:none;
+    }
+    .activity-section.active{ display:block; }
+
+    .concept-box{
+      background: linear-gradient(135deg, #fff8e1, #ffcc02);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #ff6f00;
+    }
+    .scenario-box{
+      background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #4caf50;
+    }
+    .question-card{
+      background:#fff;
+      padding:20px;
+      border-radius:10px;
+      margin:15px 0;
+      border:3px solid #2196f3;
+      font-size:1.05em;
+    }
+    .choice-btn{
+      background-color:#6f42c1;
+      color:#fff;
+      border:none;
+      padding:10px 18px;
+      margin:8px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:.95em;
+      font-weight:bold;
+      transition:all .3s ease;
+      min-width:170px;
+    }
+    .choice-btn:hover{ background-color:#5a32a3; transform: translateY(-1px); }
+    .choice-btn.selected{ background-color:#28a745; }
+    .choice-btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .feedback{
+      margin:15px 0;
+      padding:15px;
+      border-radius:8px;
+      font-weight:bold;
+      display:none;
+    }
+    .feedback.correct{
+      background-color:#d4edda;
+      color:#155724;
+      border:2px solid #c3e6cb;
+    }
+    .feedback.incorrect{
+      background-color:#f8d7da;
+      color:#721c24;
+      border:2px solid #f5c6cb;
+    }
+
+    .progress-section{
+      background:#f8f9fa;
+      padding:15px;
+      border-radius:8px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .progress-bar{
+      width:100%;
+      height:20px;
+      background-color:#e0e0e0;
+      border-radius:10px;
+      margin:15px 0;
+    }
+    .progress-fill{
+      height:100%;
+      background-color:#28a745;
+      border-radius:10px;
+      transition:width .3s ease;
+    }
+
+    .result-display{
+      background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #9c27b0;
+      display:none;
+    }
+    .score-display{
+      background:#fff;
+      padding:15px;
+      border-radius:8px;
+      margin:10px 0;
+      text-align:center;
+      font-size:1.2em;
+      font-weight:bold;
+    }
+
+    .calculate-btn{
+      background-color:#28a745;
+      color:#fff;
+      border:none;
+      padding:10px 20px;
+      margin:10px 5px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:1em;
+      font-weight:bold;
+      transition:all .3s ease;
+    }
+    .calculate-btn:hover{ background-color:#218838; transform: translateY(-1px); }
+    .calculate-btn.reset-btn{ background-color:#17a2b8; }
+    .calculate-btn.reset-btn:hover{ background-color:#138496; }
+
+    .pill{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:bold;
+      margin:0 6px 6px 0;
+      font-size:.92em;
+    }
+    .pill.pos{ background:#d1ecf1; border:2px solid #0c5460; color:#0c5460; }
+    .pill.norm{ background:#fff3cd; border:2px solid #856404; color:#856404; }
+
+    .small-note{ font-size:.95em; opacity:.9; margin-top:8px; }
+
+    footer{
+      margin-top:30px;
+      padding-top:20px;
+      border-top:2px dashed #cfd8dc;
+      text-align:center;
+    }
+
+    @media (max-width: 768px){
+      .container{ padding:15px; }
+      h1{ font-size:2em; }
+      .nav-btn{ padding:10px 18px; margin:5px; font-size:.9em; }
+      .choice-btn{ min-width:150px; margin:5px; padding:8px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🇨🇦 Positive vs Normative Statements</h1>
+
+    <div class="canada-header">
+      <h2>🍁 Facts vs Opinions in Economics 🍁</h2>
+      <p><strong>Learn to tell the difference between statements you can test and statements based on values.</strong></p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="activity-nav">
+      <button class="nav-btn active" onclick="showActivity('overview', this)">🔄 Overview</button>
+      <button class="nav-btn" onclick="showActivity('spotter', this)">🔍 Statement Spotter</button>
+      <button class="nav-btn" onclick="showActivity('revisions', this)">✏️ Rewrite Lab</button>
+      <button class="nav-btn" onclick="showActivity('quiz', this)">🎯 Master Quiz</button>
+    </div>
+
+    <!-- Overview -->
+    <div id="overview" class="activity-section active">
+      <h3>🔄 Core Concepts</h3>
+
+      <div class="concept-box">
+        <h4>📚 Definitions</h4>
+        <p><span class="pill pos">Positive statement</span> describes <strong>what is</strong>. It can be <strong>tested</strong> with evidence/data.</p>
+        <p><span class="pill norm">Normative statement</span> describes <strong>what should be</strong>. It is based on <strong>values</strong> (opinions, priorities).</p>
+        <p class="small-note"><strong>Quick clues:</strong> “is/are/was,” “will,” “increased,” “decreased” often signal <strong>positive</strong> (testable). “should/ought,” “best,” “fair,” “good/bad,” “must” often signal <strong>normative</strong> (value judgment).</p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🍁 Canadian Examples</h4>
+        <div class="question-card" style="border-color:#17a2b8;">
+          <p><strong>Example A:</strong> “If bus fares rise, ridership will fall.”</p>
+          <p class="small-note"><strong>Positive</strong> — it’s a prediction that can be tested using data.</p>
+        </div>
+        <div class="question-card" style="border-color:#ff9800;">
+          <p><strong>Example B:</strong> “Canada should make public transit free in big cities.”</p>
+          <p class="small-note"><strong>Normative</strong> — it uses “should” and depends on values (fairness, priorities, budgets).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 1: Statement Spotter (20 questions, random set, neutral buttons) -->
+    <div id="spotter" class="activity-section">
+      <h3>🔍 Statement Spotter</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>Classify each statement as <strong>Positive</strong> or <strong>Normative</strong>.</p>
+        <p class="small-note"><em>Tip:</em> Ask: “Can we test this with data?” If yes → Positive. If it’s about values/what should happen → Normative.</p>
+      </div>
+
+      <div class="progress-section">
+        <h4>📊 Progress Tracker</h4>
+        <div id="spotter-progress">Answered: <span id="spotter-done">0</span>/<span id="spotter-total">20</span></div>
+        <div class="progress-bar">
+          <div id="spotter-fill" class="progress-fill" style="width:0%;"></div>
+        </div>
+        <button class="calculate-btn reset-btn" onclick="resetSpotter()">🔄 Reset (New 20 Statements)</button>
+      </div>
+
+      <div id="spotter-container"></div>
+
+      <div id="spotter-results" class="result-display">
+        <h4>🎯 Statement Spotter Results</h4>
+        <div id="spotter-score" class="score-display"></div>
+        <div id="spotter-review"></div>
+      </div>
+    </div>
+
+    <!-- Activity 2: Rewrite Lab -->
+    <div id="revisions" class="activity-section">
+      <h3>✏️ Rewrite Lab: Switch the Type</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>Some statements mix facts and values. Practice rewriting them so they become clearly <strong>positive</strong> or clearly <strong>normative</strong>.</p>
+        <p class="small-note"><strong>Rule:</strong> Positive = testable claim. Normative = value judgment (should/ought/best/fair).</p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🧪 Prompt 1</h4>
+        <p><strong>Original:</strong> “Minimum wage should be increased because many workers can’t afford rent.”</p>
+        <div class="question-card">
+          <p><strong>Choose the best “Positive rewrite” (testable):</strong></p>
+          <button class="choice-btn" onclick="checkMC('rw1',0,1,'Not quite—this still uses a value word (should).', this)">“Minimum wage should be increased next year.”</button>
+          <button class="choice-btn" onclick="checkMC('rw1',1,1,'Correct! This is testable with rent and wage data.', this)">“In cities where rents rise faster than wages, more workers spend over 30% of income on housing.”</button>
+          <button class="choice-btn" onclick="checkMC('rw1',2,1,'Not quite—this is a personal opinion, not a testable claim.', this)">“It’s unfair that some workers struggle to afford rent.”</button>
+          <div id="rw1-feedback" class="feedback"></div>
+        </div>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🧪 Prompt 2</h4>
+        <p><strong>Original:</strong> “Carbon taxes are bad for the economy.”</p>
+        <div class="question-card">
+          <p><strong>Choose the best “Positive rewrite” (testable):</strong></p>
+          <button class="choice-btn" onclick="checkMC('rw2',0,0,'Correct! This is a testable claim about prices and emissions.', this)">“When fuel taxes increase, gasoline prices rise and fuel consumption may fall.”</button>
+          <button class="choice-btn" onclick="checkMC('rw2',1,0,'Not quite—this is still a value judgment (“bad”).', this)">“Carbon taxes are unfair to drivers.”</button>
+          <button class="choice-btn" onclick="checkMC('rw2',2,0,'Not quite—this is a policy recommendation (“should”).', this)">“Canada should remove carbon taxes immediately.”</button>
+          <div id="rw2-feedback" class="feedback"></div>
+        </div>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🧪 Prompt 3</h4>
+        <p><strong>Original:</strong> “The government should spend more on healthcare.”</p>
+        <div class="question-card">
+          <p><strong>Choose the best “Positive rewrite” (testable):</strong></p>
+          <button class="choice-btn" onclick="checkMC('rw3',0,2,'Not quite—this is still normative (“should”).', this)">“The government should raise healthcare spending.”</button>
+          <button class="choice-btn" onclick="checkMC('rw3',1,2,'Not quite—this is a value claim (“best”).', this)">“More healthcare spending is the best use of tax dollars.”</button>
+          <button class="choice-btn" onclick="checkMC('rw3',2,2,'Correct! Waiting times and spending are measurable.', this)">“Provinces with higher per-person healthcare spending may have shorter average wait times for some procedures.”</button>
+          <div id="rw3-feedback" class="feedback"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 3: Master Quiz -->
+    <div id="quiz" class="activity-section">
+      <h3>🎯 Positive vs Normative Master Quiz</h3>
+
+      <div class="progress-section">
+        <h4>📊 Progress Tracker</h4>
+        <div id="quiz-progress">Questions Completed: <span id="completed-count">0</span>/<span id="total-count">12</span></div>
+        <div class="progress-bar">
+          <div id="quiz-progress-fill" class="progress-fill" style="width:0%;"></div>
+        </div>
+        <button class="calculate-btn reset-btn" onclick="resetMasterQuiz()">🔄 Reset (New Questions)</button>
+      </div>
+
+      <div id="master-quiz"></div>
+
+      <div class="result-display" id="final-results" style="display:none;">
+        <h4>🎯 Quiz Results</h4>
+        <div id="score-summary" class="score-display"></div>
+        <div id="detailed-feedback"></div>
+      </div>
+    </div>
+
+    <!-- Footer: clickable website always -->
+    <footer>
+      <p style="font-weight:bold;">
+        ✅ View this interactive module online:
+        <!-- Update the filename after you upload to GitHub -->
+        <a href="https://htmlpreview.github.io/?https://github.com/waberra/Introduction-to-Economics-/blob/main/Positive_Normative.html"
+           target="_blank" rel="noopener noreferrer">
+          Click here
+        </a>
+      </p>
+      <p class="small-note">
+        GitHub Pages version (if enabled): <strong>https://waberra.github.io/Introduction-to-Economics-/Positive_Normative.html</strong>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Navigation ----------
+    function showActivity(activityId, btn) {
+      document.querySelectorAll(".activity-section").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(activityId).classList.add("active");
+      btn.classList.add("active");
+
+      if (activityId === "spotter") initializeSpotter();
+      if (activityId === "quiz") initializeMasterQuiz();
+    }
+
+    // ---------- Shared UI helpers ----------
+    function markSelected(btn) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+    }
+
+    function showFeedback(id, isCorrect, text) {
+      const div = document.getElementById(id + "-feedback");
+      div.style.display = "block";
+      div.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      div.textContent = text;
+    }
+
+    // Multiple choice checker (Rewrite Lab)
+    function checkMC(id, selectedIndex, correctIndex, msg, btn) {
+      markSelected(btn);
+      showFeedback(id, selectedIndex === correctIndex, msg);
+    }
+
+    // ---------- Statement Spotter (20 random) ----------
+    const SPOTTER_COUNT = 20;
+
+    const spotterBank = [
+      // Positive (testable)
+      { s: "If the price of coffee rises, some consumers will buy less coffee.", type: "positive", exp: "This is a testable prediction about behavior." },
+      { s: "Canada’s unemployment rate was higher in 2020 than in 2019.", type: "positive", exp: "This can be checked with data." },
+      { s: "A higher interest rate tends to reduce borrowing for some households.", type: "positive", exp: "This is a testable claim about borrowing." },
+      { s: "If bus fares increase, ridership may decrease.", type: "positive", exp: "Testable using ridership data." },
+      { s: "When the Canadian dollar rises, imported goods may become cheaper in Canada.", type: "positive", exp: "This is testable with exchange rates and prices." },
+      { s: "If housing supply increases, housing prices may rise more slowly.", type: "positive", exp: "This can be tested with market data." },
+      { s: "A minimum wage increase can raise earnings for workers who keep their jobs.", type: "positive", exp: "Testable using wage and employment data." },
+      { s: "Reducing tariffs can increase the quantity of imports.", type: "positive", exp: "Testable with trade data." },
+      { s: "When gasoline prices rise, some drivers reduce driving.", type: "positive", exp: "Testable by comparing price changes to usage." },
+      { s: "If a government increases spending without raising taxes, its deficit may grow.", type: "positive", exp: "Testable using budgets/deficits." },
+
+      // Normative (value-based)
+      { s: "The government should lower taxes to help families.", type: "normative", exp: "Uses 'should' and depends on values/priorities." },
+      { s: "It is unfair that some people earn much more than others.", type: "normative", exp: "Fairness is a value judgment." },
+      { s: "Canada should ban single-use plastics nationwide.", type: "normative", exp: "A policy recommendation based on values." },
+      { s: "Healthcare spending is the best use of tax dollars.", type: "normative", exp: "'Best' is a value judgment." },
+      { s: "Transit should be free in large cities.", type: "normative", exp: "Uses 'should' (value/policy)." },
+      { s: "The minimum wage is too low.", type: "normative", exp: "'Too low' depends on standards/values." },
+      { s: "Interest rates must be reduced immediately.", type: "normative", exp: "A recommendation ('must') based on goals." },
+      { s: "Companies should pay higher wages because it’s the right thing to do.", type: "normative", exp: "Value language ('should', 'right')." },
+      { s: "The government ought to spend less on defense.", type: "normative", exp: "Uses 'ought' (value/policy)." },
+      { s: "A carbon tax is a good idea.", type: "normative", exp: "'Good idea' depends on values and goals." },
+
+      // Mixy ones (still classify by language)
+      { s: "Rent prices are too high in many Canadian cities.", type: "normative", exp: "'Too high' is a value judgment (even if rent data exists)." },
+      { s: "If rent rises by 10%, more renters will spend over 30% of income on housing.", type: "positive", exp: "This is measurable and testable." },
+      { s: "Canada should aim for lower inflation even if unemployment increases slightly.", type: "normative", exp: "It’s a goal choice (value/priorities)." },
+      { s: "Inflation in Canada was lower in 2024 than in 2022.", type: "positive", exp: "This is a data check." },
+      { s: "It is wrong to charge tolls on highways.", type: "normative", exp: "'Wrong' is value-based." },
+      { s: "Charging tolls can reduce traffic congestion on busy roads.", type: "positive", exp: "This can be tested with congestion data." }
+    ];
+
+    let spotterSet = [];
+    let spotterState = {};
+    let spotterDone = 0;
+    let spotterScore = 0;
+
+    function shuffle(arr){
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function pickN(arr, n){
+      return shuffle(arr).slice(0, n);
+    }
+
+    function initializeSpotter(){
+      spotterSet = pickN(spotterBank, SPOTTER_COUNT);
+      spotterState = {};
+      spotterDone = 0;
+      spotterScore = 0;
+
+      document.getElementById("spotter-results").style.display = "none";
+      document.getElementById("spotter-done").textContent = "0";
+      document.getElementById("spotter-total").textContent = String(SPOTTER_COUNT);
+      document.getElementById("spotter-fill").style.width = "0%";
+
+      renderSpotter();
+    }
+
+    function resetSpotter(){
+      initializeSpotter();
+    }
+
+    function renderSpotter(){
+      const container = document.getElementById("spotter-container");
+      container.innerHTML = spotterSet.map((q, idx) => {
+        const qid = "st" + idx;
+        return `
+          <div class="question-card" id="${qid}">
+            <p><strong>${idx + 1}) ${q.s}</strong></p>
+            <button class="choice-btn" onclick="answerSpotter(${idx}, 'positive', this)">Positive</button>
+            <button class="choice-btn" onclick="answerSpotter(${idx}, 'normative', this)">Normative</button>
+            <div id="${qid}-feedback" class="feedback"></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function answerSpotter(index, choice, btn){
+      const q = spotterSet[index];
+      const qid = "st" + index;
+
+      if (spotterState[qid]?.answered) return;
+
+      const isCorrect = choice === q.type;
+      spotterState[qid] = { answered:true, correct:isCorrect, selected:choice };
+
+      if (isCorrect) spotterScore++;
+      spotterDone++;
+
+      // lock buttons
+      const card = document.getElementById(qid);
+      card.querySelectorAll("button.choice-btn").forEach(b => b.disabled = true);
+      btn.classList.add("selected");
+
+      const fb = document.getElementById(qid + "-feedback");
+      fb.style.display = "block";
+      fb.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      fb.textContent = (isCorrect ? "Correct. " : "Incorrect. ") + q.exp;
+
+      document.getElementById("spotter-done").textContent = String(spotterDone);
+      document.getElementById("spotter-fill").style.width = (spotterDone / SPOTTER_COUNT) * 100 + "%";
+
+      if (spotterDone === SPOTTER_COUNT) showSpotterResults();
+    }
+
+    function showSpotterResults(){
+      const pct = Math.round((spotterScore / SPOTTER_COUNT) * 100);
+      document.getElementById("spotter-results").style.display = "block";
+      document.getElementById("spotter-score").innerHTML =
+        `Your Score: ${spotterScore}/${SPOTTER_COUNT} (${pct}%)`;
+
+      let review = "<h5>📋 Quick Review:</h5>";
+      spotterSet.forEach((q, idx) => {
+        const st = spotterState["st"+idx];
+        const got = st?.correct ? "✅" : "❌";
+        const correctLabel = q.type === "positive" ? "Positive" : "Normative";
+        review += `
+          <div style="margin:10px 0; padding:12px; border-radius:8px; background:#ffffff; border:1px solid #dee2e6;">
+            <strong>${got} #${idx + 1}</strong> — Correct answer: <strong>${correctLabel}</strong><br>
+            <em>${q.exp}</em>
+          </div>
+        `;
+      });
+      document.getElementById("spotter-review").innerHTML = review;
+    }
+
+    // ---------- Master Quiz (12 random) ----------
+    let currentQ = 0;
+    let answers = [];
+    let score = 0;
+    let quizQuestions = [];
+
+    const quizBank = [
+      { q: "A positive statement is best described as:", options: ["A value judgment","A testable statement about what is","A policy recommendation","An opinion about fairness"], correct: 1,
+        exp:"Positive statements describe what is and can be tested with evidence." },
+      { q: "A normative statement is best described as:", options: ["A statement that can be proven true","A testable prediction","A value-based statement about what should be","A measurement from data"], correct: 2,
+        exp:"Normative statements depend on values and use words like should/ought/best/fair." },
+      { q: "“Inflation fell last month.” is:", options: ["Normative","Positive"], correct: 1,
+        exp:"It can be checked with inflation data." },
+      { q: "“The government should reduce inflation.” is:", options: ["Positive","Normative"], correct: 1,
+        exp:"It’s a recommendation based on goals/values." },
+      { q: "Words like 'should', 'best', 'fair' usually signal:", options: ["Positive","Normative"], correct: 1,
+        exp:"They express values or recommendations." },
+      { q: "“If taxes rise, consumer spending will fall.” is:", options: ["Positive","Normative"], correct: 0,
+        exp:"This is a testable prediction." },
+      { q: "“It is wrong to raise tuition.” is:", options: ["Positive","Normative"], correct: 1,
+        exp:"'Wrong' is a value judgment." },
+      { q: "“Canada’s GDP grew last year.” is:", options: ["Positive","Normative"], correct: 0,
+        exp:"This can be tested with GDP data." },
+      { q: "“Rent is too high.” is usually:", options: ["Positive","Normative"], correct: 1,
+        exp:"'Too high' depends on a value/standard." },
+      { q: "“A higher minimum wage increases earnings for workers who remain employed.” is:", options: ["Positive","Normative"], correct: 0,
+        exp:"This is testable using wage/employment data." },
+      { q: "“Public transit should be expanded.” is:", options: ["Positive","Normative"], correct: 1,
+        exp:"A policy recommendation (values/goals)." },
+      { q: "The best way to turn a normative statement into a positive one is to:", options: ["Add 'should'","Make it measurable/testable","Use 'fair' language","Make it more emotional"], correct: 1,
+        exp:"Positive statements are testable and measurable." },
+      // extra bank
+      { q: "“A carbon tax is good.” is:", options: ["Positive","Normative"], correct: 1,
+        exp:"'Good' is a value judgment." },
+      { q: "“A carbon tax reduces gasoline demand.” is:", options: ["Positive","Normative"], correct: 0,
+        exp:"This can be tested with data." }
+    ];
+
+    function pickQuiz(n){
+      return shuffle(quizBank).slice(0, n);
+    }
+
+    function resetMasterQuiz(){
+      initializeMasterQuiz();
+    }
+
+    function initializeMasterQuiz(){
+      currentQ = 0;
+      answers = [];
+      score = 0;
+      quizQuestions = pickQuiz(12);
+
+      document.getElementById("final-results").style.display = "none";
+      document.getElementById("completed-count").textContent = "0";
+      document.getElementById("total-count").textContent = String(quizQuestions.length);
+      document.getElementById("quiz-progress-fill").style.width = "0%";
+
+      displayQuestion();
+    }
+
+    function displayQuestion(){
+      if (currentQ >= quizQuestions.length) return showResults();
+
+      const q = quizQuestions[currentQ];
+      const container = document.getElementById("master-quiz");
+
+      container.innerHTML = `
+        <div class="question-card">
+          <h5>Question ${currentQ + 1} of ${quizQuestions.length}</h5>
+          <p><strong>${q.q}</strong></p>
+          <div id="q-options">
+            ${q.options.map((opt, idx) =>
+              `<button class="choice-btn" onclick="answerQuiz(${idx}, this)">${opt}</button>`
+            ).join("")}
+          </div>
+          <div id="q-feedback" class="feedback"></div>
+        </div>
+      `;
+    }
+
+    function answerQuiz(selectedIndex, btn){
+      const q = quizQuestions[currentQ];
+      const isCorrect = selectedIndex === q.correct;
+
+      answers[currentQ] = {
+        question: q.q,
+        options: q.options,
+        selected: selectedIndex,
+        correct: q.correct,
+        isCorrect,
+        explanation: q.exp
+      };
+
+      if (isCorrect) score++;
+
+      btn.parentElement.querySelectorAll(".choice-btn").forEach(b => b.disabled = true);
+      btn.classList.add("selected");
+
+      const feedback = document.getElementById("q-feedback");
+      feedback.style.display = "block";
+      feedback.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      feedback.innerHTML = `<strong>${isCorrect ? "Correct!" : "Incorrect."}</strong><br>${q.exp}`;
+
+      const completed = currentQ + 1;
+      document.getElementById("completed-count").textContent = String(completed);
+      document.getElementById("quiz-progress-fill").style.width = (completed / quizQuestions.length) * 100 + "%";
+
+      setTimeout(() => {
+        currentQ++;
+        displayQuestion();
+      }, 2200);
+    }
+
+    function showResults(){
+      const total = quizQuestions.length;
+      const pct = Math.round((score / total) * 100);
+
+      const resultsDiv = document.getElementById("final-results");
+      const scoreDiv = document.getElementById("score-summary");
+      const detailDiv = document.getElementById("detailed-feedback");
+
+      scoreDiv.innerHTML = `Your Score: ${score}/${total} (${pct}%)`;
+
+      let html = "<h5>📋 Detailed Review:</h5>";
+      answers.forEach((a, i) => {
+        html += `
+          <div style="margin: 12px 0; padding: 12px; border-radius: 8px; ${a.isCorrect ? "background:#d4edda;border:2px solid #c3e6cb;" : "background:#f8d7da;border:2px solid #f5c6cb;"}">
+            <strong>Q${i+1}:</strong> ${a.question}<br>
+            <strong>Your answer:</strong> ${a.options[a.selected]}<br>
+            <strong>Correct answer:</strong> ${a.options[a.correct]}<br>
+            <em>${a.explanation}</em>
+          </div>
+        `;
+      });
+
+      detailDiv.innerHTML = html;
+      resultsDiv.style.display = "block";
+    }
+  </script>
+</body>
+</html>
