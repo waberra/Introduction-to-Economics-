@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Variables in Economics - Canadian Economics</title>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin:0 auto;
+      padding:20px;
+      background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+      color:#333;
+      min-height:100vh;
+    }
+    .container{
+      background:#fff;
+      padding:30px;
+      border-radius:15px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.1);
+      margin:20px 0;
+    }
+    h1{
+      color:#2c3e50;
+      text-align:center;
+      margin-bottom:20px;
+      font-size:2.4em;
+    }
+    .canada-header{
+      background: linear-gradient(135deg, #ff0000, #ff6b6b);
+      color:#fff;
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .activity-nav{
+      background:#343a40;
+      padding:15px;
+      border-radius:10px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .nav-btn{
+      background-color:#17a2b8;
+      color:#fff;
+      border:none;
+      padding:12px 24px;
+      margin:8px;
+      border-radius:25px;
+      cursor:pointer;
+      font-size:1em;
+      font-weight:bold;
+      transition:all .3s ease;
+    }
+    .nav-btn:hover{ background-color:#138496; transform: translateY(-2px); }
+    .nav-btn.active{ background-color:#28a745; }
+
+    .activity-section{
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      padding:25px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #2196f3;
+      display:none;
+    }
+    .activity-section.active{ display:block; }
+
+    .concept-box{
+      background: linear-gradient(135deg, #fff8e1, #ffcc02);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #ff6f00;
+    }
+    .scenario-box{
+      background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #4caf50;
+    }
+    .question-card{
+      background:#fff;
+      padding:20px;
+      border-radius:10px;
+      margin:15px 0;
+      border:3px solid #2196f3;
+      font-size:1.05em;
+    }
+
+    .choice-btn{
+      background-color:#6f42c1;
+      color:#fff;
+      border:none;
+      padding:10px 18px;
+      margin:8px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:.95em;
+      font-weight:bold;
+      transition:all .3s ease;
+      min-width:170px;
+    }
+    .choice-btn:hover{ background-color:#5a32a3; transform: translateY(-1px); }
+    .choice-btn.selected{ background-color:#28a745; }
+    .choice-btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .feedback{
+      margin:15px 0;
+      padding:15px;
+      border-radius:8px;
+      font-weight:bold;
+      display:none;
+    }
+    .feedback.correct{
+      background-color:#d4edda;
+      color:#155724;
+      border:2px solid #c3e6cb;
+    }
+    .feedback.incorrect{
+      background-color:#f8d7da;
+      color:#721c24;
+      border:2px solid #f5c6cb;
+    }
+
+    .progress-section{
+      background:#f8f9fa;
+      padding:15px;
+      border-radius:8px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .progress-bar{
+      width:100%;
+      height:20px;
+      background-color:#e0e0e0;
+      border-radius:10px;
+      margin:15px 0;
+    }
+    .progress-fill{
+      height:100%;
+      background-color:#28a745;
+      border-radius:10px;
+      transition:width .3s ease;
+    }
+
+    .result-display{
+      background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+      padding:20px;
+      border-radius:10px;
+      margin:20px 0;
+      border:2px solid #9c27b0;
+      display:none;
+    }
+    .score-display{
+      background:#fff;
+      padding:15px;
+      border-radius:8px;
+      margin:10px 0;
+      text-align:center;
+      font-size:1.2em;
+      font-weight:bold;
+    }
+
+    .calculate-btn{
+      background-color:#28a745;
+      color:#fff;
+      border:none;
+      padding:10px 20px;
+      margin:10px 5px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:1em;
+      font-weight:bold;
+      transition:all .3s ease;
+    }
+    .calculate-btn:hover{ background-color:#218838; transform: translateY(-1px); }
+    .calculate-btn.reset-btn{ background-color:#17a2b8; }
+    .calculate-btn.reset-btn:hover{ background-color:#138496; }
+
+    .mini-table{
+      background:#fff;
+      border-radius:8px;
+      overflow:hidden;
+      margin:15px 0;
+    }
+    .mini-table table{ width:100%; border-collapse:collapse; }
+    .mini-table th{
+      background:#17a2b8;
+      color:#fff;
+      padding:12px;
+      text-align:left;
+    }
+    .mini-table td{
+      padding:10px;
+      border-bottom:1px solid #dee2e6;
+    }
+
+    .input-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin:10px 0;
+    }
+    .input-group{
+      background:#fff;
+      border:2px solid #dee2e6;
+      border-radius:10px;
+      padding:12px;
+    }
+    .input-group label{
+      display:block;
+      font-weight:bold;
+      margin-bottom:8px;
+      color:#2c3e50;
+    }
+    .input-group input[type="range"]{ width:100%; }
+    .small-note{ font-size:.95em; opacity:.9; margin-top:8px; }
+
+    footer{
+      margin-top:30px;
+      padding-top:20px;
+      border-top:2px dashed #cfd8dc;
+      text-align:center;
+    }
+
+    @media (max-width: 768px){
+      .container{ padding:15px; }
+      h1{ font-size:2em; }
+      .nav-btn{ padding:10px 18px; margin:5px; font-size:.9em; }
+      .choice-btn{ min-width:150px; margin:5px; padding:8px 14px; }
+      .input-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🇨🇦 Variables in Economics</h1>
+
+    <div class="canada-header">
+      <h2>🍁 How economists describe the world 🍁</h2>
+      <p><strong>Practice classifying variables: endogenous/exogenous, qualitative/quantitative, flow/stock, dependent/independent, and constants.</strong></p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="activity-nav">
+      <button class="nav-btn active" onclick="showActivity('overview', this)">🔄 Overview</button>
+      <button class="nav-btn" onclick="showActivity('spotter', this)">🔍 Variable Spotter</button>
+      <button class="nav-btn" onclick="showActivity('lab', this)">🧪 Model Lab</button>
+      <button class="nav-btn" onclick="showActivity('quiz', this)">🎯 Master Quiz</button>
+    </div>
+
+    <!-- Overview -->
+    <div id="overview" class="activity-section active">
+      <h3>🔄 Core Concepts</h3>
+
+      <div class="concept-box">
+        <h4>📚 Definitions (Quick + Clear)</h4>
+
+        <div class="mini-table">
+          <table>
+            <tr><th>Concept</th><th>Meaning</th><th>Quick Clue</th></tr>
+            <tr>
+              <td><strong>Endogenous</strong></td>
+              <td>Determined <em>inside</em> the model (the model explains it).</td>
+              <td>“What we solve for”</td>
+            </tr>
+            <tr>
+              <td><strong>Exogenous</strong></td>
+              <td>Determined <em>outside</em> the model (taken as given).</td>
+              <td>“What we assume / set”</td>
+            </tr>
+            <tr>
+              <td><strong>Qualitative</strong></td>
+              <td>Category/label (non-number).</td>
+              <td>Type / kind / group</td>
+            </tr>
+            <tr>
+              <td><strong>Quantitative</strong></td>
+              <td>Numeric amount (a number you can measure).</td>
+              <td>Counts, $, %, units</td>
+            </tr>
+            <tr>
+              <td><strong>Stock</strong></td>
+              <td>Measured at a point in time.</td>
+              <td>“As of today”</td>
+            </tr>
+            <tr>
+              <td><strong>Flow</strong></td>
+              <td>Measured per time period.</td>
+              <td>“Per month/year”</td>
+            </tr>
+            <tr>
+              <td><strong>Dependent</strong></td>
+              <td>Outcome variable (the one that responds/changes).</td>
+              <td>Usually on the left side</td>
+            </tr>
+            <tr>
+              <td><strong>Independent</strong></td>
+              <td>Input/explanatory variable (influences the outcome).</td>
+              <td>Usually on the right side</td>
+            </tr>
+            <tr>
+              <td><strong>Constant</strong></td>
+              <td>A fixed value that does not change.</td>
+              <td>a, b, tax rate fixed</td>
+            </tr>
+          </table>
+        </div>
+
+        <p class="small-note"><strong>Important:</strong> A variable can be more than one type at once (e.g., price can be endogenous in a market model, and also quantitative).</p>
+      </div>
+
+      <div class="scenario-box">
+        <h4>🍁 Canadian Mini-Example (Simple Model)</h4>
+        <p><strong>Demand model:</strong> Q<sub>d</sub> = a − bP + cY</p>
+        <ul>
+          <li><strong>Q<sub>d</sub></strong> (quantity demanded): dependent + endogenous</li>
+          <li><strong>P</strong> (price): independent (in this equation); could be endogenous in a full market model</li>
+          <li><strong>Y</strong> (income): often exogenous (given to the model)</li>
+          <li><strong>a, b, c</strong>: constants/parameters</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Variable Spotter (20 random, neutral buttons, reset = new set) -->
+    <div id="spotter" class="activity-section">
+      <h3>🔍 Variable Spotter</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>Answer 20 quick classification questions. Each question tells you which type of classification to use.</p>
+      </div>
+
+      <div class="progress-section">
+        <h4>📊 Progress Tracker</h4>
+        <div>Answered: <span id="spotter-done">0</span>/<span id="spotter-total">20</span></div>
+        <div class="progress-bar">
+          <div id="spotter-fill" class="progress-fill" style="width:0%;"></div>
+        </div>
+        <button class="calculate-btn reset-btn" onclick="resetSpotter()">🔄 Reset (New 20 Questions)</button>
+      </div>
+
+      <div id="spotter-container"></div>
+
+      <div id="spotter-results" class="result-display">
+        <h4>🎯 Spotter Results</h4>
+        <div id="spotter-score" class="score-display"></div>
+        <div id="spotter-review"></div>
+      </div>
+    </div>
+
+    <!-- Model Lab -->
+    <div id="lab" class="activity-section">
+      <h3>🧪 Model Lab</h3>
+
+      <div class="concept-box">
+        <h4>🎯 Goal</h4>
+        <p>See how variables work in simple economic models (dependent/independent, endogenous/exogenous, constants, stock/flow).</p>
+      </div>
+
+      <!-- Lab 1: Simple linear model -->
+      <div class="scenario-box">
+        <h4>Lab 1: Linear Relationship</h4>
+        <p><strong>Model:</strong> Y = a + bX</p>
+        <p class="small-note">
+          Here, <strong>a</strong> is a constant (intercept). <strong>X</strong> is an input. <strong>Y</strong> is the outcome.
+        </p>
+
+        <div class="input-grid">
+          <div class="input-group">
+            <label>X (independent input): <span id="xVal">5</span></label>
+            <input id="xSlider" type="range" min="0" max="20" value="5" oninput="updateLinear()" />
+          </div>
+          <div class="input-group">
+            <label>a (constant): <span id="aVal">2</span></label>
+            <input id="aSlider" type="range" min="-5" max="10" value="2" oninput="updateLinear()" />
+          </div>
+        </div>
+
+        <div class="question-card">
+          <p><strong>b</strong> (slope) is fixed at <strong>3</strong>.</p>
+          <p>Computed: <strong>Y = <span id="yOut">17</span></strong></p>
+          <div class="mini-table">
+            <table>
+              <tr><th>Item</th><th>Classification</th></tr>
+              <tr><td>X</td><td>Independent (input). Often exogenous (given).</td></tr>
+              <tr><td>Y</td><td>Dependent (outcome). Endogenous (explained by the model).</td></tr>
+              <tr><td>a, b</td><td>Constants/parameters (fixed numbers in this model).</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lab 2: Stock vs Flow -->
+      <div class="scenario-box">
+        <h4>Lab 2: Stock vs Flow (Savings)</h4>
+        <p><strong>Stock:</strong> Savings balance (measured at a point in time).<br/>
+           <strong>Flow:</strong> Monthly deposits/withdrawals (per month).</p>
+
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Starting Balance (Stock): $<span id="balVal">200</span></label>
+            <input id="balSlider" type="range" min="0" max="1000" value="200" oninput="updateStockFlow()" />
+          </div>
+          <div class="input-group">
+            <label>Monthly Deposit (Flow): $<span id="depVal">50</span> per month</label>
+            <input id="depSlider" type="range" min="-200" max="300" value="50" oninput="updateStockFlow()" />
+          </div>
+        </div>
+
+        <div class="question-card">
+          <p>After 1 month: <strong>New Balance = $<span id="newBal">250</span></strong></p>
+          <div class="question-card" style="border-color:#ff9800;">
+            <p><strong>Quick Check:</strong> Which is the stock variable?</p>
+            <button class="choice-btn" onclick="checkInline('lab2a', 0, 0, 'Correct. A balance is measured at a point in time (stock).', this)">Balance</button>
+            <button class="choice-btn" onclick="checkInline('lab2a', 1, 0, 'Not quite. Deposits are measured per month (flow).', this)">Monthly deposit</button>
+            <div id="lab2a-feedback" class="feedback"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lab 3: Endogenous vs Exogenous (market idea) -->
+      <div class="scenario-box">
+        <h4>Lab 3: Endogenous vs Exogenous (Simple Market Story)</h4>
+        <p>Suppose we model the local market for pizza and we solve for the <strong>market price P</strong> where supply = demand.</p>
+
+        <div class="question-card">
+          <p><strong>In THIS market model, P (price) is:</strong></p>
+          <button class="choice-btn" onclick="checkInline('lab3', 0, 0, 'Correct. Price is determined inside the model (endogenous).', this)">Endogenous</button>
+          <button class="choice-btn" onclick="checkInline('lab3', 1, 0, 'Not quite. In this story we solve for price inside the model.', this)">Exogenous</button>
+          <div id="lab3-feedback" class="feedback"></div>
+
+          <p class="small-note"><em>Note:</em> If you instead assume “price is fixed by government,” then price would become exogenous in that model. It depends on the model setup.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Master Quiz (15 questions, sequential, reset = new set) -->
+    <div id="quiz" class="activity-section">
+      <h3>🎯 Variables Master Quiz</h3>
+
+      <div class="progress-section">
+        <h4>📊 Progress Tracker</h4>
+        <div>Questions Completed: <span id="completed-count">0</span>/<span id="total-count">15</span></div>
+        <div class="progress-bar">
+          <div id="quiz-progress-fill" class="progress-fill" style="width:0%;"></div>
+        </div>
+        <button class="calculate-btn reset-btn" onclick="resetMasterQuiz()">🔄 Reset (New Questions)</button>
+      </div>
+
+      <div id="master-quiz"></div>
+
+      <div class="result-display" id="final-results">
+        <h4>🎯 Quiz Results</h4>
+        <div id="score-summary" class="score-display"></div>
+        <div id="detailed-feedback"></div>
+      </div>
+    </div>
+
+    <!-- Footer: clickable website always -->
+    <footer>
+      <p style="font-weight:bold;">
+        ✅ View this interactive module online:
+        <a href="https://htmlpreview.github.io/?https://github.com/waberra/Introduction-to-Economics-/blob/main/Variables.html"
+           target="_blank" rel="noopener noreferrer">
+          Click here
+        </a>
+      </p>
+      <p class="small-note">
+        GitHub Pages version (if enabled): <strong>https://waberra.github.io/Introduction-to-Economics-/Variables.html</strong>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Navigation ----------
+    function showActivity(activityId, btn) {
+      document.querySelectorAll(".activity-section").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(activityId).classList.add("active");
+      btn.classList.add("active");
+
+      if (activityId === "spotter") initializeSpotter();
+      if (activityId === "quiz") initializeMasterQuiz();
+      if (activityId === "lab") { updateLinear(); updateStockFlow(); }
+    }
+
+    // ---------- Shared helpers ----------
+    function shuffle(arr){
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+    function pickN(arr, n){ return shuffle(arr).slice(0, n); }
+
+    function showFeedback(divId, isCorrect, text) {
+      const div = document.getElementById(divId);
+      div.style.display = "block";
+      div.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      div.textContent = text;
+    }
+
+    function disableSiblings(btn){
+      const parent = btn.parentElement;
+      parent.querySelectorAll(".choice-btn").forEach(b => b.disabled = true);
+      btn.classList.add("selected");
+    }
+
+    // Inline check (Model Lab quick checks)
+    function checkInline(id, selectedIndex, correctIndex, msg, btn){
+      disableSiblings(btn);
+      showFeedback(id + "-feedback", selectedIndex === correctIndex, msg);
+    }
+
+    // ---------- Spotter (20 random) ----------
+    const SPOTTER_COUNT = 20;
+    let spotterSet = [];
+    let spotterState = {}; // qid -> answered?
+    let spotterDone = 0;
+    let spotterScore = 0;
+
+    const spotterBank = [
+      // Endogenous vs Exogenous
+      {
+        prompt: "Classification: Endogenous vs Exogenous\nIn a market model where price is solved by supply = demand, the market price (P) is:",
+        options: ["Endogenous", "Exogenous"],
+        correct: 0,
+        exp: "Endogenous: it is determined inside the model (solved for)."
+      },
+      {
+        prompt: "Classification: Endogenous vs Exogenous\nIn a demand model Qd = a − bP + cY where income (Y) is taken as given, Y is:",
+        options: ["Endogenous", "Exogenous"],
+        correct: 1,
+        exp: "Exogenous: income is taken as given to the model."
+      },
+      {
+        prompt: "Classification: Endogenous vs Exogenous\nIf the government sets a fixed sales tax rate t and the model treats t as given, t is:",
+        options: ["Endogenous", "Exogenous"],
+        correct: 1,
+        exp: "Exogenous: fixed policy value given to the model."
+      },
+
+      // Qualitative vs Quantitative
+      {
+        prompt: "Classification: Qualitative vs Quantitative\n“Province” (Ontario, Quebec, Alberta…) is:",
+        options: ["Qualitative", "Quantitative"],
+        correct: 0,
+        exp: "Qualitative: categories/labels, not numbers."
+      },
+      {
+        prompt: "Classification: Qualitative vs Quantitative\n“Inflation rate (%)” is:",
+        options: ["Qualitative", "Quantitative"],
+        correct: 1,
+        exp: "Quantitative: a measured number (%)."
+      },
+      {
+        prompt: "Classification: Qualitative vs Quantitative\n“Employment status” (employed/unemployed) is:",
+        options: ["Qualitative", "Quantitative"],
+        correct: 0,
+        exp: "Qualitative: category variable."
+      },
+      {
+        prompt: "Classification: Qualitative vs Quantitative\n“Number of workers” is:",
+        options: ["Qualitative", "Quantitative"],
+        correct: 1,
+        exp: "Quantitative: a count."
+      },
+
+      // Flow vs Stock
+      {
+        prompt: "Classification: Flow vs Stock\n“Canada’s GDP per year” is:",
+        options: ["Stock", "Flow"],
+        correct: 1,
+        exp: "Flow: measured per year (over time)."
+      },
+      {
+        prompt: "Classification: Flow vs Stock\n“Unemployment rate this month” (as of now) is closest to:",
+        options: ["Stock", "Flow"],
+        correct: 0,
+        exp: "Stock: measured at a point in time (this month’s level)."
+      },
+      {
+        prompt: "Classification: Flow vs Stock\n“Money in your bank account today” is:",
+        options: ["Stock", "Flow"],
+        correct: 0,
+        exp: "Stock: balance at a point in time."
+      },
+      {
+        prompt: "Classification: Flow vs Stock\n“Monthly spending” is:",
+        options: ["Stock", "Flow"],
+        correct: 1,
+        exp: "Flow: per month."
+      },
+
+      // Dependent vs Independent (context-based)
+      {
+        prompt: "Classification: Dependent vs Independent\nIn the equation Qd = a − bP + cY, Qd is:",
+        options: ["Dependent", "Independent"],
+        correct: 0,
+        exp: "Dependent: it is the outcome being explained."
+      },
+      {
+        prompt: "Classification: Dependent vs Independent\nIn the equation Y = a + bX, X is:",
+        options: ["Dependent", "Independent"],
+        correct: 1,
+        exp: "Independent: it is the input/explanatory variable."
+      },
+      {
+        prompt: "Classification: Dependent vs Independent\nIf we study how study hours affect test score, the test score is:",
+        options: ["Dependent", "Independent"],
+        correct: 0,
+        exp: "Dependent: score responds to study hours."
+      },
+
+      // Constant
+      {
+        prompt: "Classification: Constant\nIn the model Y = a + bX, the number a is:",
+        options: ["A constant", "A variable"],
+        correct: 0,
+        exp: "Constant: fixed parameter (intercept)."
+      },
+      {
+        prompt: "Classification: Constant\nIf the model uses a fixed GST rate of 5% and treats it as unchanged, that rate is:",
+        options: ["A constant", "A variable"],
+        correct: 0,
+        exp: "Constant: fixed value in the model."
+      },
+
+      // Mixed practice (still single-choice classification per prompt)
+      {
+        prompt: "Classification: Qualitative vs Quantitative\n“Type of industry” (retail, mining, healthcare) is:",
+        options: ["Qualitative", "Quantitative"],
+        correct: 0,
+        exp: "Qualitative: categories."
+      },
+      {
+        prompt: "Classification: Flow vs Stock\n“Inventory in a warehouse right now” is:",
+        options: ["Stock", "Flow"],
+        correct: 0,
+        exp: "Stock: measured at a point in time."
+      },
+      {
+        prompt: "Classification: Endogenous vs Exogenous\nIf the model takes world oil price as given to Canada, world oil price is:",
+        options: ["Endogenous", "Exogenous"],
+        correct: 1,
+        exp: "Exogenous: determined outside the model."
+      },
+      {
+        prompt: "Classification: Dependent vs Independent\nIn a regression where wages depend on education, education is:",
+        options: ["Dependent", "Independent"],
+        correct: 1,
+        exp: "Independent: it helps explain wages."
+      },
+      {
+        prompt: "Classification: Quantitative vs Qualitative\n“Exchange rate (CAD per USD)” is:",
+        options: ["Qualitative", "Quantitative"],
+        correct: 1,
+        exp: "Quantitative: numeric measure."
+      },
+      {
+        prompt: "Classification: Flow vs Stock\n“New jobs created per month” is:",
+        options: ["Stock", "Flow"],
+        correct: 1,
+        exp: "Flow: per month."
+      },
+      {
+        prompt: "Classification: Constant\nIn the equation Q = 100 − 2P, the number 100 is:",
+        options: ["A constant", "A variable"],
+        correct: 0,
+        exp: "Constant: fixed intercept in this equation."
+      },
+      {
+        prompt: "Classification: Endogenous vs Exogenous\nIf a model sets the interest rate by assumption, the interest rate is:",
+        options: ["Endogenous", "Exogenous"],
+        correct: 1,
+        exp: "Exogenous: set from outside the model."
+      }
+    ];
+
+    function initializeSpotter(){
+      spotterSet = pickN(spotterBank, SPOTTER_COUNT);
+      spotterState = {};
+      spotterDone = 0;
+      spotterScore = 0;
+
+      document.getElementById("spotter-results").style.display = "none";
+      document.getElementById("spotter-done").textContent = "0";
+      document.getElementById("spotter-total").textContent = String(SPOTTER_COUNT);
+      document.getElementById("spotter-fill").style.width = "0%";
+
+      renderSpotter();
+    }
+
+    function resetSpotter(){ initializeSpotter(); }
+
+    function renderSpotter(){
+      const container = document.getElementById("spotter-container");
+      container.innerHTML = spotterSet.map((q, idx) => {
+        const qid = "sp" + idx;
+        const lines = q.prompt.split("\n");
+        const title = lines[0];
+        const body = lines.slice(1).join(" ");
+        return `
+          <div class="question-card" id="${qid}">
+            <p style="margin-bottom:10px;"><strong>${idx + 1}) ${title}</strong></p>
+            <p style="margin-top:0;"><strong>${body}</strong></p>
+            <div>
+              ${q.options.map((opt, j) =>
+                `<button class="choice-btn" onclick="answerSpotter(${idx}, ${j}, this)">${opt}</button>`
+              ).join("")}
+            </div>
+            <div id="${qid}-feedback" class="feedback"></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function answerSpotter(index, choiceIndex, btn){
+      const qid = "sp" + index;
+      if (spotterState[qid]) return;
+
+      const q = spotterSet[index];
+      const isCorrect = choiceIndex === q.correct;
+      spotterState[qid] = true;
+
+      if (isCorrect) spotterScore++;
+      spotterDone++;
+
+      // lock buttons
+      const card = document.getElementById(qid);
+      card.querySelectorAll("button.choice-btn").forEach(b => b.disabled = true);
+      btn.classList.add("selected");
+
+      const fb = document.getElementById(qid + "-feedback");
+      fb.style.display = "block";
+      fb.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      fb.textContent = (isCorrect ? "Correct. " : "Incorrect. ") + q.exp;
+
+      document.getElementById("spotter-done").textContent = String(spotterDone);
+      document.getElementById("spotter-fill").style.width = (spotterDone / SPOTTER_COUNT) * 100 + "%";
+
+      if (spotterDone === SPOTTER_COUNT) showSpotterResults();
+    }
+
+    function showSpotterResults(){
+      const pct = Math.round((spotterScore / SPOTTER_COUNT) * 100);
+      document.getElementById("spotter-results").style.display = "block";
+      document.getElementById("spotter-score").innerHTML =
+        `Your Score: ${spotterScore}/${SPOTTER_COUNT} (${pct}%)`;
+
+      let review = "<h5>📋 Quick Review:</h5>";
+      spotterSet.forEach((q, idx) => {
+        review += `
+          <div style="margin:10px 0; padding:12px; border-radius:8px; background:#ffffff; border:1px solid #dee2e6;">
+            <strong>#${idx + 1}</strong> — Correct answer: <strong>${q.options[q.correct]}</strong><br>
+            <em>${q.exp}</em>
+          </div>
+        `;
+      });
+      document.getElementById("spotter-review").innerHTML = review;
+    }
+
+    // ---------- Model Lab computations ----------
+    function updateLinear(){
+      const X = parseInt(document.getElementById("xSlider").value, 10);
+      const a = parseInt(document.getElementById("aSlider").value, 10);
+      const b = 3;
+      const Y = a + b * X;
+
+      document.getElementById("xVal").textContent = X;
+      document.getElementById("aVal").textContent = a;
+      document.getElementById("yOut").textContent = Y;
+    }
+
+    function updateStockFlow(){
+      const bal = parseInt(document.getElementById("balSlider").value, 10);
+      const dep = parseInt(document.getElementById("depSlider").value, 10);
+      const newBal = bal + dep;
+
+      document.getElementById("balVal").textContent = bal;
+      document.getElementById("depVal").textContent = dep;
+      document.getElementById("newBal").textContent = newBal;
+    }
+
+    // ---------- Master Quiz (15 random, sequential) ----------
+    const QUIZ_COUNT = 15;
+    let currentQ = 0;
+    let answers = [];
+    let score = 0;
+    let quizQuestions = [];
+
+    const quizBank = [
+      { q: "Endogenous variables are:", options: ["Determined inside the model", "Always qualitative"], correct: 0, exp: "Endogenous variables are solved for within the model." },
+      { q: "Exogenous variables are:", options: ["Determined outside the model", "Always dependent variables"], correct: 0, exp: "Exogenous variables are taken as given from outside the model." },
+      { q: "Qualitative variables are best described as:", options: ["Categories/labels", "Numbers only"], correct: 0, exp: "Qualitative variables describe types or groups." },
+      { q: "Quantitative variables are best described as:", options: ["Measured numbers", "Opinions"], correct: 0, exp: "Quantitative variables are numeric and measurable." },
+      { q: "A stock variable is measured:", options: ["At a point in time", "Per time period"], correct: 0, exp: "Stocks are 'as of now' measurements." },
+      { q: "A flow variable is measured:", options: ["Per time period", "Only once"], correct: 0, exp: "Flows are measured per month/year, etc." },
+      { q: "In Y = a + bX, Y is usually:", options: ["Dependent", "Independent"], correct: 0, exp: "Y is the outcome being explained." },
+      { q: "In Y = a + bX, X is usually:", options: ["Independent", "Dependent"], correct: 0, exp: "X is the input/explanatory variable." },
+      { q: "In Qd = a − bP + cY, the symbols a, b, and c are:", options: ["Constants/parameters", "Random choices"], correct: 0, exp: "They are fixed values in the equation." },
+      { q: "“Province (Ontario/Quebec/etc.)” is:", options: ["Qualitative", "Quantitative"], correct: 0, exp: "It’s a category label." },
+      { q: "“GDP per year” is:", options: ["Flow", "Stock"], correct: 0, exp: "GDP per year is measured over time (flow)." },
+      { q: "“Money in a bank account today” is:", options: ["Stock", "Flow"], correct: 0, exp: "Balance at a point in time (stock)." },
+      { q: "If a model solves for market price using supply = demand, price is:", options: ["Endogenous", "Exogenous"], correct: 0, exp: "It’s determined inside the model." },
+      { q: "If the government sets a tax rate and the model treats it as fixed, the tax rate is:", options: ["Exogenous", "Endogenous"], correct: 0, exp: "It’s taken as given from outside the model." },
+      { q: "A constant is:", options: ["A fixed value that doesn’t change", "Any variable in the model"], correct: 0, exp: "Constants do not vary." },
+      // extras for variety
+      { q: "“Inflation rate (%)” is:", options: ["Quantitative", "Qualitative"], correct: 0, exp: "It is numeric and measurable." },
+      { q: "“Jobs created per month” is:", options: ["Flow", "Stock"], correct: 0, exp: "Per month makes it a flow." },
+      { q: "In a study where wages depend on education, education is:", options: ["Independent", "Dependent"], correct: 0, exp: "Education is an explanatory input for wages." },
+      { q: "In a study where wages depend on education, wages are:", options: ["Dependent", "Independent"], correct: 0, exp: "Wages are the outcome being explained." },
+      { q: "A model can treat the same variable as endogenous or exogenous depending on:", options: ["How the model is set up", "The weather"], correct: 0, exp: "Classification depends on assumptions and model boundaries." }
+    ];
+
+    function resetMasterQuiz(){ initializeMasterQuiz(); }
+
+    function initializeMasterQuiz(){
+      currentQ = 0;
+      answers = [];
+      score = 0;
+
+      quizQuestions = pickN(quizBank, QUIZ_COUNT);
+
+      document.getElementById("final-results").style.display = "none";
+      document.getElementById("completed-count").textContent = "0";
+      document.getElementById("total-count").textContent = String(QUIZ_COUNT);
+      document.getElementById("quiz-progress-fill").style.width = "0%";
+
+      displayQuestion();
+    }
+
+    function displayQuestion(){
+      if (currentQ >= quizQuestions.length) return showResults();
+
+      const q = quizQuestions[currentQ];
+      const container = document.getElementById("master-quiz");
+
+      container.innerHTML = `
+        <div class="question-card">
+          <h5>Question ${currentQ + 1} of ${quizQuestions.length}</h5>
+          <p><strong>${q.q}</strong></p>
+          <div id="q-options">
+            ${q.options.map((opt, idx) =>
+              `<button class="choice-btn" onclick="answerQuiz(${idx}, this)">${opt}</button>`
+            ).join("")}
+          </div>
+          <div id="q-feedback" class="feedback"></div>
+        </div>
+      `;
+    }
+
+    function answerQuiz(selectedIndex, btn){
+      const q = quizQuestions[currentQ];
+      const isCorrect = selectedIndex === q.correct;
+
+      answers[currentQ] = {
+        question: q.q,
+        options: q.options,
+        selected: selectedIndex,
+        correct: q.correct,
+        isCorrect,
+        explanation: q.exp
+      };
+
+      if (isCorrect) score++;
+
+      // lock buttons
+      btn.parentElement.querySelectorAll(".choice-btn").forEach(b => b.disabled = true);
+      btn.classList.add("selected");
+
+      const feedback = document.getElementById("q-feedback");
+      feedback.style.display = "block";
+      feedback.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      feedback.innerHTML = `<strong>${isCorrect ? "Correct!" : "Incorrect."}</strong><br>${q.exp}`;
+
+      const completed = currentQ + 1;
+      document.getElementById("completed-count").textContent = String(completed);
+      document.getElementById("quiz-progress-fill").style.width = (completed / quizQuestions.length) * 100 + "%";
+
+      setTimeout(() => {
+        currentQ++;
+        displayQuestion();
+      }, 2200);
+    }
+
+    function showResults(){
+      const total = quizQuestions.length;
+      const pct = Math.round((score / total) * 100);
+
+      const resultsDiv = document.getElementById("final-results");
+      const scoreDiv = document.getElementById("score-summary");
+      const detailDiv = document.getElementById("detailed-feedback");
+
+      scoreDiv.innerHTML = `Your Score: ${score}/${total} (${pct}%)`;
+
+      let html = "<h5>📋 Detailed Review:</h5>";
+      answers.forEach((a, i) => {
+        html += `
+          <div style="margin: 12px 0; padding: 12px; border-radius: 8px; ${a.isCorrect ? "background:#d4edda;border:2px solid #c3e6cb;" : "background:#f8d7da;border:2px solid #f5c6cb;"}">
+            <strong>Q${i+1}:</strong> ${a.question}<br>
+            <strong>Your answer:</strong> ${a.options[a.selected]}<br>
+            <strong>Correct answer:</strong> ${a.options[a.correct]}<br>
+            <em>${a.explanation}</em>
+          </div>
+        `;
+      });
+
+      detailDiv.innerHTML = html;
+      resultsDiv.style.display = "block";
+    }
+
+    // Default lab values
+    updateLinear();
+    updateStockFlow();
+  </script>
+</body>
+</html>
