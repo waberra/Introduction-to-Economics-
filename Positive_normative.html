@@ -252,7 +252,7 @@
       </div>
     </div>
 
-    <!-- Activity 1: Statement Spotter (20 questions, random set, neutral buttons) -->
+    <!-- Activity 1: Statement Spotter -->
     <div id="spotter" class="activity-section">
       <h3>🔍 Statement Spotter</h3>
 
@@ -327,13 +327,13 @@
       </div>
     </div>
 
-    <!-- Activity 3: Master Quiz -->
+    <!-- Activity 3: Master Quiz (UPDATED to 15 questions) -->
     <div id="quiz" class="activity-section">
       <h3>🎯 Positive vs Normative Master Quiz</h3>
 
       <div class="progress-section">
         <h4>📊 Progress Tracker</h4>
-        <div id="quiz-progress">Questions Completed: <span id="completed-count">0</span>/<span id="total-count">12</span></div>
+        <div id="quiz-progress">Questions Completed: <span id="completed-count">0</span>/<span id="total-count">15</span></div>
         <div class="progress-bar">
           <div id="quiz-progress-fill" class="progress-fill" style="width:0%;"></div>
         </div>
@@ -353,14 +353,13 @@
     <footer>
       <p style="font-weight:bold;">
         ✅ View this interactive module online:
-        <!-- Update the filename after you upload to GitHub -->
-        <a href="https://htmlpreview.github.io/?https://github.com/waberra/Introduction-to-Economics-/blob/main/Positive_Normative.html"
+        <a href="https://htmlpreview.github.io/?https://github.com/waberra/Introduction-to-Economics-/blob/main/Positive_normative.html"
            target="_blank" rel="noopener noreferrer">
           Click here
         </a>
       </p>
       <p class="small-note">
-        GitHub Pages version (if enabled): <strong>https://waberra.github.io/Introduction-to-Economics-/Positive_Normative.html</strong>
+        GitHub Pages version (if enabled): <strong>https://waberra.github.io/Introduction-to-Economics-/Positive_normative.html</strong>
       </p>
     </footer>
   </div>
@@ -391,7 +390,6 @@
       div.textContent = text;
     }
 
-    // Multiple choice checker (Rewrite Lab)
     function checkMC(id, selectedIndex, correctIndex, msg, btn) {
       markSelected(btn);
       showFeedback(id, selectedIndex === correctIndex, msg);
@@ -401,7 +399,6 @@
     const SPOTTER_COUNT = 20;
 
     const spotterBank = [
-      // Positive (testable)
       { s: "If the price of coffee rises, some consumers will buy less coffee.", type: "positive", exp: "This is a testable prediction about behavior." },
       { s: "Canada’s unemployment rate was higher in 2020 than in 2019.", type: "positive", exp: "This can be checked with data." },
       { s: "A higher interest rate tends to reduce borrowing for some households.", type: "positive", exp: "This is a testable claim about borrowing." },
@@ -413,7 +410,6 @@
       { s: "When gasoline prices rise, some drivers reduce driving.", type: "positive", exp: "Testable by comparing price changes to usage." },
       { s: "If a government increases spending without raising taxes, its deficit may grow.", type: "positive", exp: "Testable using budgets/deficits." },
 
-      // Normative (value-based)
       { s: "The government should lower taxes to help families.", type: "normative", exp: "Uses 'should' and depends on values/priorities." },
       { s: "It is unfair that some people earn much more than others.", type: "normative", exp: "Fairness is a value judgment." },
       { s: "Canada should ban single-use plastics nationwide.", type: "normative", exp: "A policy recommendation based on values." },
@@ -425,7 +421,6 @@
       { s: "The government ought to spend less on defense.", type: "normative", exp: "Uses 'ought' (value/policy)." },
       { s: "A carbon tax is a good idea.", type: "normative", exp: "'Good idea' depends on values and goals." },
 
-      // Mixy ones (still classify by language)
       { s: "Rent prices are too high in many Canadian cities.", type: "normative", exp: "'Too high' is a value judgment (even if rent data exists)." },
       { s: "If rent rises by 10%, more renters will spend over 30% of income on housing.", type: "positive", exp: "This is measurable and testable." },
       { s: "Canada should aim for lower inflation even if unemployment increases slightly.", type: "normative", exp: "It’s a goal choice (value/priorities)." },
@@ -534,7 +529,7 @@
       document.getElementById("spotter-review").innerHTML = review;
     }
 
-    // ---------- Master Quiz (12 random) ----------
+    // ---------- Master Quiz (UPDATED to 15 questions) ----------
     let currentQ = 0;
     let answers = [];
     let score = 0;
@@ -565,11 +560,16 @@
         exp:"A policy recommendation (values/goals)." },
       { q: "The best way to turn a normative statement into a positive one is to:", options: ["Add 'should'","Make it measurable/testable","Use 'fair' language","Make it more emotional"], correct: 1,
         exp:"Positive statements are testable and measurable." },
-      // extra bank
       { q: "“A carbon tax is good.” is:", options: ["Positive","Normative"], correct: 1,
         exp:"'Good' is a value judgment." },
       { q: "“A carbon tax reduces gasoline demand.” is:", options: ["Positive","Normative"], correct: 0,
-        exp:"This can be tested with data." }
+        exp:"This can be tested with data." },
+      { q: "“The government must increase funding for schools.” is:", options: ["Positive","Normative"], correct: 1,
+        exp:"'Must' is a recommendation/value statement." },
+      { q: "“If interest rates rise, borrowing will likely fall.” is:", options: ["Positive","Normative"], correct: 0,
+        exp:"This is a testable prediction." },
+      { q: "“It is fair that higher earners pay more tax.” is:", options: ["Positive","Normative"], correct: 1,
+        exp:"Fairness is a value judgment." }
     ];
 
     function pickQuiz(n){
@@ -584,7 +584,9 @@
       currentQ = 0;
       answers = [];
       score = 0;
-      quizQuestions = pickQuiz(12);
+
+      // UPDATED: pick 15 questions
+      quizQuestions = pickQuiz(15);
 
       document.getElementById("final-results").style.display = "none";
       document.getElementById("completed-count").textContent = "0";
