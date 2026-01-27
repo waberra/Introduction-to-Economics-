@@ -184,6 +184,21 @@
     .calculate-btn.reset-btn{ background-color:#17a2b8; }
     .calculate-btn.reset-btn:hover{ background-color:#138496; }
 
+    /* quiz set buttons */
+    .set-btn{
+      background-color:#6c757d;
+      color:#fff;
+      border:none;
+      padding:10px 16px;
+      margin:6px;
+      border-radius:18px;
+      cursor:pointer;
+      font-weight:bold;
+      transition:all .2s ease;
+    }
+    .set-btn:hover{ transform: translateY(-1px); }
+    .set-btn.active{ background-color:#28a745; }
+
     .mini-table{
       background:#fff;
       border-radius:8px;
@@ -329,7 +344,7 @@
       </div>
     </div>
 
-    <!-- Variable Spotter (20 random, neutral buttons, reset = new set) -->
+    <!-- Variable Spotter -->
     <div id="spotter" class="activity-section">
       <h3>🔍 Variable Spotter</h3>
 
@@ -365,7 +380,6 @@
         <p>See how variables work in simple economic models (dependent/independent, endogenous/exogenous, constants, stock/flow).</p>
       </div>
 
-      <!-- Lab 1: Simple linear model -->
       <div class="scenario-box">
         <h4>Lab 1: Linear Relationship</h4>
         <p><strong>Model:</strong> Y = a + bX</p>
@@ -398,7 +412,6 @@
         </div>
       </div>
 
-      <!-- Lab 2: Stock vs Flow -->
       <div class="scenario-box">
         <h4>Lab 2: Stock vs Flow (Savings)</h4>
         <p><strong>Stock:</strong> Savings balance (measured at a point in time).<br/>
@@ -426,7 +439,6 @@
         </div>
       </div>
 
-      <!-- Lab 3: Endogenous vs Exogenous (market idea) -->
       <div class="scenario-box">
         <h4>Lab 3: Endogenous vs Exogenous (Simple Market Story)</h4>
         <p>Suppose we model the local market for pizza and we solve for the <strong>market price P</strong> where supply = demand.</p>
@@ -442,23 +454,38 @@
       </div>
     </div>
 
-    <!-- Master Quiz (15 questions, sequential, reset = new set) -->
+    <!-- Master Quiz (UPDATED: 3 sets × 20 questions) -->
     <div id="quiz" class="activity-section">
       <h3>🎯 Variables Master Quiz</h3>
 
+      <div class="concept-box">
+        <h4>🎯 How it works</h4>
+        <p>You have <strong>3 sets</strong>. Each set has <strong>20 questions</strong>.</p>
+        <p class="small-note">Sets are created from one shuffle so Set 1–3 don’t repeat within the same run. Reset generates a brand new Set 1–3.</p>
+      </div>
+
+      <div style="text-align:center; margin-bottom:10px;">
+        <button class="set-btn active" id="setBtn1" onclick="selectQuizSet(1, this)">Set 1</button>
+        <button class="set-btn" id="setBtn2" onclick="selectQuizSet(2, this)">Set 2</button>
+        <button class="set-btn" id="setBtn3" onclick="selectQuizSet(3, this)">Set 3</button>
+      </div>
+
       <div class="progress-section">
         <h4>📊 Progress Tracker</h4>
-        <div>Questions Completed: <span id="completed-count">0</span>/<span id="total-count">15</span></div>
+        <div>
+          Current Set: <strong><span id="current-set">1</span>/3</strong> —
+          Questions Completed: <span id="completed-count">0</span>/<span id="total-count">20</span>
+        </div>
         <div class="progress-bar">
           <div id="quiz-progress-fill" class="progress-fill" style="width:0%;"></div>
         </div>
-        <button class="calculate-btn reset-btn" onclick="resetMasterQuiz()">🔄 Reset (New Questions)</button>
+        <button class="calculate-btn reset-btn" onclick="resetMasterQuiz()">🔄 Reset (New Set 1–3)</button>
       </div>
 
       <div id="master-quiz"></div>
 
       <div class="result-display" id="final-results">
-        <h4>🎯 Quiz Results</h4>
+        <h4>🎯 Set Results</h4>
         <div id="score-summary" class="score-display"></div>
         <div id="detailed-feedback"></div>
       </div>
@@ -516,7 +543,6 @@
       btn.classList.add("selected");
     }
 
-    // Inline check (Model Lab quick checks)
     function checkInline(id, selectedIndex, correctIndex, msg, btn){
       disableSiblings(btn);
       showFeedback(id + "-feedback", selectedIndex === correctIndex, msg);
@@ -525,12 +551,11 @@
     // ---------- Spotter (20 random) ----------
     const SPOTTER_COUNT = 20;
     let spotterSet = [];
-    let spotterState = {}; // qid -> answered?
+    let spotterState = {};
     let spotterDone = 0;
     let spotterScore = 0;
 
     const spotterBank = [
-      // Endogenous vs Exogenous
       {
         prompt: "Classification: Endogenous vs Exogenous\nIn a market model where price is solved by supply = demand, the market price (P) is:",
         options: ["Endogenous", "Exogenous"],
@@ -549,8 +574,6 @@
         correct: 1,
         exp: "Exogenous: fixed policy value given to the model."
       },
-
-      // Qualitative vs Quantitative
       {
         prompt: "Classification: Qualitative vs Quantitative\n“Province” (Ontario, Quebec, Alberta…) is:",
         options: ["Qualitative", "Quantitative"],
@@ -575,19 +598,11 @@
         correct: 1,
         exp: "Quantitative: a count."
       },
-
-      // Flow vs Stock
       {
         prompt: "Classification: Flow vs Stock\n“Canada’s GDP per year” is:",
         options: ["Stock", "Flow"],
         correct: 1,
         exp: "Flow: measured per year (over time)."
-      },
-      {
-        prompt: "Classification: Flow vs Stock\n“Unemployment rate this month” (as of now) is closest to:",
-        options: ["Stock", "Flow"],
-        correct: 0,
-        exp: "Stock: measured at a point in time (this month’s level)."
       },
       {
         prompt: "Classification: Flow vs Stock\n“Money in your bank account today” is:",
@@ -601,8 +616,6 @@
         correct: 1,
         exp: "Flow: per month."
       },
-
-      // Dependent vs Independent (context-based)
       {
         prompt: "Classification: Dependent vs Independent\nIn the equation Qd = a − bP + cY, Qd is:",
         options: ["Dependent", "Independent"],
@@ -616,41 +629,25 @@
         exp: "Independent: it is the input/explanatory variable."
       },
       {
-        prompt: "Classification: Dependent vs Independent\nIf we study how study hours affect test score, the test score is:",
-        options: ["Dependent", "Independent"],
-        correct: 0,
-        exp: "Dependent: score responds to study hours."
-      },
-
-      // Constant
-      {
         prompt: "Classification: Constant\nIn the model Y = a + bX, the number a is:",
         options: ["A constant", "A variable"],
         correct: 0,
         exp: "Constant: fixed parameter (intercept)."
       },
       {
-        prompt: "Classification: Constant\nIf the model uses a fixed GST rate of 5% and treats it as unchanged, that rate is:",
-        options: ["A constant", "A variable"],
-        correct: 0,
-        exp: "Constant: fixed value in the model."
-      },
-
-      // Mixed practice (still single-choice classification per prompt)
-      {
-        prompt: "Classification: Qualitative vs Quantitative\n“Type of industry” (retail, mining, healthcare) is:",
-        options: ["Qualitative", "Quantitative"],
-        correct: 0,
-        exp: "Qualitative: categories."
-      },
-      {
-        prompt: "Classification: Flow vs Stock\n“Inventory in a warehouse right now” is:",
+        prompt: "Classification: Flow vs Stock\n“Government debt (total) today” is:",
         options: ["Stock", "Flow"],
         correct: 0,
-        exp: "Stock: measured at a point in time."
+        exp: "Stock: total amount at a point in time."
       },
       {
-        prompt: "Classification: Endogenous vs Exogenous\nIf the model takes world oil price as given to Canada, world oil price is:",
+        prompt: "Classification: Flow vs Stock\n“Government spending per year” is:",
+        options: ["Stock", "Flow"],
+        correct: 1,
+        exp: "Flow: measured per year."
+      },
+      {
+        prompt: "Classification: Endogenous vs Exogenous\nIf a model takes world oil price as given to Canada, world oil price is:",
         options: ["Endogenous", "Exogenous"],
         correct: 1,
         exp: "Exogenous: determined outside the model."
@@ -662,16 +659,10 @@
         exp: "Independent: it helps explain wages."
       },
       {
-        prompt: "Classification: Quantitative vs Qualitative\n“Exchange rate (CAD per USD)” is:",
+        prompt: "Classification: Qualitative vs Quantitative\n“Exchange rate (CAD per USD)” is:",
         options: ["Qualitative", "Quantitative"],
         correct: 1,
         exp: "Quantitative: numeric measure."
-      },
-      {
-        prompt: "Classification: Flow vs Stock\n“New jobs created per month” is:",
-        options: ["Stock", "Flow"],
-        correct: 1,
-        exp: "Flow: per month."
       },
       {
         prompt: "Classification: Constant\nIn the equation Q = 100 − 2P, the number 100 is:",
@@ -684,6 +675,18 @@
         options: ["Endogenous", "Exogenous"],
         correct: 1,
         exp: "Exogenous: set from outside the model."
+      },
+      {
+        prompt: "Classification: Qualitative vs Quantitative\n“Type of industry” (retail, mining, healthcare) is:",
+        options: ["Qualitative", "Quantitative"],
+        correct: 0,
+        exp: "Qualitative: categories."
+      },
+      {
+        prompt: "Classification: Flow vs Stock\n“Inventory in a warehouse right now” is:",
+        options: ["Stock", "Flow"],
+        correct: 0,
+        exp: "Stock: measured at a point in time."
       }
     ];
 
@@ -736,7 +739,6 @@
       if (isCorrect) spotterScore++;
       spotterDone++;
 
-      // lock buttons
       const card = document.getElementById(qid);
       card.querySelectorAll("button.choice-btn").forEach(b => b.disabled = true);
       btn.classList.add("selected");
@@ -792,67 +794,185 @@
       document.getElementById("newBal").textContent = newBal;
     }
 
-    // ---------- Master Quiz (15 random, sequential) ----------
-    const QUIZ_COUNT = 15;
-    let currentQ = 0;
-    let answers = [];
-    let score = 0;
-    let quizQuestions = [];
+    // ---------- Master Quiz (UPDATED: 3 sets × 20) ----------
+    const SET_COUNT = 3;
+    const QUESTIONS_PER_SET = 20;
 
+    let currentSetIndex = 0; // 0,1,2
+    let quizSets = []; // [{questions, currentQ, answers, score, finished}, ...]
+
+    // 60-question bank (enough for 3 disjoint sets of 20)
     const quizBank = [
-      { q: "Endogenous variables are:", options: ["Determined inside the model", "Always qualitative"], correct: 0, exp: "Endogenous variables are solved for within the model." },
-      { q: "Exogenous variables are:", options: ["Determined outside the model", "Always dependent variables"], correct: 0, exp: "Exogenous variables are taken as given from outside the model." },
-      { q: "Qualitative variables are best described as:", options: ["Categories/labels", "Numbers only"], correct: 0, exp: "Qualitative variables describe types or groups." },
-      { q: "Quantitative variables are best described as:", options: ["Measured numbers", "Opinions"], correct: 0, exp: "Quantitative variables are numeric and measurable." },
-      { q: "A stock variable is measured:", options: ["At a point in time", "Per time period"], correct: 0, exp: "Stocks are 'as of now' measurements." },
-      { q: "A flow variable is measured:", options: ["Per time period", "Only once"], correct: 0, exp: "Flows are measured per month/year, etc." },
-      { q: "In Y = a + bX, Y is usually:", options: ["Dependent", "Independent"], correct: 0, exp: "Y is the outcome being explained." },
-      { q: "In Y = a + bX, X is usually:", options: ["Independent", "Dependent"], correct: 0, exp: "X is the input/explanatory variable." },
-      { q: "In Qd = a − bP + cY, the symbols a, b, and c are:", options: ["Constants/parameters", "Random choices"], correct: 0, exp: "They are fixed values in the equation." },
-      { q: "“Province (Ontario/Quebec/etc.)” is:", options: ["Qualitative", "Quantitative"], correct: 0, exp: "It’s a category label." },
-      { q: "“GDP per year” is:", options: ["Flow", "Stock"], correct: 0, exp: "GDP per year is measured over time (flow)." },
-      { q: "“Money in a bank account today” is:", options: ["Stock", "Flow"], correct: 0, exp: "Balance at a point in time (stock)." },
-      { q: "If a model solves for market price using supply = demand, price is:", options: ["Endogenous", "Exogenous"], correct: 0, exp: "It’s determined inside the model." },
-      { q: "If the government sets a tax rate and the model treats it as fixed, the tax rate is:", options: ["Exogenous", "Endogenous"], correct: 0, exp: "It’s taken as given from outside the model." },
-      { q: "A constant is:", options: ["A fixed value that doesn’t change", "Any variable in the model"], correct: 0, exp: "Constants do not vary." },
-      // extras for variety
-      { q: "“Inflation rate (%)” is:", options: ["Quantitative", "Qualitative"], correct: 0, exp: "It is numeric and measurable." },
-      { q: "“Jobs created per month” is:", options: ["Flow", "Stock"], correct: 0, exp: "Per month makes it a flow." },
-      { q: "In a study where wages depend on education, education is:", options: ["Independent", "Dependent"], correct: 0, exp: "Education is an explanatory input for wages." },
-      { q: "In a study where wages depend on education, wages are:", options: ["Dependent", "Independent"], correct: 0, exp: "Wages are the outcome being explained." },
-      { q: "A model can treat the same variable as endogenous or exogenous depending on:", options: ["How the model is set up", "The weather"], correct: 0, exp: "Classification depends on assumptions and model boundaries." }
+      // Endogenous / Exogenous
+      { q:"Endogenous variables are:", options:["Determined inside the model","Always categories"], correct:0, exp:"Endogenous variables are solved for within the model." },
+      { q:"Exogenous variables are:", options:["Taken as given from outside the model","Always dependent variables"], correct:0, exp:"Exogenous variables are determined outside the model and treated as given." },
+      { q:"If a market model solves for price where supply = demand, price is:", options:["Endogenous","Exogenous"], correct:0, exp:"Price is determined inside the model." },
+      { q:"If the government fixes a tax rate and the model treats it as given, the tax rate is:", options:["Exogenous","Endogenous"], correct:0, exp:"A fixed policy value is exogenous in that model." },
+      { q:"If a small Canadian city takes the world oil price as given, world oil price is:", options:["Exogenous","Endogenous"], correct:0, exp:"World oil price is determined outside the local model." },
+      { q:"If the model assumes the interest rate is set by the central bank and treated as given, interest rate is:", options:["Exogenous","Endogenous"], correct:0, exp:"It is set from outside the model." },
+      { q:"If a model explains unemployment using GDP and interest rates, unemployment is usually:", options:["Endogenous","Exogenous"], correct:0, exp:"It is an outcome the model explains (endogenous)." },
+      { q:"In a model of demand where income is taken as fixed, income is:", options:["Exogenous","Endogenous"], correct:0, exp:"Income is treated as given to the demand model." },
+
+      // Qualitative / Quantitative
+      { q:"Qualitative variables are:", options:["Categories/labels","Numbers only"], correct:0, exp:"Qualitative means non-numeric categories." },
+      { q:"Quantitative variables are:", options:["Measured numbers","Opinions"], correct:0, exp:"Quantitative means numeric and measurable." },
+      { q:"Province (Ontario/Quebec/etc.) is:", options:["Qualitative","Quantitative"], correct:0, exp:"It’s a category label." },
+      { q:"Inflation rate (%) is:", options:["Quantitative","Qualitative"], correct:0, exp:"It’s a numeric measure." },
+      { q:"Employment status (employed/unemployed) is:", options:["Qualitative","Quantitative"], correct:0, exp:"This is categorical." },
+      { q:"Number of workers in a firm is:", options:["Quantitative","Qualitative"], correct:0, exp:"Counts are quantitative." },
+      { q:"Industry type (retail/mining/healthcare) is:", options:["Qualitative","Quantitative"], correct:0, exp:"It’s categorical." },
+      { q:"Exchange rate (CAD per USD) is:", options:["Quantitative","Qualitative"], correct:0, exp:"It’s numeric." },
+      { q:"Credit score (e.g., 720) is:", options:["Quantitative","Qualitative"], correct:0, exp:"It’s a number." },
+      { q:"Brand name (Nike/Adidas/etc.) is:", options:["Qualitative","Quantitative"], correct:0, exp:"It’s a label/category." },
+
+      // Stock / Flow
+      { q:"A stock variable is measured:", options:["At a point in time","Per year/month"], correct:0, exp:"Stocks are ‘as of now’." },
+      { q:"A flow variable is measured:", options:["Per time period","Only once"], correct:0, exp:"Flows are per month/year, etc." },
+      { q:"Money in your bank account today is:", options:["Stock","Flow"], correct:0, exp:"Balance at a point in time is stock." },
+      { q:"Monthly spending is:", options:["Flow","Stock"], correct:0, exp:"Spending per month is a flow." },
+      { q:"Canada’s GDP per year is:", options:["Flow","Stock"], correct:0, exp:"GDP per year is measured over time." },
+      { q:"Total government debt today is:", options:["Stock","Flow"], correct:0, exp:"Debt level today is stock." },
+      { q:"Government spending per year is:", options:["Flow","Stock"], correct:0, exp:"Spending per year is a flow." },
+      { q:"Inventory in a warehouse right now is:", options:["Stock","Flow"], correct:0, exp:"Inventory level right now is stock." },
+      { q:"Jobs created per month is:", options:["Flow","Stock"], correct:0, exp:"Per month is flow." },
+      { q:"Population on July 1 (this year) is:", options:["Stock","Flow"], correct:0, exp:"Measured at a specific time = stock." },
+      { q:"Population growth per year is:", options:["Flow","Stock"], correct:0, exp:"Per year change = flow." },
+      { q:"Interest paid each month is:", options:["Flow","Stock"], correct:0, exp:"Per month payments are flows." },
+
+      // Dependent / Independent
+      { q:"Dependent variable means:", options:["Outcome that responds","Input that explains"], correct:0, exp:"Dependent = outcome." },
+      { q:"Independent variable means:", options:["Input that explains","Outcome that responds"], correct:0, exp:"Independent = explanatory/input." },
+      { q:"In Y = a + bX, Y is:", options:["Dependent","Independent"], correct:0, exp:"Y is the outcome." },
+      { q:"In Y = a + bX, X is:", options:["Independent","Dependent"], correct:0, exp:"X is the input." },
+      { q:"If wages depend on education, wages are:", options:["Dependent","Independent"], correct:0, exp:"Wages are the outcome." },
+      { q:"If wages depend on education, education is:", options:["Independent","Dependent"], correct:0, exp:"Education is the input." },
+      { q:"If quantity demanded depends on price, quantity demanded is:", options:["Dependent","Independent"], correct:0, exp:"Quantity demanded responds to price." },
+      { q:"If quantity demanded depends on price, price is:", options:["Independent","Dependent"], correct:0, exp:"Price is an explanatory variable in that equation." },
+      { q:"In Qd = a − bP + cY, Qd is:", options:["Dependent","Independent"], correct:0, exp:"Qd is the outcome." },
+      { q:"In Qd = a − bP + cY, P is (in that equation):", options:["Independent","Dependent"], correct:0, exp:"Price is an explanatory variable in the demand equation." },
+
+      // Constants
+      { q:"A constant is:", options:["A fixed value that doesn’t change","Any variable"], correct:0, exp:"Constants do not vary." },
+      { q:"In Y = a + bX, a is:", options:["A constant","A variable"], correct:0, exp:"a is the intercept (fixed parameter)." },
+      { q:"In Q = 100 − 2P, 100 is:", options:["A constant","A variable"], correct:0, exp:"It’s a fixed intercept." },
+      { q:"In Q = 100 − 2P, 2 is:", options:["A constant","A variable"], correct:0, exp:"It’s a fixed slope parameter." },
+      { q:"If a model uses a fixed GST rate of 5% and treats it as unchanged, GST rate is:", options:["A constant in the model","Always endogenous"], correct:0, exp:"Fixed rates are constants within the model." },
+
+      // Mixed applied (still clean classification)
+      { q:"In a market model, price is often endogenous because:", options:["The model determines it","It is always set by law"], correct:0, exp:"Endogenous means solved for inside the model." },
+      { q:"A variable can be endogenous in one model and exogenous in another because:", options:["Model assumptions differ","Variables change their meaning"], correct:0, exp:"Classification depends on the model setup." },
+      { q:"“Number of students in a class” is:", options:["Quantitative","Qualitative"], correct:0, exp:"It’s a count." },
+      { q:"“Type of payment” (cash/debit/credit) is:", options:["Qualitative","Quantitative"], correct:0, exp:"It’s a category." },
+      { q:"“Sales per week” is:", options:["Flow","Stock"], correct:0, exp:"Per week is flow." },
+      { q:"“Total sales so far today at 3 pm” is closest to:", options:["Stock (as of that time)","Flow only"], correct:0, exp:"As-of-time totals are stock-like measurements." },
+      { q:"“Average rent in Toronto ($)” is:", options:["Quantitative","Qualitative"], correct:0, exp:"It’s numeric." },
+      { q:"“Rental type” (apartment/house/basement) is:", options:["Qualitative","Quantitative"], correct:0, exp:"It’s categorical." },
+      { q:"If we model consumption C depending on income Y, C is usually:", options:["Dependent","Independent"], correct:0, exp:"Consumption responds to income." },
+      { q:"If we model consumption C depending on income Y, Y is usually:", options:["Independent","Dependent"], correct:0, exp:"Income explains consumption." },
+
+      // Extra variety (still simple)
+      { q:"“Interest rate (%)” is:", options:["Quantitative","Qualitative"], correct:0, exp:"It’s numeric." },
+      { q:"“Bank balance” is:", options:["Stock","Flow"], correct:0, exp:"Balance at a point in time is stock." },
+      { q:"“Deposit per month” is:", options:["Flow","Stock"], correct:0, exp:"Per month is flow." },
+      { q:"In a model where supply depends on price, supply quantity is usually:", options:["Dependent","Independent"], correct:0, exp:"Quantity supplied responds to price." },
+      { q:"In a model where supply depends on price, price is:", options:["Independent","Dependent"], correct:0, exp:"Price is an explanatory variable." },
+      { q:"If the model treats weather as given and studies crop output, weather is:", options:["Exogenous","Endogenous"], correct:0, exp:"Weather is outside the model." },
+      { q:"If the model explains inflation using money supply and output, inflation is:", options:["Endogenous","Exogenous"], correct:0, exp:"Inflation is an outcome in that model." }
     ];
 
-    function resetMasterQuiz(){ initializeMasterQuiz(); }
+    function buildDisjointQuizSets(){
+      const needed = SET_COUNT * QUESTIONS_PER_SET;
+      const shuffled = shuffle(quizBank);
 
-    function initializeMasterQuiz(){
-      currentQ = 0;
-      answers = [];
-      score = 0;
+      // Safety: if someone later shortens the bank, this prevents crashing.
+      // (It will wrap around, but right now we have 60+ questions.)
+      let pool = shuffled;
+      while (pool.length < needed) pool = pool.concat(shuffle(quizBank));
 
-      quizQuestions = pickN(quizBank, QUIZ_COUNT);
-
-      document.getElementById("final-results").style.display = "none";
-      document.getElementById("completed-count").textContent = "0";
-      document.getElementById("total-count").textContent = String(QUIZ_COUNT);
-      document.getElementById("quiz-progress-fill").style.width = "0%";
-
-      displayQuestion();
+      const sets = [];
+      for (let i = 0; i < SET_COUNT; i++){
+        const start = i * QUESTIONS_PER_SET;
+        const slice = pool.slice(start, start + QUESTIONS_PER_SET);
+        sets.push({
+          questions: slice,
+          currentQ: 0,
+          answers: [],
+          score: 0,
+          finished: false
+        });
+      }
+      return sets;
     }
 
-    function displayQuestion(){
-      if (currentQ >= quizQuestions.length) return showResults();
+    function setActiveSetButton(btn){
+      document.querySelectorAll(".set-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
 
-      const q = quizQuestions[currentQ];
+    function selectQuizSet(setNumber, btn){
+      currentSetIndex = setNumber - 1;
+      setActiveSetButton(btn);
+      renderCurrentSet();
+    }
+
+    function resetMasterQuiz(){
+      initializeMasterQuiz();
+    }
+
+    function initializeMasterQuiz(){
+      quizSets = buildDisjointQuizSets();
+      currentSetIndex = 0;
+
+      // UI: mark Set 1 active
+      setActiveSetButton(document.getElementById("setBtn1"));
+
+      // hide results and show first question
+      document.getElementById("final-results").style.display = "none";
+      renderCurrentSet();
+    }
+
+    function updateQuizProgressUI(){
+      const setObj = quizSets[currentSetIndex];
+      document.getElementById("current-set").textContent = String(currentSetIndex + 1);
+      document.getElementById("completed-count").textContent = String(setObj.currentQ);
+      document.getElementById("total-count").textContent = String(QUESTIONS_PER_SET);
+
+      const pct = (setObj.currentQ / QUESTIONS_PER_SET) * 100;
+      document.getElementById("quiz-progress-fill").style.width = pct + "%";
+    }
+
+    function renderCurrentSet(){
+      const setObj = quizSets[currentSetIndex];
+
+      document.getElementById("final-results").style.display = "none";
+      updateQuizProgressUI();
+
+      if (setObj.finished){
+        showSetResults();
+      } else {
+        displaySetQuestion();
+      }
+    }
+
+    function displaySetQuestion(){
+      const setObj = quizSets[currentSetIndex];
+
+      if (setObj.currentQ >= setObj.questions.length){
+        setObj.finished = true;
+        showSetResults();
+        return;
+      }
+
+      const q = setObj.questions[setObj.currentQ];
       const container = document.getElementById("master-quiz");
 
       container.innerHTML = `
         <div class="question-card">
-          <h5>Question ${currentQ + 1} of ${quizQuestions.length}</h5>
+          <h5>Set ${currentSetIndex + 1} — Question ${setObj.currentQ + 1} of ${QUESTIONS_PER_SET}</h5>
           <p><strong>${q.q}</strong></p>
           <div id="q-options">
             ${q.options.map((opt, idx) =>
-              `<button class="choice-btn" onclick="answerQuiz(${idx}, this)">${opt}</button>`
+              `<button class="choice-btn" onclick="answerSetQuestion(${idx}, this)">${opt}</button>`
             ).join("")}
           </div>
           <div id="q-feedback" class="feedback"></div>
@@ -860,11 +980,12 @@
       `;
     }
 
-    function answerQuiz(selectedIndex, btn){
-      const q = quizQuestions[currentQ];
+    function answerSetQuestion(selectedIndex, btn){
+      const setObj = quizSets[currentSetIndex];
+      const q = setObj.questions[setObj.currentQ];
       const isCorrect = selectedIndex === q.correct;
 
-      answers[currentQ] = {
+      setObj.answers[setObj.currentQ] = {
         question: q.q,
         options: q.options,
         selected: selectedIndex,
@@ -873,7 +994,7 @@
         explanation: q.exp
       };
 
-      if (isCorrect) score++;
+      if (isCorrect) setObj.score++;
 
       // lock buttons
       btn.parentElement.querySelectorAll(".choice-btn").forEach(b => b.disabled = true);
@@ -884,28 +1005,27 @@
       feedback.className = isCorrect ? "feedback correct" : "feedback incorrect";
       feedback.innerHTML = `<strong>${isCorrect ? "Correct!" : "Incorrect."}</strong><br>${q.exp}`;
 
-      const completed = currentQ + 1;
-      document.getElementById("completed-count").textContent = String(completed);
-      document.getElementById("quiz-progress-fill").style.width = (completed / quizQuestions.length) * 100 + "%";
-
+      // advance progress after delay
       setTimeout(() => {
-        currentQ++;
-        displayQuestion();
-      }, 2200);
+        setObj.currentQ++;
+        updateQuizProgressUI();
+        displaySetQuestion();
+      }, 1800);
     }
 
-    function showResults(){
-      const total = quizQuestions.length;
-      const pct = Math.round((score / total) * 100);
+    function showSetResults(){
+      const setObj = quizSets[currentSetIndex];
+      const total = QUESTIONS_PER_SET;
+      const pct = Math.round((setObj.score / total) * 100);
 
       const resultsDiv = document.getElementById("final-results");
       const scoreDiv = document.getElementById("score-summary");
       const detailDiv = document.getElementById("detailed-feedback");
 
-      scoreDiv.innerHTML = `Your Score: ${score}/${total} (${pct}%)`;
+      scoreDiv.innerHTML = `Set ${currentSetIndex + 1} Score: ${setObj.score}/${total} (${pct}%)`;
 
       let html = "<h5>📋 Detailed Review:</h5>";
-      answers.forEach((a, i) => {
+      setObj.answers.forEach((a, i) => {
         html += `
           <div style="margin: 12px 0; padding: 12px; border-radius: 8px; ${a.isCorrect ? "background:#d4edda;border:2px solid #c3e6cb;" : "background:#f8d7da;border:2px solid #f5c6cb;"}">
             <strong>Q${i+1}:</strong> ${a.question}<br>
@@ -916,8 +1036,18 @@
         `;
       });
 
+      html += `
+        <div class="scenario-box" style="margin-top:15px;">
+          <strong>Next:</strong> Click <em>Set 2</em> or <em>Set 3</em> above to try another set — or hit <em>Reset</em> for a brand new Set 1–3.
+        </div>
+      `;
+
       detailDiv.innerHTML = html;
       resultsDiv.style.display = "block";
+
+      // keep progress bar full for completed set
+      document.getElementById("completed-count").textContent = String(QUESTIONS_PER_SET);
+      document.getElementById("quiz-progress-fill").style.width = "100%";
     }
 
     // Default lab values
