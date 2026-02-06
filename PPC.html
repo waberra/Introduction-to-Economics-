@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Production Possibilities Curve Interactive Learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Trebuchet MS", sans-serif;
+      padding: 20px;
+      background: #fde3d9; /* peach background */
+      background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.7) 1px,
+        transparent 1px
+      );
+      background-size: 100% 32px;
+      display: flex;
+      justify-content: center;
+      color: #143057; /* deep navy text */
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    /* Coral Red Header Card */
+    .header-box {
+      background: #ff4d6d;           /* coral red */
+      color: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.35);
+      margin-bottom: 20px;
+      border: 3px solid #ffffff;
+    }
+    .header-box h1 {
+      margin: 0 0 10px 0;
+      color: #ffffff;
+      text-align: center;
+    }
+    .header-box p {
+      margin: 0;
+      text-align: center;
+    }
+
+    /* Light Blue Explanation Card */
+    .explanation-box {
+      background: #e8f4fd;           /* light blue */
+      color: #143057;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.2);
+      margin-bottom: 20px;
+      border: 2px solid #4a90e2;
+    }
+    
+    .explanation-box h2 {
+      margin: 0 0 20px 0;
+      color: #2c5282;
+      text-align: center;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 10px;
+    }
+
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .concept-item {
+      margin: 10px 0;
+      padding: 15px;
+      background: #ffffff;
+      border-radius: 10px;
+      border-left: 4px solid #4a90e2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .concept-item h3 {
+      margin: 0 0 10px 0;
+      color: #2c5282;
+      font-size: 1.1em;
+    }
+    
+    .concept-item .definition {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #143057;
+    }
+    
+    .concept-item .formula {
+      background: #f0f8ff;
+      padding: 8px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      margin: 8px 0;
+      text-align: center;
+      border: 1px solid #4a90e2;
+    }
+
+    .concept-item .example {
+      font-style: italic;
+      color: #666;
+      margin-top: 8px;
+      font-size: 0.9em;
+    }
+
+    /* PPC Canvas Styling */
+    .ppc-canvas {
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      border: 2px solid #4a90e2;
+      border-radius: 10px;
+      background: white;
+      margin: 15px auto;
+      display: block;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .ppc-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    /* Aqua Question Card */
+    #question-card {
+      margin: 12px 0;
+      padding: 25px;
+      background: #a6f5e9;           /* aqua pastel */
+      border: 3px solid #46cbb0;     /* teal border */
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(70, 203, 176, 0.45);
+      display: none;
+      color: #143057;                /* navy text inside card */
+    }
+
+    #question-text {
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      line-height: 1.4;
+    }
+
+    #progress {
+      font-size: 1em;
+      margin-bottom: 15px;
+      text-align: center;
+      background: rgba(255,255,255,0.7);
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .options {
+      margin: 20px 0;
+    }
+    
+    .options label {
+      display: block;
+      margin: 12px 0;
+      cursor: pointer;
+      color: #143057;
+      padding: 15px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      font-size: 1.05em;
+    }
+    
+    .options label:hover {
+      background: rgba(255,255,255,0.8);
+      border-color: #46cbb0;
+      transform: translateY(-1px);
+    }
+    
+    .options input {
+      margin-right: 12px;
+      transform: scale(1.3);
+    }
+
+    .input-field {
+      width: 120px;
+      padding: 8px;
+      border: 2px solid #46cbb0;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1em;
+      margin: 0 5px;
+    }
+
+    .scenario-data {
+      background: rgba(255,255,255,0.8);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border: 1px solid #46cbb0;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .data-table th {
+      background: #ff4d6d;           /* coral red header */
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .data-table td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .data-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    #warning {
+      font-size: 0.95em;
+      color: #e8113b;                /* cherry red */
+      min-height: 1.2em;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
+      background: rgba(232, 17, 59, 0.1);
+      padding: 8px;
+      border-radius: 5px;
+    }
+
+    /* Feedback Section */
+    #feedback-section {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+      animation: slideIn 0.4s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .feedback-correct {
+      background: #d4edda;
+      border: 3px solid #1ccb8f;     /* ocean green */
+      color: #155724;
+    }
+    
+    .feedback-incorrect {
+      background: #f8d7da;
+      border: 3px solid #e8113b;     /* cherry red */
+      color: #721c24;
+    }
+    
+    .feedback-header {
+      font-weight: bold;
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .feedback-explanation {
+      margin-top: 15px;
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    .feedback-details {
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    /* Score Display */
+    #score-display {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      color: #856404;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+
+    /* Buttons with Original Color Scheme */
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    button {
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(109, 252, 155, 0.6);
+      min-width: 160px;
+    }
+    
+    .btn-primary {
+      background: #6dfc9b;           /* mint green */
+      color: #143057;                /* navy text */
+    }
+    .btn-primary:hover {
+      background: #82ffd6;
+      box-shadow: 0 0 14px rgba(130, 255, 214, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #a6f5e9;           /* aqua */
+      color: #143057;
+    }
+    .btn-secondary:hover {
+      background: #8eeee4;
+      box-shadow: 0 0 14px rgba(142, 238, 228, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-warning {
+      background: #ffc107;           /* yellow */
+      color: #143057;
+    }
+    .btn-warning:hover {
+      background: #ffcd39;
+      box-shadow: 0 0 14px rgba(255, 205, 57, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #ff4d6d;           /* coral red */
+      color: #ffffff;
+    }
+    .btn-danger:hover {
+      background: #ff6b85;
+      box-shadow: 0 0 14px rgba(255, 107, 133, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+      .buttons {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+        min-width: unset;
+      }
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+      .ppc-canvas {
+        max-width: 300px;
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="header-box">
+      <h1>📈 Production Possibilities Curve Learning</h1>
+      <p>
+        Master economic concepts of choice, scarcity, efficiency, and opportunity cost<br>
+        with interactive Canadian economic scenarios!
+      </p>
+    </div>
+
+    <!-- Concepts Explanation -->
+    <div class="explanation-box">
+      <h2>📚 Production Possibilities Curve Concepts</h2>
+      
+      <div class="concepts-grid">
+        <div class="concept-item">
+          <h3>📈 Production Possibilities Curve (PPC)</h3>
+          <div class="definition">A graph showing the maximum combinations of two goods an economy can produce with available resources and technology.</div>
+          <div class="formula">Shows trade-off between production alternatives</div>
+          <div class="example">Example: Canada producing cars vs. wheat with limited resources</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📏 Straight Line PPC</h3>
+          <div class="definition">Linear PPC indicating constant opportunity cost between goods.</div>
+          <div class="formula">Slope = Constant opportunity cost</div>
+          <div class="example">Example: Perfect substitutes in production (same resources used)</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>🏔️ Concave PPC (Bowed Out)</h3>
+          <div class="definition">Curved PPC showing increasing opportunity cost as production shifts.</div>
+          <div class="formula">Slope increases = Rising opportunity cost</div>
+          <div class="example">Example: Specialized resources better for specific goods</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>💰 Opportunity Cost</h3>
+          <div class="definition">The value of the next best alternative given up when making a choice.</div>
+          <div class="formula">Opportunity Cost = What you give up ÷ What you gain</div>
+          <div class="example">Example: Producing 1 more car costs 5 tonnes of wheat</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>🎯 Efficiency</h3>
+          <div class="definition">Points on the PPC curve representing maximum output with available resources.</div>
+          <div class="formula">Efficient = On the PPC curve</div>
+          <div class="example">Example: Using all resources optimally with no waste</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>😴 Unemployment/Inefficiency</h3>
+          <div class="definition">Points inside the PPC curve showing underutilized resources.</div>
+          <div class="formula">Inefficient = Inside the PPC curve</div>
+          <div class="example">Example: Idle workers, unused factories, economic recession</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>💼 Full Employment</h3>
+          <div class="definition">All available resources are being used productively (on the PPC curve).</div>
+          <div class="formula">Full Employment = Points on PPC</div>
+          <div class="example">Example: All workers employed, all factories operating</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>⚡ Scarcity</h3>
+          <div class="definition">Limited resources relative to unlimited wants, forcing choices.</div>
+          <div class="formula">Scarcity → Trade-offs → Opportunity Cost</div>
+          <div class="example">Example: Can't produce unlimited cars AND wheat simultaneously</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📈 Economic Growth</h3>
+          <div class="definition">Outward shift of the entire PPC curve, increasing production capacity.</div>
+          <div class="formula">Growth = PPC shifts outward</div>
+          <div class="example">Example: New technology, more workers, better education</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>💥 Economic Disaster</h3>
+          <div class="definition">Inward shift of the PPC curve, reducing production capacity.</div>
+          <div class="formula">Disaster = PPC shifts inward</div>
+          <div class="example">Example: Natural disasters, war, pandemic, resource depletion</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>🤔 Economic Choice</h3>
+          <div class="definition">Deciding how much of each good to produce given resource constraints.</div>
+          <div class="formula">Choice = Selecting a point on or inside PPC</div>
+          <div class="example">Example: Produce 100 cars & 1000 tonnes wheat OR 200 cars & 500 tonnes wheat</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>🚫 Impossible Production</h3>
+          <div class="definition">Points outside the PPC curve that cannot be achieved with current resources.</div>
+          <div class="formula">Impossible = Outside the PPC curve</div>
+          <div class="example">Example: Wanting 300 cars & 2000 tonnes wheat but lacking resources</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Score Display -->
+    <div id="score-display"></div>
+
+    <!-- Question Card -->
+    <div id="question-card">
+      <div id="progress"></div>
+      <div id="question-text"></div>
+      <div id="scenario-display"></div>
+      <div id="question-input-area"></div>
+      <div id="warning"></div>
+
+      <!-- Feedback Section -->
+      <div id="feedback-section">
+        <div class="feedback-header" id="feedback-header"></div>
+        <div class="feedback-explanation" id="feedback-explanation"></div>
+        <div class="feedback-details" id="feedback-details"></div>
+      </div>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="buttons">
+      <button id="start-btn" class="btn-primary" onclick="startLearning()">🚀 Start Learning</button>
+      <button id="show-explanation-btn" class="btn-secondary hidden" onclick="showExplanation()">💡 Show Explanation</button>
+      <button id="check-answer-btn" class="btn-warning hidden" onclick="checkAnswer()">✅ Check Answer</button>
+      <button id="next-btn" class="btn-primary hidden" onclick="nextQuestion()">➡️ Next Question</button>
+      <button id="reset-btn" class="btn-danger hidden" onclick="resetLearning()">🔄 Reset & New Scenario</button>
+    </div>
+
+  </div>
+
+<script>
+  // Canadian Economic Scenarios
+  const ppcScenarios = [
+    {
+      title: "Canadian Manufacturing vs. Agriculture",
+      description: "Canada must decide how to allocate resources between car manufacturing and wheat production",
+      goodX: "Cars (thousands)",
+      goodY: "Wheat (million tonnes)",
+      type: "concave", // increasing opportunity cost
+      dataPoints: [
+        {x: 0, y: 20},
+        {x: 50, y: 19},
+        {x: 90, y: 17},
+        {x: 120, y: 14},
+        {x: 140, y: 10},
+        {x: 155, y: 5},
+        {x: 160, y: 0}
+      ],
+      context: "Specialized resources: some workers/land better for cars, others for wheat",
+      currentProduction: {x: 90, y: 17}
+    },
+    {
+      title: "Canadian Energy: Oil vs. Renewable",
+      description: "Alberta allocating resources between oil production and renewable energy development",
+      goodX: "Oil (million barrels/year)",
+      goodY: "Renewable Energy (GW capacity)",
+      type: "concave",
+      dataPoints: [
+        {x: 0, y: 50},
+        {x: 200, y: 48},
+        {x: 380, y: 44},
+        {x: 540, y: 38},
+        {x: 680, y: 30},
+        {x: 800, y: 20},
+        {x: 900, y: 8},
+        {x: 950, y: 0}
+      ],
+      context: "Specialized equipment and expertise for each energy type",
+      currentProduction: {x: 540, y: 38}
+    },
+    {
+      title: "Canadian Healthcare Resources",
+      description: "Ontario allocating healthcare resources between hospitals and community clinics",
+      goodX: "Hospital Beds (thousands)",
+      goodY: "Community Clinics",
+      type: "linear", // constant opportunity cost
+      dataPoints: [
+        {x: 0, y: 1000},
+        {x: 10, y: 800},
+        {x: 20, y: 600},
+        {x: 30, y: 400},
+        {x: 40, y: 200},
+        {x: 50, y: 0}
+      ],
+      context: "Same medical professionals and equipment can be used for both",
+      currentProduction: {x: 20, y: 600}
+    },
+    {
+      title: "Canadian Tech Sector",
+      description: "Vancouver tech companies choosing between software development and hardware manufacturing",
+      goodX: "Software Projects",
+      goodY: "Hardware Units (thousands)",
+      type: "concave",
+      dataPoints: [
+        {x: 0, y: 100},
+        {x: 20, y: 95},
+        {x: 35, y: 85},
+        {x: 45, y: 70},
+        {x: 52, y: 50},
+        {x: 56, y: 25},
+        {x: 58, y: 0}
+      ],
+      context: "Different skills required: programmers vs. manufacturing engineers",
+      currentProduction: {x: 35, y: 85}
+    },
+    {
+      title: "Canadian Education Resources",
+      description: "University allocating resources between undergraduate and graduate programs",
+      goodX: "Undergraduate Students (thousands)",
+      goodY: "Graduate Students (thousands)",
+      type: "linear",
+      dataPoints: [
+        {x: 0, y: 10},
+        {x: 5, y: 8},
+        {x: 10, y: 6},
+        {x: 15, y: 4},
+        {x: 20, y: 2},
+        {x: 25, y: 0}
+      ],
+      context: "Professors can teach both undergraduate and graduate courses",
+      currentProduction: {x: 10, y: 6}
+    }
+  ];
+
+  const questionTypes = [
+    {
+      id: "opportunity_cost_numerical",
+      question: (scenario) => {
+        // Calculate opportunity cost between two points
+        const points = scenario.dataPoints;
+        const point1Index = Math.floor(Math.random() * (points.length - 1));
+        const point2Index = point1Index + 1;
+        
+        const point1 = points[point1Index];
+        const point2 = points[point2Index];
+        
+        const changeX = point2.x - point1.x;
+        const changeY = point1.y - point2.y; // Y decreases as X increases
+        
+        const opportunityCost = (changeY / changeX).toFixed(2);
+        
+        return {
+          type: "input",
+          question: `Moving from producing ${point1.x} ${scenario.goodX.toLowerCase()} to ${point2.x} ${scenario.goodX.toLowerCase()}, what is the opportunity cost per additional unit of ${scenario.goodX.toLowerCase()}? (Round to 2 decimal places)`,
+          correctAnswer: parseFloat(opportunityCost),
+          explanation: `The opportunity cost is ${changeY} ÷ ${changeX} = ${opportunityCost} units of ${scenario.goodY.toLowerCase()} per unit of ${scenario.goodX.toLowerCase()}`,
+          hint: "Opportunity cost = What you give up ÷ What you gain"
+        };
+      }
+    },
+    {
+      id: "efficiency_concept",
+      question: (scenario) => {
+        const scenarios = [
+          {
+            point: {x: scenario.currentProduction.x, y: scenario.currentProduction.y},
+            description: `Currently producing ${scenario.currentProduction.x} ${scenario.goodX.toLowerCase()} and ${scenario.currentProduction.y} ${scenario.goodY.toLowerCase()}`,
+            answer: "Efficient (on PPC)",
+            explanation: "This point is on the PPC curve, meaning all resources are being used optimally"
+          },
+          {
+            point: {x: Math.round(scenario.currentProduction.x * 0.7), y: Math.round(scenario.currentProduction.y * 0.8)},
+            description: `Producing ${Math.round(scenario.currentProduction.x * 0.7)} ${scenario.goodX.toLowerCase()} and ${Math.round(scenario.currentProduction.y * 0.8)} ${scenario.goodY.toLowerCase()}`,
+            answer: "Inefficient (inside PPC)",
+            explanation: "This point is inside the PPC curve, indicating unemployed resources or inefficiency"
+          },
+          {
+            point: {x: Math.round(scenario.currentProduction.x * 1.3), y: Math.round(scenario.currentProduction.y * 1.2)},
+            description: `Wanting to produce ${Math.round(scenario.currentProduction.x * 1.3)} ${scenario.goodX.toLowerCase()} and ${Math.round(scenario.currentProduction.y * 1.2)} ${scenario.goodY.toLowerCase()}`,
+            answer: "Impossible (outside PPC)",
+            explanation: "This point is outside the current PPC curve and cannot be achieved with available resources"
+          }
+        ];
+        
+        const selected = scenarios[Math.floor(Math.random() * scenarios.length)];
+        
+        return {
+          type: "multiple_choice",
+          question: `${selected.description}. What does this production point represent?`,
+          options: ["Efficient (on PPC)", "Inefficient (inside PPC)", "Impossible (outside PPC)"],
+          correctAnswer: selected.answer,
+          explanation: selected.explanation,
+          hint: "Compare the production point to the PPC curve position"
+        };
+      }
+    },
+    {
+      id: "ppc_shape",
+      question: (scenario) => {
+        return {
+          type: "multiple_choice",
+          question: `The PPC for "${scenario.title}" has a ${scenario.type === 'linear' ? 'straight line' : 'concave (bowed out)'} shape. Why is this the case?`,
+          options: [
+            "Constant opportunity cost - resources are perfect substitutes",
+            "Increasing opportunity cost - resources are specialized",
+            "Decreasing opportunity cost - economies of scale",
+            "Random variation in production efficiency"
+          ],
+          correctAnswer: scenario.type === 'linear' ? 
+            "Constant opportunity cost - resources are perfect substitutes" : 
+            "Increasing opportunity cost - resources are specialized",
+          explanation: scenario.type === 'linear' ? 
+            "A straight-line PPC indicates constant opportunity cost because resources can be easily transferred between uses." :
+            "A concave PPC indicates increasing opportunity cost because resources become less suitable as more are transferred to the other good.",
+          hint: "Think about whether resources are easily transferable between the two goods"
+        };
+      }
+    },
+    {
+      id: "economic_growth",
+      question: (scenario) => {
+        const growthCauses = [
+          {
+            cause: "Discovery of new oil reserves in Alberta",
+            effect: "Outward shift of PPC",
+            explanation: "New resources increase the economy's production capacity"
+          },
+          {
+            cause: "Technological advancement in manufacturing",
+            effect: "Outward shift of PPC",
+            explanation: "Better technology allows more output with same resources"
+          },
+          {
+            cause: "Major earthquake destroys factories",
+            effect: "Inward shift of PPC", 
+            explanation: "Destruction of resources reduces production capacity"
+          },
+          {
+            cause: "Recession causes high unemployment",
+            effect: "Movement inside PPC",
+            explanation: "Unemployed resources mean not producing at full capacity"
+          },
+          {
+            cause: "Immigration increases labor force",
+            effect: "Outward shift of PPC",
+            explanation: "More workers increase the economy's production capacity"
+          }
+        ];
+        
+        const selected = growthCauses[Math.floor(Math.random() * growthCauses.length)];
+        
+        return {
+          type: "multiple_choice",
+          question: `If ${selected.cause.toLowerCase()}, what would happen to the PPC?`,
+          options: [
+            "Outward shift of PPC (economic growth)",
+            "Inward shift of PPC (economic decline)", 
+            "Movement along PPC (reallocation)",
+            "Movement inside PPC (inefficiency)"
+          ],
+          correctAnswer: selected.effect === "Outward shift of PPC" ? "Outward shift of PPC (economic growth)" :
+                          selected.effect === "Inward shift of PPC" ? "Inward shift of PPC (economic decline)" :
+                          "Movement inside PPC (inefficiency)",
+          explanation: selected.explanation,
+          hint: "Consider whether this affects the economy's production capacity or just how resources are used"
+        };
+      }
+    },
+    {
+      id: "choice_analysis",
+      question: (scenario) => {
+        const point1 = scenario.dataPoints[Math.floor(scenario.dataPoints.length * 0.3)];
+        const point2 = scenario.dataPoints[Math.floor(scenario.dataPoints.length * 0.7)];
+        
+        return {
+          type: "multiple_choice",
+          question: `A country must choose between producing (${point1.x} ${scenario.goodX.toLowerCase()}, ${point1.y} ${scenario.goodY.toLowerCase()}) or (${point2.x} ${scenario.goodX.toLowerCase()}, ${point2.y} ${scenario.goodY.toLowerCase()}). What economic concept does this illustrate?`,
+          options: [
+            "Scarcity forcing trade-offs and choices",
+            "Unlimited resources allowing everything",
+            "Perfect efficiency in all production",
+            "Economic growth eliminating constraints"
+          ],
+          correctAnswer: "Scarcity forcing trade-offs and choices",
+          explanation: "Limited resources force societies to choose between alternative uses, illustrating the fundamental economic problem of scarcity",
+          hint: "Think about why we can't produce unlimited amounts of both goods"
+        };
+      }
+    },
+    {
+      id: "unemployment_analysis",
+      question: (scenario) => {
+        // Create an inefficient point inside the PPC
+        const efficientPoint = scenario.currentProduction;
+        const inefficientX = Math.round(efficientPoint.x * 0.75);
+        const inefficientY = Math.round(efficientPoint.y * 0.8);
+        
+        return {
+          type: "multiple_choice",
+          question: `Currently producing ${inefficientX} ${scenario.goodX.toLowerCase()} and ${inefficientY} ${scenario.goodY.toLowerCase()}, but the PPC shows we could produce ${efficientPoint.x} ${scenario.goodX.toLowerCase()} and ${efficientPoint.y} ${scenario.goodY.toLowerCase()}. What does this suggest?`,
+          options: [
+            "The economy has unemployed or underutilized resources",
+            "The economy is operating at maximum efficiency", 
+            "Economic growth has occurred recently",
+            "The PPC has shifted outward"
+          ],
+          correctAnswer: "The economy has unemployed or underutilized resources",
+          explanation: "Production inside the PPC indicates that not all available resources are being used productively, suggesting unemployment or inefficiency",
+          hint: "Compare the current production to what's possible on the PPC curve"
+        };
+      }
+    }
+  ];
+
+  let currentScenario = {};
+  let currentQuestion = {};
+  let totalCorrect = 0;
+  let totalQuestions = 0;
+  let hasAnswered = false;
+
+  function drawPPC(canvas, scenario) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const margin = 50;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+    
+    // Set up coordinate system
+    const plotWidth = width - 2 * margin;
+    const plotHeight = height - 2 * margin;
+    
+    const maxX = Math.max(...scenario.dataPoints.map(p => p.x));
+    const maxY = Math.max(...scenario.dataPoints.map(p => p.y));
+    
+    // Draw axes
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    // Y-axis
+    ctx.moveTo(margin, margin);
+    ctx.lineTo(margin, height - margin);
+    // X-axis
+    ctx.moveTo(margin, height - margin);
+    ctx.lineTo(width - margin, height - margin);
+    ctx.stroke();
+    
+    // Draw PPC curve
+    ctx.strokeStyle = '#ff4d6d';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    
+    scenario.dataPoints.forEach((point, index) => {
+      const x = margin + (point.x / maxX) * plotWidth;
+      const y = height - margin - (point.y / maxY) * plotHeight;
+      
+      if (index === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    });
+    ctx.stroke();
+    
+    // Draw current production point
+    const currentX = margin + (scenario.currentProduction.x / maxX) * plotWidth;
+    const currentY = height - margin - (scenario.currentProduction.y / maxY) * plotHeight;
+    
+    ctx.fillStyle = '#1ccb8f';
+    ctx.beginPath();
+    ctx.arc(currentX, currentY, 6, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Add labels
+    ctx.fillStyle = '#143057';
+    ctx.font = '12px Trebuchet MS';
+    ctx.textAlign = 'center';
+    ctx.fillText(scenario.goodX, width/2, height - 10);
+    
+    ctx.save();
+    ctx.translate(15, height/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText(scenario.goodY, 0, 0);
+    ctx.restore();
+    
+    // Add title
+    ctx.font = 'bold 14px Trebuchet MS';
+    ctx.textAlign = 'center';
+    ctx.fillText('Production Possibilities Curve', width/2, 20);
+  }
+
+  function generateQuestion() {
+    const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+    currentQuestion = questionType.question(currentScenario);
+    hasAnswered = false;
+  }
+
+  function startLearning() {
+    // Select random scenario
+    currentScenario = ppcScenarios[Math.floor(Math.random() * ppcScenarios.length)];
+    
+    generateQuestion();
+    displayQuestion();
+    
+    // Show question card and relevant buttons
+    document.getElementById("question-card").style.display = "block";
+    document.getElementById("start-btn").classList.add("hidden");
+    document.getElementById("show-explanation-btn").classList.remove("hidden");
+    document.getElementById("check-answer-btn").classList.remove("hidden");
+    document.getElementById("reset-btn").classList.remove("hidden");
+    
+    // Hide feedback initially
+    document.getElementById("feedback-section").style.display = "none";
+  }
+
+  function displayQuestion() {
+    // Update progress
+    document.getElementById("progress").textContent = 
+      `${currentScenario.title} • Question ${totalQuestions + 1} • Score: ${totalCorrect}/${totalQuestions} correct`;
+    
+    // Display question
+    document.getElementById("question-text").innerHTML = `
+      <strong>Scenario:</strong> ${currentScenario.description}<br><br>
+      <strong>Question:</strong> ${currentQuestion.question}
+    `;
+
+    // Display scenario data and PPC
+    displayScenarioData();
+    
+    // Create input area based on question type
+    createInputArea();
+    
+    document.getElementById("warning").textContent = "";
+    updateScoreDisplay();
+  }
+
+  function displayScenarioData() {
+    const scenarioDiv = document.getElementById("scenario-display");
+    
+    let dataHTML = `
+      <div class="scenario-data">
+        <h4 style="text-align: center; color: #2c5282; margin-bottom: 15px;">📊 Production Data</h4>
+        <p><strong>Context:</strong> ${currentScenario.context}</p>
+        
+        <div class="ppc-container">
+          <canvas id="ppc-canvas" class="ppc-canvas" width="400" height="300"></canvas>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>${currentScenario.goodX}</th>
+              <th>${currentScenario.goodY}</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    
+    currentScenario.dataPoints.forEach(point => {
+      const isCurrentProduction = point.x === currentScenario.currentProduction.x && 
+                                  point.y === currentScenario.currentProduction.y;
+      const rowStyle = isCurrentProduction ? 'background: #d4edda; font-weight: bold;' : '';
+      dataHTML += `
+        <tr style="${rowStyle}">
+          <td>${point.x}</td>
+          <td>${point.y}</td>
+        </tr>
+      `;
+    });
+    
+    dataHTML += `
+          </tbody>
+        </table>
+        <p style="text-align: center; font-size: 0.9em; color: #666;">
+          <span style="color: #1ccb8f; font-weight: bold;">●</span> Current Production Point
+        </p>
+      </div>
+    `;
+    
+    scenarioDiv.innerHTML = dataHTML;
+    
+    // Draw PPC after DOM update
+    setTimeout(() => {
+      const canvas = document.getElementById('ppc-canvas');
+      if (canvas) {
+        drawPPC(canvas, currentScenario);
+      }
+    }, 100);
+  }
+
+  function createInputArea() {
+    const inputArea = document.getElementById("question-input-area");
+    
+    if (currentQuestion.type === "input") {
+      inputArea.innerHTML = `
+        <div style="text-align: center; margin: 20px 0;">
+          <label for="answer-input" style="display: block; margin-bottom: 10px; font-weight: bold;">
+            Your Answer:
+          </label>
+          <input type="number" id="answer-input" class="input-field" step="0.01" 
+                 placeholder="Enter number" style="width: 150px; font-size: 1.1em;">
+        </div>
+      `;
+    } else if (currentQuestion.type === "multiple_choice") {
+      let optionsHTML = '<div class="options">';
+      currentQuestion.options.forEach((option, index) => {
+        optionsHTML += `
+          <label>
+            <input type="radio" name="answer" value="${option}"> ${option}
+          </label>
+        `;
+      });
+      optionsHTML += '</div>';
+      inputArea.innerHTML = optionsHTML;
+    }
+  }
+
+  function updateScoreDisplay() {
+    const scoreDiv = document.getElementById("score-display");
+    if (totalQuestions > 0) {
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+      scoreDiv.innerHTML = `📊 Your Progress: ${totalCorrect}/${totalQuestions} correct (${percentage}%)`;
+      scoreDiv.style.display = "block";
+    }
+  }
+
+  function showExplanation() {
+    const feedbackSection = document.getElementById("feedback-section");
+    
+    document.getElementById("feedback-header").textContent = "💡 Hint";
+    document.getElementById("feedback-explanation").innerHTML = `
+      <strong>How to approach this question:</strong><br>
+      ${currentQuestion.hint}
+    `;
+    document.getElementById("feedback-details").innerHTML = `
+      <strong>Remember:</strong> Look at the PPC graph and data table to understand the relationships between the goods and resource allocation.
+    `;
+    
+    feedbackSection.className = "";
+    feedbackSection.style.display = "block";
+    feedbackSection.style.background = "#e3f2fd";
+    feedbackSection.style.border = "3px solid #2196f3";
+    feedbackSection.style.color = "#1565c0";
+  }
+
+  function checkAnswer() {
+    if (hasAnswered) {
+      document.getElementById("warning").textContent = 
+        "You've already answered this question. Click 'Next Question' to continue.";
+      return;
+    }
+
+    let userAnswer;
+    let isCorrect = false;
+
+    if (currentQuestion.type === "input") {
+      const input = document.getElementById("answer-input");
+      if (!input.value.trim()) {
+        document.getElementById("warning").textContent = 
+          "⚠️ Please enter your answer before checking.";
+        return;
+      }
+      userAnswer = parseFloat(input.value);
+      isCorrect = Math.abs(userAnswer - currentQuestion.correctAnswer) < 0.01;
+    } else if (currentQuestion.type === "multiple_choice") {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        document.getElementById("warning").textContent = 
+          "⚠️ Please select an option before checking your answer.";
+        return;
+      }
+      userAnswer = selected.value;
+      isCorrect = userAnswer === currentQuestion.correctAnswer;
+    }
+
+    // Update statistics
+    totalQuestions++;
+    if (isCorrect) totalCorrect++;
+    hasAnswered = true;
+
+    // Show feedback
+    showFeedback(isCorrect, userAnswer);
+    
+    // Update UI
+    document.getElementById("next-btn").classList.remove("hidden");
+    document.getElementById("check-answer-btn").classList.add("hidden");
+    updateScoreDisplay();
+    document.getElementById("warning").textContent = "";
+  }
+
+  function showFeedback(isCorrect, userAnswer) {
+    const feedbackSection = document.getElementById("feedback-section");
+    const feedbackHeader = document.getElementById("feedback-header");
+    const feedbackExplanation = document.getElementById("feedback-explanation");
+    const feedbackDetails = document.getElementById("feedback-details");
+
+    if (isCorrect) {
+      feedbackSection.className = "feedback-correct";
+      feedbackHeader.innerHTML = "🎉 Excellent!";
+      feedbackExplanation.innerHTML = `
+        <strong>Perfect!</strong> You correctly answered: <strong>${userAnswer}</strong><br><br>
+        ${currentQuestion.explanation}
+      `;
+      feedbackDetails.innerHTML = `
+        <strong>Great economic thinking!</strong> You understand this PPC concept well.
+      `;
+    } else {
+      feedbackSection.className = "feedback-incorrect";
+      feedbackHeader.innerHTML = "📚 Let's Learn Together";
+      feedbackExplanation.innerHTML = `
+        You answered: <strong>${userAnswer}</strong><br>
+        The correct answer is: <strong>${currentQuestion.correctAnswer}</strong><br><br>
+        <strong>Explanation:</strong><br>
+        ${currentQuestion.explanation}
+      `;
+      feedbackDetails.innerHTML = `
+        <strong>Learning tip:</strong> Study the PPC graph and think about how resources are allocated between the two goods. Practice identifying points on, inside, and outside the curve.
+      `;
+    }
+
+    feedbackSection.style.display = "block";
+  }
+
+  function nextQuestion() {
+    generateQuestion();
+    displayQuestion();
+    
+    // Reset UI state
+    document.getElementById("feedback-section").style.display = "none";
+    document.getElementById("check-answer-btn").classList.remove("hidden");
+    document.getElementById("next-btn").classList.add("hidden");
+    document.getElementById("warning").textContent = "";
+  }
+
+  function resetLearning() {
+    // Reset statistics
+    totalCorrect = 0;
+    totalQuestions = 0;
+    hasAnswered = false;
+
+    // Reset UI
+    document.getElementById("question-card").style.display = "none";
+    document.getElementById("feedback-section").style.display = "none";
+    document.getElementById("score-display").style.display = "none";
+    
+    // Reset buttons
+    document.getElementById("start-btn").classList.remove("hidden");
+    document.getElementById("show-explanation-btn").classList.add("hidden");
+    document.getElementById("check-answer-btn").classList.add("hidden");
+    document.getElementById("next-btn").classList.add("hidden");
+    document.getElementById("reset-btn").classList.add("hidden");
+    
+    document.getElementById("warning").textContent = "";
+  }
+</script>
+</body>
+</html>
