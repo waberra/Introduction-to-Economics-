@@ -618,10 +618,10 @@
   ];
 
   const questionTypes = [
+    // OPPORTUNITY COST CALCULATIONS (Multiple variations)
     {
       id: "opportunity_cost_numerical",
       question: (scenario) => {
-        // Calculate opportunity cost between two points
         const points = scenario.dataPoints;
         const point1Index = Math.floor(Math.random() * (points.length - 1));
         const point2Index = point1Index + 1;
@@ -630,7 +630,7 @@
         const point2 = points[point2Index];
         
         const changeX = point2.x - point1.x;
-        const changeY = point1.y - point2.y; // Y decreases as X increases
+        const changeY = point1.y - point2.y;
         
         const opportunityCost = (changeY / changeX).toFixed(2);
         
@@ -643,6 +643,69 @@
         };
       }
     },
+    {
+      id: "total_opportunity_cost",
+      question: (scenario) => {
+        const points = scenario.dataPoints;
+        const point1Index = Math.floor(Math.random() * (points.length - 2));
+        const point2Index = point1Index + 2;
+        
+        const point1 = points[point1Index];
+        const point2 = points[point2Index];
+        
+        const totalCost = point1.y - point2.y;
+        
+        return {
+          type: "input",
+          question: `What is the total opportunity cost of increasing ${scenario.goodX.toLowerCase()} production from ${point1.x} to ${point2.x} units?`,
+          correctAnswer: totalCost,
+          explanation: `The total opportunity cost is ${point1.y} - ${point2.y} = ${totalCost} units of ${scenario.goodY.toLowerCase()} given up`,
+          hint: "Total opportunity cost = Total amount of the other good given up"
+        };
+      }
+    },
+    {
+      id: "marginal_opportunity_cost",
+      question: (scenario) => {
+        if (scenario.type === "linear") {
+          const point1 = scenario.dataPoints[1];
+          const point2 = scenario.dataPoints[2];
+          const moc = ((point1.y - point2.y) / (point2.x - point1.x)).toFixed(2);
+          
+          return {
+            type: "input",
+            question: `For this straight-line PPC, what is the marginal opportunity cost of ${scenario.goodX.toLowerCase()}? (Round to 2 decimal places)`,
+            correctAnswer: parseFloat(moc),
+            explanation: `For a straight-line PPC, marginal opportunity cost is constant at ${moc} units of ${scenario.goodY.toLowerCase()} per unit of ${scenario.goodX.toLowerCase()}.`,
+            hint: "For straight-line PPC, marginal opportunity cost is constant everywhere"
+          };
+        } else {
+          const startIndex = Math.floor(Math.random() * (scenario.dataPoints.length - 2));
+          const point1 = scenario.dataPoints[startIndex];
+          const point2 = scenario.dataPoints[startIndex + 1];
+          const point3 = scenario.dataPoints[startIndex + 2];
+          
+          const moc1 = ((point1.y - point2.y) / (point2.x - point1.x)).toFixed(2);
+          const moc2 = ((point2.y - point3.y) / (point3.x - point2.x)).toFixed(2);
+          
+          return {
+            type: "multiple_choice",
+            question: `How does marginal opportunity cost change as we move from the first to second segment of this concave PPC?`,
+            options: [
+              "Marginal opportunity cost increases",
+              "Marginal opportunity cost decreases", 
+              "Marginal opportunity cost stays constant",
+              "Marginal opportunity cost becomes zero"
+            ],
+            correctAnswer: "Marginal opportunity cost increases",
+            explanation: `Marginal opportunity cost increases from ${moc1} to ${moc2} as we move along the concave PPC, reflecting increasing difficulty of switching resources.`,
+            hint: "Think about what happens to trade-offs on a concave (bowed-out) curve"
+          };
+        }
+      }
+    },
+
+    // EFFICIENCY AND POINT IDENTIFICATION (Expanded)
     {
       id: "efficiency_concept",
       question: (scenario) => {
@@ -680,6 +743,32 @@
       }
     },
     {
+      id: "efficiency_ranking",
+      question: (scenario) => {
+        const efficientPoint = scenario.dataPoints[Math.floor(Math.random() * scenario.dataPoints.length)];
+        const inefficientX = Math.max(0, efficientPoint.x - Math.floor(Math.random() * 8) - 2);
+        const inefficientY = Math.max(0, efficientPoint.y - Math.floor(Math.random() * 8) - 2);
+        const impossibleX = efficientPoint.x + Math.floor(Math.random() * 10) + 5;
+        const impossibleY = efficientPoint.y + Math.floor(Math.random() * 10) + 5;
+        
+        return {
+          type: "multiple_choice",
+          question: `Rank these production points from most to least desirable: A(${efficientPoint.x}, ${efficientPoint.y}), B(${inefficientX}, ${inefficientY}), C(${impossibleX}, ${impossibleY})`,
+          options: [
+            "A, B, C (efficient, inefficient, impossible)",
+            "C, A, B (impossible, efficient, inefficient)",
+            "A, C, B (efficient, impossible, inefficient)", 
+            "B, A, C (inefficient, efficient, impossible)"
+          ],
+          correctAnswer: "C, A, B (impossible, efficient, inefficient)",
+          explanation: `Point C is most desirable (if achievable), A is currently possible and efficient, B wastes resources. However, C is impossible with current resources.`,
+          hint: "Consider both desirability and achievability with current resources"
+        };
+      }
+    },
+
+    // PPC SHAPE AND CHARACTERISTICS (Expanded)
+    {
       id: "ppc_shape",
       question: (scenario) => {
         return {
@@ -701,6 +790,42 @@
         };
       }
     },
+    {
+      id: "opportunity_cost_trend",
+      question: (scenario) => {
+        if (scenario.type === "linear") {
+          return {
+            type: "multiple_choice",
+            question: `As we move along this straight-line PPC producing more ${scenario.goodX.toLowerCase()}, what happens to opportunity cost?`,
+            options: [
+              "Opportunity cost increases with each additional unit",
+              "Opportunity cost decreases with each additional unit", 
+              "Opportunity cost remains constant for all units",
+              "Opportunity cost first increases then decreases"
+            ],
+            correctAnswer: "Opportunity cost remains constant for all units",
+            explanation: "A straight-line PPC shows constant opportunity cost - each additional unit of one good always costs the same amount of the other good.",
+            hint: "What does a straight line tell you about the rate of trade-off?"
+          };
+        } else {
+          return {
+            type: "multiple_choice",
+            question: `As we move along this concave PPC producing more ${scenario.goodX.toLowerCase()}, what happens to opportunity cost?`,
+            options: [
+              "Opportunity cost increases with each additional unit",
+              "Opportunity cost decreases with each additional unit",
+              "Opportunity cost remains constant for all units", 
+              "Opportunity cost becomes negative"
+            ],
+            correctAnswer: "Opportunity cost increases with each additional unit",
+            explanation: "A concave PPC shows increasing opportunity cost - each additional unit becomes progressively more expensive due to resource specialization.",
+            hint: "Why does the curve bow outward? Think about resource suitability."
+          };
+        }
+      }
+    },
+
+    // ECONOMIC GROWTH AND SHIFTS (Greatly Expanded)
     {
       id: "economic_growth",
       question: (scenario) => {
@@ -752,6 +877,153 @@
       }
     },
     {
+      id: "biased_growth",
+      question: (scenario) => {
+        const favoredGood = Math.random() < 0.5 ? scenario.goodX : scenario.goodY;
+        
+        return {
+          type: "multiple_choice",
+          question: `If new technology improves productivity ONLY in ${favoredGood.toLowerCase()} production, what happens to the PPC?`,
+          options: [
+            "Shifts outward parallel to the original curve",
+            "Pivots outward with larger increase on one axis",
+            "Shifts inward due to resource reallocation", 
+            "Changes from concave to straight line"
+          ],
+          correctAnswer: "Pivots outward with larger increase on one axis",
+          explanation: `Technology that only improves ${favoredGood.toLowerCase()} productivity increases maximum ${favoredGood.toLowerCase()} output while leaving the other good's maximum unchanged, causing the PPC to pivot.`,
+          hint: "Consider which axis would be most affected by this technological change"
+        };
+      }
+    },
+    {
+      id: "long_term_growth",
+      question: (scenario) => {
+        const growthFactors = [
+          "Investment in education and training",
+          "Research and development spending", 
+          "Infrastructure development",
+          "Population growth through immigration"
+        ];
+        
+        const selected = growthFactors[Math.floor(Math.random() * growthFactors.length)];
+        
+        return {
+          type: "multiple_choice",
+          question: `${selected} will most likely cause which change to the PPC over time?`,
+          options: [
+            "Immediate inward shift",
+            "Gradual outward shift over several years",
+            "No long-term change in PPC position",
+            "Conversion from concave to straight line"
+          ],
+          correctAnswer: "Gradual outward shift over several years", 
+          explanation: `${selected} builds productive capacity over time, gradually expanding the economy's production possibilities rather than causing immediate changes.`,
+          hint: "Consider the time lag between investment and increased productive capacity"
+        };
+      }
+    },
+    {
+      id: "resource_depletion",
+      question: (scenario) => {
+        return {
+          type: "multiple_choice",
+          question: `If Canada experiences significant depletion of natural resources without finding alternatives, what happens to the PPC?`,
+          options: [
+            "Shifts outward due to scarcity premiums",
+            "Shifts inward due to reduced productive capacity",
+            "Remains unchanged but becomes steeper",
+            "Converts from concave to straight line"
+          ],
+          correctAnswer: "Shifts inward due to reduced productive capacity",
+          explanation: "Resource depletion reduces the economy's ability to produce goods, shrinking the production possibilities and shifting the PPC inward.",
+          hint: "Consider how the loss of productive inputs affects total production capacity"
+        };
+      }
+    },
+
+    // UNEMPLOYMENT AND EFFICIENCY (Expanded)
+    {
+      id: "unemployment_analysis",
+      question: (scenario) => {
+        const efficientPoint = scenario.currentProduction;
+        const inefficientX = Math.round(efficientPoint.x * 0.75);
+        const inefficientY = Math.round(efficientPoint.y * 0.8);
+        
+        return {
+          type: "multiple_choice",
+          question: `Currently producing ${inefficientX} ${scenario.goodX.toLowerCase()} and ${inefficientY} ${scenario.goodY.toLowerCase()}, but the PPC shows we could produce ${efficientPoint.x} ${scenario.goodX.toLowerCase()} and ${efficientPoint.y} ${scenario.goodY.toLowerCase()}. What does this suggest?`,
+          options: [
+            "The economy has unemployed or underutilized resources",
+            "The economy is operating at maximum efficiency", 
+            "Economic growth has occurred recently",
+            "The PPC has shifted outward"
+          ],
+          correctAnswer: "The economy has unemployed or underutilized resources",
+          explanation: "Production inside the PPC indicates that not all available resources are being used productively, suggesting unemployment or inefficiency",
+          hint: "Compare the current production to what's possible on the PPC curve"
+        };
+      }
+    },
+    {
+      id: "unemployment_causes",
+      question: (scenario) => {
+        const causes = [
+          {
+            cause: "Economic recession reduces demand for workers",
+            result: "Movement inside PPC",
+            explanation: "Recession creates unemployment, moving the economy inside the PPC curve."
+          },
+          {
+            cause: "Seasonal layoffs in tourism industry", 
+            result: "Temporary movement inside PPC",
+            explanation: "Seasonal unemployment temporarily reduces resource utilization below full capacity."
+          },
+          {
+            cause: "Automation eliminates manufacturing jobs",
+            result: "Short-term movement inside PPC, long-term shift outward",
+            explanation: "Initial job losses reduce production, but automation eventually increases productive capacity."
+          }
+        ];
+        
+        const selected = causes[Math.floor(Math.random() * causes.length)];
+        
+        return {
+          type: "multiple_choice",
+          question: `If ${selected.cause.toLowerCase()}, what is the most likely immediate effect?`,
+          options: [
+            "PPC shifts outward immediately",
+            "Economy moves inside the PPC curve", 
+            "PPC shifts inward permanently",
+            "Economy moves along the PPC curve"
+          ],
+          correctAnswer: selected.result.includes("inside") ? "Economy moves inside the PPC curve" : selected.result,
+          explanation: selected.explanation,
+          hint: "Consider the immediate impact on resource utilization vs. long-term capacity"
+        };
+      }
+    },
+    {
+      id: "full_employment_recovery",
+      question: (scenario) => {
+        return {
+          type: "multiple_choice",
+          question: `If an economy recovers from recession and achieves full employment, it moves:`,
+          options: [
+            "From inside the PPC to a point on the PPC",
+            "From one point on the PPC to another point on the PPC", 
+            "From outside the PPC to inside the PPC",
+            "The PPC itself shifts outward"
+          ],
+          correctAnswer: "From inside the PPC to a point on the PPC",
+          explanation: "Recovery from recession eliminates unemployment, allowing the economy to utilize all available resources efficiently (moving from inside the curve to on the curve).",
+          hint: "Think about where the economy operates during recession vs. full employment"
+        };
+      }
+    },
+
+    // CHOICE AND TRADE-OFFS (Expanded)
+    {
       id: "choice_analysis",
       question: (scenario) => {
         const point1 = scenario.dataPoints[Math.floor(scenario.dataPoints.length * 0.3)];
@@ -773,25 +1045,181 @@
       }
     },
     {
-      id: "unemployment_analysis",
+      id: "societal_preferences",
       question: (scenario) => {
-        // Create an inefficient point inside the PPC
-        const efficientPoint = scenario.currentProduction;
-        const inefficientX = Math.round(efficientPoint.x * 0.75);
-        const inefficientY = Math.round(efficientPoint.y * 0.8);
+        const militaryScenario = scenario.title.includes("Military");
+        const point = militaryScenario ? scenario.dataPoints[1] : scenario.dataPoints[Math.floor(scenario.dataPoints.length * 0.3)];
         
         return {
           type: "multiple_choice",
-          question: `Currently producing ${inefficientX} ${scenario.goodX.toLowerCase()} and ${inefficientY} ${scenario.goodY.toLowerCase()}, but the PPC shows we could produce ${efficientPoint.x} ${scenario.goodX.toLowerCase()} and ${efficientPoint.y} ${scenario.goodY.toLowerCase()}. What does this suggest?`,
+          question: `If society chooses to operate at point (${point.x}, ${point.y}), what might this reveal about societal values?`,
           options: [
-            "The economy has unemployed or underutilized resources",
-            "The economy is operating at maximum efficiency", 
-            "Economic growth has occurred recently",
-            "The PPC has shifted outward"
+            `Society prioritizes ${scenario.goodX.toLowerCase()}`,
+            `Society prioritizes ${scenario.goodY.toLowerCase()}`,
+            "Society values both goods equally",
+            "Society's values cannot be determined from production choices"
           ],
-          correctAnswer: "The economy has unemployed or underutilized resources",
-          explanation: "Production inside the PPC indicates that not all available resources are being used productively, suggesting unemployment or inefficiency",
-          hint: "Compare the current production to what's possible on the PPC curve"
+          correctAnswer: point.y > point.x ? `Society prioritizes ${scenario.goodY.toLowerCase()}` : `Society prioritizes ${scenario.goodX.toLowerCase()}`,
+          explanation: `The production mix (${point.x}, ${point.y}) suggests society allocates more resources to ${point.y > point.x ? scenario.goodY.toLowerCase() : scenario.goodX.toLowerCase()}, reflecting societal preferences.`,
+          hint: "Look at which good receives more resource allocation at this production point"
+        };
+      }
+    },
+    {
+      id: "wartime_production",
+      question: (scenario) => {
+        if (scenario.title.includes("Military")) {
+          return {
+            type: "multiple_choice",
+            question: `During wartime, a country would most likely move to which type of production point?`,
+            options: [
+              "Higher military production, lower civilian goods",
+              "Higher civilian goods, lower military production",
+              "Equal production of both goods", 
+              "Production outside the PPC curve"
+            ],
+            correctAnswer: "Higher military production, lower civilian goods",
+            explanation: "Wartime necessities require reallocating resources toward military goods and away from civilian consumption, moving along the PPC.",
+            hint: "Consider how national priorities change during wartime"
+          };
+        } else {
+          return questionTypes[0].question(scenario); // fallback
+        }
+      }
+    },
+
+    // SCARCITY AND FUNDAMENTAL CONCEPTS
+    {
+      id: "scarcity_demonstration",
+      question: (scenario) => {
+        const maxPoint = scenario.dataPoints[0];
+        const impossibleX = maxPoint.x + 20;
+        const impossibleY = maxPoint.y + 15;
+        
+        return {
+          type: "multiple_choice",
+          question: `Why can't the economy produce ${impossibleX} units of ${scenario.goodX.toLowerCase()} AND ${impossibleY} units of ${scenario.goodY.toLowerCase()}?`,
+          options: [
+            "Government regulations prevent this production level",
+            "Consumer demand is insufficient for these quantities",
+            "Resources are scarce and have limits",
+            "Workers lack the necessary skills"
+          ],
+          correctAnswer: "Resources are scarce and have limits",
+          explanation: "The PPC represents maximum production possibilities given scarce resources. Points beyond the curve are impossible because resources are limited.",
+          hint: "What does the PPC boundary represent in terms of resource availability?"
+        };
+      }
+    },
+    {
+      id: "fundamental_problem",
+      question: (scenario) => {
+        return {
+          type: "multiple_choice",
+          question: "What fundamental economic problem does the PPC illustrate?",
+          options: [
+            "How to achieve perfect equality in income distribution",
+            "How to eliminate all unemployment permanently",
+            "How to choose among alternatives when resources are scarce", 
+            "How to produce goods without any opportunity cost"
+          ],
+          correctAnswer: "How to choose among alternatives when resources are scarce",
+          explanation: "The PPC shows the trade-offs societies face when allocating limited resources among competing uses - the fundamental problem of scarcity.",
+          hint: "Think about the basic economic problem that creates the need for choice"
+        };
+      }
+    },
+    {
+      id: "resource_allocation",
+      question: (scenario) => {
+        return {
+          type: "multiple_choice",
+          question: `Moving along the PPC from maximum ${scenario.goodY.toLowerCase()} to maximum ${scenario.goodX.toLowerCase()} shows:`,
+          options: [
+            "Economic growth over time",
+            "Changing opportunity costs of production",
+            "Elimination of scarcity",
+            "Increase in total available resources"
+          ],
+          correctAnswer: "Changing opportunity costs of production", 
+          explanation: "Movement along the PPC shows how opportunity costs change as resources are reallocated between different goods production.",
+          hint: "Focus on what happens as you move along a single PPC curve"
+        };
+      }
+    },
+
+    // POLICY AND REAL-WORLD APPLICATIONS
+    {
+      id: "government_policy",
+      question: (scenario) => {
+        const policies = [
+          {
+            policy: "Massive investment in education and infrastructure",
+            effect: "Shift PPC outward over time",
+            explanation: "Long-term investment increases future productive capacity"
+          },
+          {
+            policy: "Immediate stimulus spending to reduce unemployment",
+            effect: "Move toward PPC curve in short term", 
+            explanation: "Reduces unemployment, allowing better utilization of existing resources"
+          },
+          {
+            policy: "Strict environmental regulations that limit production",
+            effect: "Move inside PPC or shift inward",
+            explanation: "Regulations may constrain production below maximum potential"
+          }
+        ];
+        
+        const selected = policies[Math.floor(Math.random() * policies.length)];
+        
+        return {
+          type: "multiple_choice",
+          question: `If the government implements ${selected.policy.toLowerCase()}, what would be the most likely effect?`,
+          options: [
+            "Shift PPC outward over time",
+            "Shift PPC inward immediately",
+            "Move toward PPC curve in short term", 
+            "Move inside PPC or shift inward"
+          ],
+          correctAnswer: selected.effect,
+          explanation: selected.explanation,
+          hint: "Consider whether the policy affects current resource utilization or future productive capacity"
+        };
+      }
+    },
+    {
+      id: "international_trade",
+      question: (scenario) => {
+        return {
+          type: "multiple_choice",
+          question: `If Canada specializes in producing ${scenario.goodX.toLowerCase()} and trades with other countries, this allows Canada to:`,
+          options: [
+            "Consume inside its PPC",
+            "Consume on its PPC only",
+            "Consume beyond its PPC through trade gains",
+            "Shift its PPC inward"
+          ],
+          correctAnswer: "Consume beyond its PPC through trade gains",
+          explanation: "International trade allows countries to specialize and consume combinations beyond their individual PPCs through the gains from trade.",
+          hint: "Think about how trade can expand consumption possibilities beyond domestic production"
+        };
+      }
+    },
+    {
+      id: "sustainability_tradeoff",
+      question: (scenario) => {
+        return {
+          type: "multiple_choice",
+          question: `If a country consistently operates at maximum production capacity without investing in future growth, what might happen over time?`,
+          options: [
+            "The PPC will expand automatically",
+            "The PPC may shrink due to wear and resource depletion",
+            "Opportunity costs will disappear",
+            "The economy will become more efficient"
+          ],
+          correctAnswer: "The PPC may shrink due to wear and resource depletion",
+          explanation: "Operating at maximum capacity without investment in maintenance or renewal can lead to resource depletion and capital deterioration, potentially shrinking future possibilities.",
+          hint: "Consider what happens when you don't invest in maintaining productive capacity"
         };
       }
     }
